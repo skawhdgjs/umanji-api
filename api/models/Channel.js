@@ -7,8 +7,8 @@ export default {
   schema: true,
 
   attributes: {
-    owner    : { type: 'string', required   : true, unique: true },
     type     : { type: 'string' },
+    owner    : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer' },
@@ -19,10 +19,17 @@ export default {
     links    : { type: 'array', defaultsTo: [] },
     actions  : { type: 'array', defaultsTo: [] },
 
-    address  : {
-      model: 'Address'
-    },
-    
+    address      : { type: 'string', defaultsTo: '' },
+    countryCode  : { type: 'string', defaultsTo: '' },
+    countryName  : { type: 'string', defaultsTo: '' },
+    adminArea    : { type: 'string', defaultsTo: '' },
+    locality     : { type: 'string', defaultsTo: '' },
+    thoroughfare : { type: 'string', defaultsTo: '' },
+    featureName  : { type: 'string', defaultsTo: '' },
+    latitude     : { type: 'float', defaultsTo : 0.0 },
+    longitude    : { type: 'float', defaultsTo : 0.0 },
+
+
     toJSON() {
       return this.toObject();
     }

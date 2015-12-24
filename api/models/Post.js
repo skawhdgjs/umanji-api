@@ -19,10 +19,6 @@ export default {
     links    : { type: 'array', defaultsTo: [] },
     actions  : { type: 'array', defaultsTo: [] },
 
-    address  : {
-      model: 'Address'
-    },
-    
     toJSON() {
       return this.toObject();
     }

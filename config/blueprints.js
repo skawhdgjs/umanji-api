@@ -34,7 +34,7 @@ export default {
      * Shortcut routes are simple helpers to provide access to a controller's CRUD methods from your browser's URL bar
      * @type {Boolean}
      */
-    shortcuts: false,
+    shortcuts: true,
 
     /**
      * An optional mount path for all blueprint routes on a controller, including `rest`, `actions`, and `shortcuts`

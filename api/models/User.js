@@ -20,10 +20,6 @@ export default {
     actions  : { type: 'array', defaultsTo: [] },
     devices  : { type: 'array', defaultsTo: [] },
 
-    address  : {
-      model: 'Address'
-    },
-
     toJSON() {
       let obj = this.toObject();
 

@@ -12,7 +12,6 @@ import passport from 'passport';
  * @param res
  */
 export function signin(req, res) {
-  console.log('signin: ', req.allParams());
   passport.authenticate('local', _.partial(sails.config.passport.onPassportAuth, req, res))(req, res);
 }
 
