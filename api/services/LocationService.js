@@ -22,8 +22,19 @@ export default {
 
         response.on('end', () => {
           if(body) {
-            let address = JSON.parse(body);
-            resolve(address);
+            let address = JSON.parse(body).results[0];
+
+            let addressDoc = {
+              address: address.formatted_address,
+              countryCode: address.address_components[4].short_name,
+              countryName: address.address_components[4].long_name,
+              adminArea: address.address_components[3].long_name,
+              locality: address.address_components[2].long_name,
+              thoroughfare: address.address_components[1].long_name,
+              featureName: address.address_components[0].long_name
+            }
+            resolve(addressDoc);
+
           } else {
             resolve('');
           }
@@ -54,8 +65,18 @@ export default {
 
         response.on('end', () => {
           if(body) {
-            let address = JSON.parse(body);
-            resolve(address);
+            let address = JSON.parse(body).addressInfo;
+
+            let addressDoc = {
+              address: address.fullAddress,
+              countryCode: 'KR',
+              countryName: '대한민국',
+              adminArea: address.city_do,
+              locality: address.gu_gun,
+              thoroughfare: address.adminDong,
+              featureName: address.bunji
+            }
+            resolve(addressDoc);
           } else {
             resolve('');
           }
@@ -64,5 +85,4 @@ export default {
       }).end();
     })
   }
-
 };

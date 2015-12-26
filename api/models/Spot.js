@@ -9,8 +9,8 @@ export default {
   attributes: {
     type     : { type: 'string', defaultsTo: 'SPOT' },
     owner    : { type: 'string' },
-    name     : { type: 'string', defaultsTo: '건물 이름을 지어주세요.' },
-    desc     : { type: 'string', defaultsTo: '건물 정보를 입력해 주세요.' },
+    name     : { type: 'string', defaultsTo: '' },
+    desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer' },
 
     photos   : { type: 'array', defaultsTo: [] },
