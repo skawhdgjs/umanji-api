@@ -9,6 +9,9 @@ export default {
     'POST /v1/signup' : 'AuthController.signup',
     'POST /v1/signin' : 'AuthController.signin',
 
-    'GET /v1/spot'    : 'SpotController.get'
+    'GET /v1/spots/main' : 'SpotController.getMainChannels',
+    'GET /v1/spots/:id'  : 'SpotController.get',
+    'GET /v1/spot/point' : 'SpotController.getByPoint',
+
   }
 }

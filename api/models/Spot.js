@@ -11,7 +11,7 @@ export default {
     owner    : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
-    level    : { type: 'integer' },
+    level    : { type: 'integer', defaultsTo: 18 },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },

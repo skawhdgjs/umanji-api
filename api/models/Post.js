@@ -7,7 +7,7 @@ export default {
   schema: true,
 
   attributes: {
-    owner    : { type: 'string', required   : true, unique: true },
+    owner    : { type: 'string', defaultsTo: 'POST' },
     type     : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
