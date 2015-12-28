@@ -31,7 +31,9 @@ export default {
               adminArea: address.address_components[3].long_name,
               locality: address.address_components[2].long_name,
               thoroughfare: address.address_components[1].long_name,
-              featureName: address.address_components[0].long_name
+              featureName: address.address_components[0].long_name,
+              latitude: point.latitude,
+              longitude: point.longitude
             }
             resolve(addressDoc);
 
@@ -66,7 +68,6 @@ export default {
         response.on('end', () => {
           if(body) {
             let address = JSON.parse(body).addressInfo;
-
             let addressDoc = {
               address: address.fullAddress,
               countryCode: 'KR',
@@ -74,7 +75,9 @@ export default {
               adminArea: address.city_do,
               locality: address.gu_gun,
               thoroughfare: address.adminDong,
-              featureName: address.bunji
+              featureName: address.bunji,
+              latitude: point.latitude,
+              longitude: point.longitude
             }
             resolve(addressDoc);
           } else {

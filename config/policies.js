@@ -11,9 +11,18 @@
 
 export default {
   policies: {
+
     '*': true,
     // '*': ['isAuthenticated'],
 
+    PostController: {
+      create: ['isAuthenticated']
+    },
+    SpotController: {
+      create: ['isAuthenticated']
+    },
+
+    create: ['isAuthenticated'],
     AuthController: {
       '*': true
     }

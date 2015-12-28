@@ -10,6 +10,7 @@ export function get(req, res) {
 
   Spot
     .findOne(pk)
+    .populate('owner')
     .then(record => record ? res.ok(record) : res.notFound())
     .catch(res.negotiate);
 }
@@ -24,6 +25,7 @@ export function getMainChannels(req, res) {
       longitude: { '>=': values.minLongitude, '<=': values.maxLongitude },
       level: { '<=': values.zoom}
     })
+    .populate('owner')
     .then(records => {
       res.ok(records)
     })
@@ -54,6 +56,21 @@ export function getByPoint(req, res) {
     .catch(res.negotiate);
 }
 
+export function getPosts(req, res) {
+  let pk = actionUtil.requirePk(req);
+
+  let qeury = {
+    where: { channel: pk },
+    sort: 'updatedAt DESC'
+  }
+
+  Post
+    .find(qeury)
+    .populateAll()
+    .then(res.ok)
+    .catch(res.negotiate);
+}
+
 export function create(req, res) {
   let values = actionUtil.parseValues(req);
   const point = {
@@ -61,6 +78,8 @@ export function create(req, res) {
     'longitude': req.param('longitude')
   }
 
+  console.log('point', point);
+  
   getAddress(point)
     .then(address => {
       let query = {
@@ -68,12 +87,12 @@ export function create(req, res) {
         address: address.address
       }
 
-      address.latitude = point.latitude;
-      address.longitude = point.longitude;
+      let spotDoc = address;
+      spotDoc.owner = req.user.id;
 
       Spot
         .findOne(query)
-        .then(record => record ? res.ok(record) : createSpot(res, address))
+        .then(record => record ? res.ok(record) : createSpot(res, spotDoc))
         .catch(res.negotiate);
     })
     .catch(res.negotiate);
@@ -94,10 +113,9 @@ function getAddress(point) {
     })
 }
 
-function createSpot(res, address) {
-
+function createSpot(res, doc) {
   Spot
-    .create(address)
-    .then(record => record ? res.ok(record) : createSpot(address))
+    .create(doc)
+    .then(res.created)
     .catch(res.negotiate);
 }

@@ -1,3 +1,5 @@
+import policy from '../../config/services/policy';
+
 /**
  * Spot
  * @description :: Model for storing Channel records
@@ -7,16 +9,17 @@ export default {
   schema: true,
 
   attributes: {
+    owner    : { model: 'User' },
     type     : { type: 'string', defaultsTo: 'SPOT' },
-    owner    : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
-    level    : { type: 'integer', defaultsTo: 18 },
+    level    : { type: 'integer', defaultsTo: policy.level.SPOT },
+
+    channel  : { model: 'Spot' },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
-    links    : { type: 'array', defaultsTo: [] },
     actions  : { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },
