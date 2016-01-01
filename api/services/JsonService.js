@@ -37,6 +37,18 @@ export default {
       featureName: doc.featureName,
       latitude: doc.latitude,
       longitude: doc.longitude    }
+  },
+
+  copyAddress: (doc, address) => {
+    doc.address = address.address,
+    doc.countryCode = address.countryCode,
+    doc.countryName = address.countryName,
+    doc.adminArea = address.adminArea,
+    doc.locality = address.locality,
+    doc.thoroughfare = address.thoroughfare,
+    doc.featureName = address.featureName,
+    doc.latitude = address.latitude,
+    doc.longitude = address.longitude
   }
 
 }

@@ -20,5 +20,6 @@ export default function (error) {
   if (statusCode === 404) return res.notFound(data, config);
   if (statusCode >= 400 && statusCode < 500) return res.badRequest(data, config);
 
+  console.log('error ', config);
   return res.serverError(data, config);
 }

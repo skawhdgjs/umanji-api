@@ -13,7 +13,7 @@ export default {
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer' },
 
-    channel  : { model: 'Spot' },
+    link     : { model: 'Channel' },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
@@ -30,7 +30,7 @@ export default {
     featureName  : { type: 'string', defaultsTo: '' },
     latitude     : { type: 'float', defaultsTo : 0.0 },
     longitude    : { type: 'float', defaultsTo : 0.0 },
-    
+
     toJSON() {
       let obj = this.toObject();
 

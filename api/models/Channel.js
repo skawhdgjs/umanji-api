@@ -15,12 +15,13 @@ export default {
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer', defaultsTo: policy.level.SPOT },
 
-    channel  : { model: 'Spot' },
+    link     : { model: 'Channel' },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
     actions  : { type: 'array', defaultsTo: [] },
+    followers: { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },
     countryCode  : { type: 'string', defaultsTo: '' },

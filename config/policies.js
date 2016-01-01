@@ -15,14 +15,11 @@ export default {
     '*': true,
     // '*': ['isAuthenticated'],
 
-    PostController: {
-      create: ['isAuthenticated']
-    },
-    SpotController: {
-      create: ['isAuthenticated']
+    ChannelController: {
+      create: ['isAuthenticated'],
+      createSpot: ['isAuthenticated']
     },
 
-    create: ['isAuthenticated'],
     AuthController: {
       '*': true
     }
