@@ -33,7 +33,7 @@ export default {
 
     toJSON() {
       let obj = this.toObject();
-
+      obj.name = this.email.split('@')[0];
       delete obj.password;
       return obj;
     }

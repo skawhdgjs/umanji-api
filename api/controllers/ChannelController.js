@@ -23,7 +23,7 @@ export default {
 
   findPosts(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT']
+    params.type = ['POST']
     find(req, res, params);
   },
 
@@ -79,21 +79,17 @@ export default {
   },
 
   create(req, res) {
-    let pk = actionUtil.requirePk(req);
     let params = actionUtil.parseValues(req);
 
-    console.log('pk', pk);
-    console.log('params', params);
-
     Channel
-      .findOne(pk)
+      .findOne(params.id)
       .then(record => {
 
         let post = {
           owner: req.user.id,
           type: params.type,
           name: params.name,
-          link: pk,
+          link: params.id,
         };
 
         jsonService.copyAddress(post, record);
@@ -112,14 +108,14 @@ export default {
 
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('getLinks: params', params);
-    
+
     Channel
       .find({
         link: params.id,
         type: params.type
       })
       .populate('owner')
+      .sort('updatedAt DESC')
       .then(res.ok)
       .catch(res.negotiate);
 
@@ -171,6 +167,7 @@ function find(req, res, params) {
   Channel
     .find(query)
     .populate('owner')
+    .sort('updatedAt DESC')
     .then((records, config) => {
       if(records.length == 1){
         res.ok(records[0], config);
