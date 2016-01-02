@@ -13,6 +13,9 @@ export default {
     'POST /v1/channels/:id'       : 'ChannelController.create',
 
     'GET /v1/channels'            : 'ChannelController.find',
+    'GET /v1/channels/markers'    : 'ChannelController.findMarkers',
+    'GET /v1/channels/posts'      : 'ChannelController.findPosts',
+
     'GET /v1/channels/point'      : 'ChannelController.getByPoint',
     'GET /v1/channels/links'      : 'ChannelController.getLevelLinks',
     'GET /v1/channels/:id/links'  : 'ChannelController.getLinks',

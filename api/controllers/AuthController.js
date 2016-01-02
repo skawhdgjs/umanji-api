@@ -1,3 +1,5 @@
+import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
+
 /**
  * AuthController
  * @description :: Server-side logic for manage users' authorization
@@ -12,6 +14,7 @@ import passport from 'passport';
  * @param res
  */
 export function signin(req, res) {
+  let params = actionUtil.parseValues(req);
   passport.authenticate('local', _.partial(sails.config.passport.onPassportAuth, req, res))(req, res);
 }
 

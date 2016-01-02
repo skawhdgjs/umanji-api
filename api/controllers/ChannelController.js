@@ -12,20 +12,19 @@ import jsonService from '../services/JsonService';
 export default {
   find(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('channels.find: params: ', params);
+    find(req, res, params);
+  },
 
+  findMarkers(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT', 'SPOT_INNER'];
+    find(req, res, params);
+  },
 
-    Channel
-      .find({
-        type: params.type,
-        latitude: { '>=': params.minLatitude, '<=': params.maxLatitude },
-        longitude: { '>=': params.minLongitude, '<=': params.maxLongitude },
-        level: { '<=': params.zoom}
-      })
-      .populate('owner')
-      .then(res.ok)
-      .catch(res.negotiate);
-
+  findPosts(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT']
+    find(req, res, params);
   },
 
   getByPoint(req, res) {
@@ -82,6 +81,9 @@ export default {
   create(req, res) {
     let pk = actionUtil.requirePk(req);
     let params = actionUtil.parseValues(req);
+
+    console.log('pk', pk);
+    console.log('params', params);
 
     Channel
       .findOne(pk)
@@ -153,4 +155,17 @@ function getAddress(point) {
         return location.getAddressByGmap(point)
       }
     })
+}
+
+function find(req, res, params) {
+  Channel
+    .find({
+      type: params.type,
+      latitude: { '>=': params.minLatitude, '<=': params.maxLatitude },
+      longitude: { '>=': params.minLongitude, '<=': params.maxLongitude },
+      level: { '<=': params.zoom}
+    })
+    .populate('owner')
+    .then(res.ok)
+    .catch(res.negotiate);
 }
