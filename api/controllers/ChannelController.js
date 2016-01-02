@@ -111,12 +111,12 @@ export default {
   },
 
   getLinks(req, res) {
-    let pk = actionUtil.requirePk(req);
     let params = actionUtil.parseValues(req);
-
+    console.log('getLinks: params', params);
+    
     Channel
       .find({
-        link: pk,
+        link: params.id,
         type: params.type
       })
       .populate('owner')
@@ -158,14 +158,25 @@ function getAddress(point) {
 }
 
 function find(req, res, params) {
+  let query = {}
+
+  if(params.id) query.id = params.id
+  if(params.type) query.type = query.type = params.type;
+  if(params.minLatitude) {
+    query.latitude = { '>=': params.minLatitude, '<=': params.maxLatitude };
+    query.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };
+  }
+  if(params.zoom) query.level = params.zoom;
+
   Channel
-    .find({
-      type: params.type,
-      latitude: { '>=': params.minLatitude, '<=': params.maxLatitude },
-      longitude: { '>=': params.minLongitude, '<=': params.maxLongitude },
-      level: { '<=': params.zoom}
-    })
+    .find(query)
     .populate('owner')
-    .then(res.ok)
+    .then((records, config) => {
+      if(records.length == 1){
+        res.ok(records[0], config);
+      } else {
+        res.ok(records, config);
+      }
+    })
     .catch(res.negotiate);
 }
