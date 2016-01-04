@@ -12,19 +12,62 @@ import jsonService from '../services/JsonService';
 export default {
   find(req, res) {
     let params = actionUtil.parseValues(req);
-    find(req, res, params);
+    let query = getMainQuery(params);
+
+    Channel
+      .find(query)
+      .populate('owner')
+      .sort('updatedAt DESC')
+      .then((records, config) => {
+        if(records.length == 1){
+          res.ok(records[0], config);
+        } else {
+          res.ok(records, config);
+        }
+      })
+      .catch(res.negotiate);
   },
 
   findMarkers(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = ['SPOT', 'SPOT_INNER'];
-    find(req, res, params);
+
+    let query = getMainQuery(params);
+
+    Channel
+      .find(query)
+      .populate('owner')
+      .sort('updatedAt DESC')
+      .then((records, config) => {
+        if(records.length == 1){
+          res.ok(records[0], config);
+        } else {
+          res.ok(records, config);
+        }
+      })
+      .catch(res.negotiate);
   },
 
   findPosts(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = ['POST']
-    find(req, res, params);
+
+    let query = getMainQuery(params);
+
+    Channel
+      .find(query)
+      .populateAll()
+      .sort('updatedAt DESC')
+      .then((records, config) => {
+        console.log('findPosts', records);
+
+        if(records.length == 1){
+          res.ok(records[0], config);
+        } else {
+          res.ok(records, config);
+        }
+      })
+      .catch(res.negotiate);
   },
 
   getByPoint(req, res) {
@@ -80,6 +123,7 @@ export default {
 
   create(req, res) {
     let params = actionUtil.parseValues(req);
+    console.log('photos', params.photos);
 
     Channel
       .findOne(params.id)
@@ -90,6 +134,7 @@ export default {
           type: params.type,
           name: params.name,
           link: params.id,
+          photos: params.photos
         };
 
         jsonService.copyAddress(post, record);
@@ -153,9 +198,8 @@ function getAddress(point) {
     })
 }
 
-function find(req, res, params) {
+function getMainQuery(params) {
   let query = {}
-
   if(params.id) query.id = params.id
   if(params.type) query.type = query.type = params.type;
   if(params.minLatitude) {
@@ -164,16 +208,5 @@ function find(req, res, params) {
   }
   if(params.zoom) query.level = params.zoom;
 
-  Channel
-    .find(query)
-    .populate('owner')
-    .sort('updatedAt DESC')
-    .then((records, config) => {
-      if(records.length == 1){
-        res.ok(records[0], config);
-      } else {
-        res.ok(records, config);
-      }
-    })
-    .catch(res.negotiate);
+  return query;
 }

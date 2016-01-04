@@ -9,6 +9,9 @@ export default {
     'POST /v1/signup'             : 'AuthController.signup',
     'POST /v1/signin'             : 'AuthController.signin',
 
+    'POST /v1/photo'              : 'PhotoController.photo',
+    'GET /v1/photo/id'            : 'PhotoController.get',
+
     'POST /v1/channels/spot'      : 'ChannelController.createSpot',
     'POST /v1/channels/id'        : 'ChannelController.create',
 

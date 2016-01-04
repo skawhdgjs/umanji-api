@@ -5,7 +5,7 @@ export default {
     return {
       id: doc.id,
       email: doc.email,
-      name: doc.name,
+      name: doc.email.split('@')[0],
       desc: doc.desc,
       photos: doc.photos,
       roles: doc.roles,
