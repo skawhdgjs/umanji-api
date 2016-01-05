@@ -18,13 +18,17 @@ export default {
       .find(query)
       .populate('owner')
       .sort('updatedAt DESC')
-      .then((records, config) => {
-        if(records.length == 1){
-          res.ok(records[0], config);
-        } else {
-          res.ok(records, config);
-        }
-      })
+      .then(res.ok)
+      .catch(res.negotiate);
+  },
+
+  get(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    Channel
+      .findOne(params.id)
+      .populate('owner')
+      .then(res.ok)
       .catch(res.negotiate);
   },
 
@@ -38,13 +42,7 @@ export default {
       .find(query)
       .populate('owner')
       .sort('updatedAt DESC')
-      .then((records, config) => {
-        if(records.length == 1){
-          res.ok(records[0], config);
-        } else {
-          res.ok(records, config);
-        }
-      })
+      .then(res.ok)
       .catch(res.negotiate);
   },
 
@@ -58,15 +56,7 @@ export default {
       .find(query)
       .populateAll()
       .sort('updatedAt DESC')
-      .then((records, config) => {
-        console.log('findPosts', records);
-
-        if(records.length == 1){
-          res.ok(records[0], config);
-        } else {
-          res.ok(records, config);
-        }
-      })
+      .then(res.ok)
       .catch(res.negotiate);
   },
 
