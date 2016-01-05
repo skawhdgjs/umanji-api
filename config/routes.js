@@ -27,11 +27,11 @@ export default {
     'GET /v1/channels/id/posts'       : 'ChannelController.getLinks',
     'GET /v1/channels/id/members'     : 'ChannelController.getLinks',
     'GET /v1/channels/id/communities' : 'ChannelController.getLinks',
+    'GET /v1/channels/id/keywords'    : 'ChannelController.getLinks',
 
     'POST /v1/channels/id/link'       : 'ChannelController.create',
-    'POST /v1/channels/id/post'       : 'ChannelController.create',
-    'POST /v1/channels/id/member'     : 'ChannelController.create',
-    'POST /v1/channels/id/community'  : 'ChannelController.create',
+
+    'POST /v1/channels/id/join'       : 'ChannelController.create',
 
     'GET /v1/users/id/links'          : 'UserController.getLinks',
   }
