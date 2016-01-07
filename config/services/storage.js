@@ -5,8 +5,8 @@ export default {
     storage: {
       amazon: {
         provider: {
-          accessKeyId: 'AKIAIGOPEU23H4Z3Y2AA',
-          secretAccessKey: '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'
+          accessKeyId: 'AKIAIASRV25TIJNRVQEQ',
+          secretAccessKey: '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'
         }
       },
       local: {

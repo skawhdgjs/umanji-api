@@ -15,12 +15,15 @@ export default {
       })
       .populate('owner')
       .then(channels => {
-        let tokens = channelRecord.owner.gcmTokens;
+
+        let tokens = channelRecord.owner.gcmTokens? channelRecord.owner.gcmTokens: [];
 
         let usersToken = _.pluck(channels, 'owner.gcmTokens');
-        _.forEach(usersToken, (userToken) => {
-          tokens = tokens.concat(userToken)
-        })
+        if(usersToken.length > 0) {
+          _.forEach(usersToken, (userToken) => {
+            tokens = tokens.concat(userToken)
+          })
+        }
 
         pusher
           .send(tokens,{

@@ -1,8 +1,23 @@
 import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
 import config from '../../config/connections';
 import fileAdapter from 'skipper-s3';
+import storageService from '../services/StorageService';
+import gm from 'gm';
 
-/**
+
+var Writable = require('stream').Writable;
+
+let receiver = new Writable({objectMode: true});
+receiver._write = function(file, enc, cb) {
+  gm(file)
+    .resize(500)
+    .autoOrient()
+    .write('.tmp/uploads/' + file.fd, function (err) {
+      cb();
+    });
+};
+
+/**amazon
  * PhotoController
  * @description :: Server-side logic for manage photo
  */
@@ -13,17 +28,41 @@ let amazon = fileAdapter({
   bucket: 'umanji-0001'
 });
 
-
 export default {
-  photo (req, res) {
-    
+  photo (req, res, next) {
     req.file('photo')
-      .upload({
-        adapter: amazon
-      }, (error, uploadedFiles) =>{
+      .upload(receiver, (error, files) =>{
         if(error) res.negotiate(error)
-        res.ok({photo: uploadedFiles[0].fd})
+        let file = files[0];
+
+        let fileName = null;
+        let filePath = null;
+        if(file.fd.indexOf('.tmp/uploads/') < 0) {
+          fileName = file.fd;
+          filePath = '.tmp/uploads/' + file.fd;
+        }else {
+          fileName = file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13)
+          filePath = '.tmp/uploads/' + fileName;
+
+          console.log('11', file.fd);
+          console.log('22', file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13))
+        }
+
+        storageService
+          .upload(filePath, 'umanji-0001:' + fileName)
+          .then((a) => {
+            res.ok({photo: fileName});
+          })
+          .catch(res.negotiate);
       })
+
+    // req.file('photo')
+    //   .upload({
+    //     adapter: amazon
+    //   }, (error, uploadedFiles) =>{
+    //     if(error) res.negotiate(error)
+    //     res.ok({photo: uploadedFiles[0].fd})
+    //   })
   },
 
   get (req, res) {
