@@ -6,6 +6,8 @@
 
 export default {
   routes: {
+    'POST /v1/token/check'            : 'AuthController.checkToken',
+
     'POST /v1/signup'                 : 'AuthController.signup',
     'POST /v1/signin'                 : 'AuthController.signin',
 
@@ -33,6 +35,13 @@ export default {
 
     'POST /v1/channels/id/join'       : 'ChannelController.create',
 
+    'GET /v1/users/id'                : 'UserController.get',
     'GET /v1/users/id/links'          : 'UserController.getLinks',
+    'GET /v1/users/id/posts'          : 'UserController.getLinks',
+    'GET /v1/users/id/spots'          : 'UserController.getLinks',
+    'GET /v1/users/id/communities'    : 'UserController.getLinks',
+    'GET /v1/users/id/keywords'       : 'UserController.getLinks',
+
+    'POST /v1/users/id/gcm'           : 'UserController.gcm',
   }
 }

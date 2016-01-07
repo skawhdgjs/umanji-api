@@ -3,6 +3,9 @@ import _ from 'lodash';
 import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
 import location from '../services/LocationService';
 import jsonService from '../services/JsonService';
+import pusherService from '../services/PusherService';
+
+let pusher = pusherService.android;
 
 /**
  * ChannelController
@@ -113,11 +116,11 @@ export default {
 
   create(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('photos', params.photos);
 
     Channel
       .findOne(params.id)
-      .then(record => {
+      .populate('owner')
+      .then(channelRecord => {
 
         let post = {
           owner: req.user.id,
@@ -127,13 +130,16 @@ export default {
           photos: params.photos
         };
 
-        jsonService.copyAddress(post, record);
+        jsonService.copyAddress(post, channelRecord);
 
         Channel
           .create(post)
-          .then((record, config) => {
-            record.owner = jsonService.getUserSimple(req.user);
-            res.created(record, config);
+          .then((postRecord, config) => {
+            postRecord.owner = jsonService.getUserSimple(req.user);
+
+            pusherService.channelCreated(pusher, channelRecord, postRecord);
+
+            res.created(postRecord, config);
           })
           .catch(res.negotiate)
 
@@ -196,7 +202,7 @@ function getMainQuery(params) {
     query.latitude = { '>=': params.minLatitude, '<=': params.maxLatitude };
     query.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };
   }
-  if(params.zoom) query.level = params.zoom;
+  if(params.zoom) query.level = { '<=': params.zoom};
 
   return query;
 }

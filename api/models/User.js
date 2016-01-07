@@ -19,7 +19,7 @@ export default {
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
     actions  : { type: 'array', defaultsTo: [] },
-    devices  : { type: 'array', defaultsTo: [] },
+    gcmTokens    : { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },
     countryCode  : { type: 'string', defaultsTo: '' },

@@ -16,8 +16,7 @@ let amazon = fileAdapter({
 
 export default {
   photo (req, res) {
-    console.log('access_token', req.param('access_token'));
-
+    
     req.file('photo')
       .upload({
         adapter: amazon

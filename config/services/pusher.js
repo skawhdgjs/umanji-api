@@ -1,7 +1,15 @@
 export default {
   services: {
     pusher: {
-      android: {},
+      android: {
+        provider: {
+          apiKey: 'AIzaSyCQCJnG4VyPK-kJy4-84xBGCRobhtKMQFE'
+        },
+        notification: {
+          title: 'Umanji',
+          payload: {}
+        }
+      },
       ios: {}
     }
   }

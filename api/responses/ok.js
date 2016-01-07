@@ -16,7 +16,6 @@ export default function (data, config) {
     data: data || {}
   }, _.get(config, 'root', {}));
 
-  console.log('ok', response);
   this.res.status(200);
   this.res.jsonx(response);
 }

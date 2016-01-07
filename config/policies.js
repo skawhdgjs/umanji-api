@@ -21,7 +21,12 @@ export default {
     },
 
     AuthController: {
-      '*': true
+      '*': true,
+      checkToken: ['isAuthenticated']
+    },
+
+    UserController: {
+      gcm: ['isAuthenticated']
     }
   }
 }

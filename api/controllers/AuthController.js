@@ -24,15 +24,18 @@ export function signin(req, res) {
  * @param res
  */
 export function signup(req, res) {
-  let values = _.omit(req.allParams(), 'id');
-
+  let params = _.omit(req.allParams(), 'id');
   User
-    .create(values)
+    .create(params)
     .then(user => {
       return {token: CipherService.jwt.encodeSync({id: user.id}), user: user}
     })
     .then(res.created)
     .catch(res.negotiate);
+}
+
+export function checkToken(req, res) {
+  res.ok({token: req.param('access_token')});
 }
 
 /**
