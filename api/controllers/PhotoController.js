@@ -34,6 +34,7 @@ export default {
         if(error) {
           res.negotiate(error)
         }
+        console.log('file', files[0]);
         let file = files[0];
 
         let fileName = null;
