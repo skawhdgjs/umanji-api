@@ -29,39 +29,43 @@ let amazon = fileAdapter({
 
 export default {
   photo (req, res, next) {
+
     req.file('photo')
-      .upload(receiver, (error, files) =>{
-        if(error) {
-          res.negotiate(error)
-        }
-        console.log('file', files[0]);
-        let file = files[0];
-
-        let fileName = null;
-        let filePath = null;
-        if(file.fd.indexOf('.tmp/uploads/') < 0) {
-          fileName = file.fd;
-          filePath = '.tmp/uploads/' + file.fd;
-        }else {
-          fileName = file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13)
-          filePath = '.tmp/uploads/' + fileName;
-        }
-
-        storageService
-          .upload(filePath, 'umanji-0001:' + fileName)
-          .then((a) => {
-            res.ok({photo: fileName});
-          })
-          .catch(res.negotiate);
+      .upload({
+        adapter: amazon
+      }, (error, uploadedFiles) =>{
+        if(error) res.negotiate(error)
+        res.ok({photo: uploadedFiles[0].fd})
       })
 
+      
     // req.file('photo')
-    //   .upload({
-    //     adapter: amazon
-    //   }, (error, uploadedFiles) =>{
-    //     if(error) res.negotiate(error)
-    //     res.ok({photo: uploadedFiles[0].fd})
+    //   .upload(receiver, (error, files) =>{
+    //     if(error) {
+    //       res.negotiate(error)
+    //     }
+    //     console.log('file', files[0]);
+    //     let file = files[0];
+    //
+    //     let fileName = null;
+    //     let filePath = null;
+    //     if(file.fd.indexOf('.tmp/uploads/') < 0) {
+    //       fileName = file.fd;
+    //       filePath = '.tmp/uploads/' + file.fd;
+    //     }else {
+    //       fileName = file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13)
+    //       filePath = '.tmp/uploads/' + fileName;
+    //     }
+    //
+    //     storageService
+    //       .upload(filePath, 'umanji-0001:' + fileName)
+    //       .then((a) => {
+    //         res.ok({photo: fileName});
+    //       })
+    //       .catch(res.negotiate);
     //   })
+
+
   },
 
   get (req, res) {
