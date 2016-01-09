@@ -15,6 +15,7 @@ export default {
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer', defaultsTo: policy.level.SPOT },
 
+    point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
     link     : { model: 'Channel' },
 
     photos   : { type: 'array', defaultsTo: [] },

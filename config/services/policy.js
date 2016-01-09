@@ -6,5 +6,8 @@ export default {
     GUGUN:    11,
     DOSI:     8,
     CONTRY:   4
+  },
+  point: {
+    DEFAULT: 100,
   }
 }

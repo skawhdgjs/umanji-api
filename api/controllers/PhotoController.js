@@ -35,10 +35,11 @@ export default {
         adapter: amazon
       }, (error, uploadedFiles) =>{
         if(error) res.negotiate(error)
+        console.log('photo upload success');
         res.ok({photo: uploadedFiles[0].fd})
       })
 
-      
+
     // req.file('photo')
     //   .upload(receiver, (error, files) =>{
     //     if(error) {

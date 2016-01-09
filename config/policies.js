@@ -26,7 +26,8 @@ export default {
     },
 
     UserController: {
-      gcm: ['isAuthenticated']
+      gcm: ['isAuthenticated'],
+      update: ['isAuthenticated']
     }
   }
 }

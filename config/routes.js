@@ -42,6 +42,7 @@ export default {
     'GET /v1/users/id/communities'    : 'UserController.getLinks',
     'GET /v1/users/id/keywords'       : 'UserController.getLinks',
 
+    'PUT /v1/users/id'                : 'UserController.update',
     'POST /v1/users/id/gcm'           : 'UserController.gcm',
 
 

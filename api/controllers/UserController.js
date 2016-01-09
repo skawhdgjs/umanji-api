@@ -10,6 +10,16 @@ import jsonService from '../services/JsonService';
  */
 
 export default {
+  update (req, res) {
+    let params = actionUtil.parseValues(req);
+    console.log('params', params);
+
+    User
+      .update(params.id, _.omit(params, 'id'))
+      .then(records => records[0] ? res.ok(records[0]) : res.notFound())
+      .catch(res.negotiate);
+
+  },
 
   get(req, res) {
     let params = actionUtil.parseValues(req);

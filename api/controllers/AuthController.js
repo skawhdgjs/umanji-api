@@ -37,8 +37,15 @@ export function signup(req, res) {
 }
 
 export function checkToken(req, res) {
-  console.log('checkToken');
-  res.ok({token: req.param('access_token')});
+  let params = _.omit(req.allParams(), 'id');
+  console.log('checkToken: params', params);
+
+  let result = {
+    token: req.param('access_token'),
+    user: req.user
+  }
+
+  res.ok(result);
 }
 
 /**

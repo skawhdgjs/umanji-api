@@ -15,6 +15,7 @@ export default {
 
     link     : { model: 'Channel' },
 
+    userPhotos  : { type: 'array', defaultsTo: [] },
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
