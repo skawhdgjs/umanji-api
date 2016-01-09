@@ -10,7 +10,6 @@ var Writable = require('stream').Writable;
 let receiver = new Writable({objectMode: true});
 receiver._write = function(file, enc, cb) {
   gm(file)
-    .resize(500)
     .autoOrient()
     .write('.tmp/uploads/' + file.fd, function (err) {
       cb();
@@ -32,7 +31,9 @@ export default {
   photo (req, res, next) {
     req.file('photo')
       .upload(receiver, (error, files) =>{
-        if(error) res.negotiate(error)
+        if(error) {
+          res.negotiate(error)
+        }
         let file = files[0];
 
         let fileName = null;
@@ -43,9 +44,6 @@ export default {
         }else {
           fileName = file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13)
           filePath = '.tmp/uploads/' + fileName;
-
-          console.log('11', file.fd);
-          console.log('22', file.fd.substring(file.fd.indexOf('.tmp/uploads/')+13))
         }
 
         storageService

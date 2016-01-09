@@ -43,5 +43,9 @@ export default {
     'GET /v1/users/id/keywords'       : 'UserController.getLinks',
 
     'POST /v1/users/id/gcm'           : 'UserController.gcm',
+
+
+
+    'GET /v1/migration'               : 'MigrationController.importData',
   }
 }
