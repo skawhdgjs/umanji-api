@@ -24,6 +24,7 @@ export default {
             payload: {
               id: channelRecord.id,
               type: channelRecord.type,
+              level: channelRecord.level,
               title: channelRecord.type + ':'+ (channelRecord.name? channelRecord.name : '이름없음'),
               text: '@' + postRecord.owner.name + ' ' + postRecord.name,
             }

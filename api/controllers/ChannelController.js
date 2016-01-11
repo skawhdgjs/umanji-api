@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import policy from '../../config/services/policy';
+
 import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
 import location from '../services/LocationService';
 import jsonService from '../services/JsonService';
@@ -118,6 +120,7 @@ export default {
 
   createLink(req, res) {
     let params = actionUtil.parseValues(req);
+    console.log('createLink: params', params);
 
     Channel
       .findOne(params.id)
@@ -191,19 +194,101 @@ export default {
       .catch(res.negotiate)
   },
 
+// countryName
+// adminArea
+// locality
+// thoroughfare
+// featureName
+
+// level: {
+//   SPOT:     18,
+//   COMPLEX:  15,
+//   DONG:     13,
+//   GUGUN:    11,
+//   DOSI:     8,
+//   CONTRY:   4
+// },
+
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('getLinks', params);
+    let level = params.level;
 
-    Channel
-      .find({
-        link: params.id,
-        type: params.type
-      })
-      .populate('owner')
-      .sort('updatedAt DESC')
-      .then(res.ok)
-      .catch(res.negotiate);
+
+    if(level == policy.level.SPOT) {
+      Channel
+        .find({
+          link: params.id,
+          type: params.type
+        })
+        .populate('owner')
+        .sort('updatedAt DESC')
+        .then(res.ok)
+        .catch(res.negotiate);
+    }
+    else if(level == policy.level.DONG) {
+      Channel
+        .findOne(params.id)
+        .then(record => {
+          if(record) {
+
+            Channel
+              .find({
+                countryName: record.countryName,
+                adminArea: record.adminArea,
+                locality: record.locality,
+                thoroughfare: record.thoroughfare
+              })
+              .populate('owner')
+              .sort('updatedAt DESC')
+              .then(res.ok)
+              .catch(res.negotiate);
+          }
+        })
+        .catch(res.negotiate);
+    }
+    else if(level == policy.level.GUGUN) {
+
+      Channel
+        .findOne(params.id)
+        .then(record => {
+          if(record) {
+
+            Channel
+              .find({
+                countryName: record.countryName,
+                adminArea: record.adminArea,
+                locality: record.locality,
+              })
+              .populate('owner')
+              .sort('updatedAt DESC')
+              .then(res.ok)
+              .catch(res.negotiate);
+          }
+        })
+        .catch(res.negotiate);
+    }
+    else if(level == policy.level.DOSI) {
+      Channel
+        .findOne(params.id)
+        .then(record => {
+          if(record) {
+            Channel
+              .find({
+                countryName: record.countryName,
+                adminArea: record.adminArea,
+                type: params.type
+              })
+              .populate('owner')
+              .sort('updatedAt DESC')
+              .then(records => {
+                if(records.length > 0) res.ok(records);
+                else res.ok([])
+              })
+              .catch(res.negotiate);
+          } else res.ok([])
+        })
+        .catch(res.negotiate);
+    }
 
   },
 
