@@ -137,7 +137,7 @@ export default {
           .then((postRecord, config) => {
             postRecord.owner = jsonService.getUserSimple(req.user);
 
-            pusherService.channelCreated(pusher, channelRecord, postRecord);
+            pusherService.channelCreated(req, pusher, channelRecord, postRecord);
 
             res.created(postRecord, config);
           })

@@ -7,23 +7,17 @@ export default {
   android: pusher('android', config.services.pusher.android),
   ios: pusher('ios', config.services.pusher.ios),
 
-  channelCreated (pusher, channelRecord, postRecord) {
+  channelCreated (req, pusher, channelRecord, postRecord) {
     Channel
       .find({
         link: channelRecord.id,
         type: 'USER'
       })
       .populate('owner')
-      .then(channels => {
+      .then(memberChannels => {
 
-        let tokens = channelRecord.owner.gcmTokens? channelRecord.owner.gcmTokens: [];
-
-        let usersToken = _.pluck(channels, 'owner.gcmTokens');
-        if(usersToken.length > 0) {
-          _.forEach(usersToken, (userToken) => {
-            tokens = tokens.concat(userToken)
-          })
-        }
+        let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
+        tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
 
         pusher
           .send(tokens,{
@@ -36,4 +30,25 @@ export default {
           });
       })
   }
+}
+
+
+let getGcmTokensFromChannel = (channelRecord, memberChannels) => {
+  let tokens = channelRecord.owner.gcmTokens? channelRecord.owner.gcmTokens: [];
+  let usersToken = _.pluck(memberChannels, 'owner.gcmTokens');
+  if(usersToken.length > 0) {
+    _.forEach(usersToken, (userToken) => {
+      tokens = tokens.concat(userToken)
+    })
+  }
+  tokens = _.uniq(tokens);
+  return tokens;
+}
+
+
+let removeMyTokenFrom = (tokens, myTokens) => {
+  _.forEach(myTokens, (userToken) => {
+    _.pull(tokens, userToken);
+  });
+  return tokens;
 }
