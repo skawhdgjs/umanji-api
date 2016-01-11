@@ -32,9 +32,9 @@ export default {
     'GET /v1/channels/id/communities' : 'ChannelController.getLinks',
     'GET /v1/channels/id/keywords'    : 'ChannelController.getLinks',
 
-    'POST /v1/channels/id/link'       : 'ChannelController.create',
+    'POST /v1/channels/id/link'       : 'ChannelController.createLink',
 
-    'POST /v1/channels/id/join'       : 'ChannelController.create',
+    'POST /v1/channels/id/join'       : 'ChannelController.join',
 
     'GET /v1/users/id'                : 'UserController.get',
     'GET /v1/users/id/links'          : 'UserController.getLinks',
@@ -49,5 +49,9 @@ export default {
 
 
     'GET /v1/migration'               : 'MigrationController.importData',
+
+    'GET /v1/migration/to/01'         : 'MigrationController.toChannel_01',
+    'GET /v1/migration/to/02'         : 'MigrationController.toChannel_02',
+    'GET /v1/migration/to/03'         : 'MigrationController.toChannel_03',
   }
 }

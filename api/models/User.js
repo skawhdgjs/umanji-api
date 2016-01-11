@@ -1,3 +1,5 @@
+import policy from '../../config/services/policy';
+
 /**
  * User
  * @description :: Model for storing users
@@ -12,7 +14,7 @@ export default {
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer' },
-
+    point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
     link     : { model: 'Channel' },
 
     userPhotos  : { type: 'array', defaultsTo: [] },

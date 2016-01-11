@@ -16,8 +16,10 @@ export default {
     // '*': ['isAuthenticated'],
 
     ChannelController: {
+      join: ['isAuthenticated'],
       create: ['isAuthenticated'],
-      createSpot: ['isAuthenticated']
+      createSpot: ['isAuthenticated'],
+      createLink: ['isAuthenticated'],
     },
 
     AuthController: {

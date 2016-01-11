@@ -37,7 +37,7 @@ export default {
 
   findMarkers(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT', 'SPOT_INNER'];
+    params.type = ['SPOT', 'SPOT_INNER', 'INFO_CENTER'];
 
     let query = getMainQuery(params);
 
@@ -116,7 +116,7 @@ export default {
       .catch(res.negotiate);
   },
 
-  create(req, res) {
+  createLink(req, res) {
     let params = actionUtil.parseValues(req);
 
     Channel
@@ -124,7 +124,7 @@ export default {
       .populate('owner')
       .then(channelRecord => {
 
-        let post = {
+        let linkData = {
           owner: req.user.id,
           type: params.type,
           name: params.name,
@@ -132,19 +132,61 @@ export default {
           photos: params.photos
         };
 
-        jsonService.copyAddress(post, channelRecord);
+        jsonService.copyAddress(linkData, channelRecord);
 
         Channel
-          .create(post)
-          .then((postRecord, config) => {
-            postRecord.owner = jsonService.getUserSimple(req.user);
+          .create(linkData)
+          .then((linkRecord, config) => {
+            linkRecord.owner = jsonService.getUserSimple(req.user);
 
-            pusherService.channelCreated(req, pusher, channelRecord, postRecord);
+            pusherService.channelCreated(req, pusher, channelRecord, linkRecord);
 
-            res.created(postRecord, config);
+            res.created(linkRecord, config);
           })
           .catch(res.negotiate)
 
+      })
+      .catch(res.negotiate)
+  },
+
+  isJoined(req, res) {
+    let params = actionUtil.parseValues(req);
+    let channelId = params.id
+
+    let query = {
+      owner: req.user.id,
+      link: channelId
+    }
+
+    Channel
+      .findOne(query)
+      .then(record => {
+        if(record != null) {
+          res.ok({});
+        }else {
+          res.notFound();
+        }
+      })
+      .catch(res.negotiate)
+  },
+
+  join(req, res) {
+    let params = actionUtil.parseValues(req);
+    console.log('params', params);
+    let channelId = params.id
+
+
+    let query = {
+      owner: req.user.id,
+      link: channelId
+    }
+
+    Channel
+      .findOne(query)
+      .then(record => {
+        if(record == null) {
+          this.createLink(req, res);
+        }
       })
       .catch(res.negotiate)
   },
