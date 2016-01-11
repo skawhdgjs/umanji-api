@@ -27,6 +27,7 @@ export default {
     'GET /v1/channels/links'          : 'ChannelController.getLevelLinks',
     'GET /v1/channels/id/links'       : 'ChannelController.getLinks',
     'GET /v1/channels/id/posts'       : 'ChannelController.getLinks',
+    'GET /v1/channels/id/spots'       : 'ChannelController.getLinks',
     'GET /v1/channels/id/members'     : 'ChannelController.getLinks',
     'GET /v1/channels/id/communities' : 'ChannelController.getLinks',
     'GET /v1/channels/id/keywords'    : 'ChannelController.getLinks',

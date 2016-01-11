@@ -81,7 +81,9 @@ export default {
   },
 
   createSpot(req, res) {
+    console.log('createSpot');
     let params = actionUtil.parseValues(req);
+    console.log('params', params);
 
     getAddress(params)
       .then(address => {
@@ -149,6 +151,7 @@ export default {
 
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
+    console.log('getLinks', params);
 
     Channel
       .find({
