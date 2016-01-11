@@ -15,7 +15,6 @@ import passport from 'passport';
  */
 export function signin(req, res) {
   let params = actionUtil.parseValues(req);
-  console.log('signin:params:', params);
   passport.authenticate('local', _.partial(sails.config.passport.onPassportAuth, req, res))(req, res);
 }
 
@@ -26,7 +25,6 @@ export function signin(req, res) {
  */
 export function signup(req, res) {
   let params = _.omit(req.allParams(), 'id');
-  console.log('signup:params:', params);
   User
     .create(params)
     .then(user => {
