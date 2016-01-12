@@ -194,21 +194,6 @@ export default {
       .catch(res.negotiate)
   },
 
-// countryName
-// adminArea
-// locality
-// thoroughfare
-// featureName
-
-// level: {
-//   SPOT:     18,
-//   COMPLEX:  15,
-//   DONG:     13,
-//   GUGUN:    11,
-//   DOSI:     8,
-//   CONTRY:   4
-// },
-
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
     let level = params.level;
@@ -241,7 +226,6 @@ export default {
               thoroughfare: record.thoroughfare,
               type: params.type
             }
-            console.log('query', query);
             Channel
               .find(query)
               .populate('owner')

@@ -68,7 +68,7 @@ export default {
             address: address.road_address,
             countryCode: 'KR',
             countryName: '대한민국',
-            adminArea: address.delegate,
+            adminArea: address.delegate.replace(/청$/, ''),
             locality: addressSet[1],
             thoroughfare: address.name,
             featureName: addressSet[3] + ' ' + addressSet[4]? addressSet[4]: '',
@@ -98,7 +98,7 @@ export default {
             address: address.road_address,
             countryCode: 'KR',
             countryName: '대한민국',
-            adminArea: address.delegate,
+            adminArea: address.delegate.replace(/청$/, ''),
             locality: address.name.replace(/청$/, ''),
             latitude: address.latitude,
             longitude: address.longitude,
@@ -123,11 +123,11 @@ export default {
         _.forEach(addresses, (address) => {
           let channel = {
             type: 'INFO_CENTER',
-            name: address.name + ' 정보센터',
+            name: address.name.replace(/청$/, '') + ' 정보센터',
             address: address.road_address,
             countryCode: 'KR',
             countryName: '대한민국',
-            adminArea: address.delegate,
+            adminArea: address.delegate.replace(/청$/, ''),
             latitude: address.latitude,
             longitude: address.longitude,
             level: policy.level.DOSI
