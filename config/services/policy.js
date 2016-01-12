@@ -2,8 +2,8 @@ export default {
   level: {
     SPOT:     18,
     COMPLEX:  15,
-    DONG:     13,
-    GUGUN:    11,
+    DONG:     14,
+    GUGUN:    10,
     DOSI:     8,
     CONTRY:   2
   },
