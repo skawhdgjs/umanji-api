@@ -311,14 +311,17 @@ export default {
     let params = actionUtil.parseValues(req);
     let level = params.level;
 
-
     if(level == policy.level.LOCAL) {
+
+      let query = {
+        link: params.id,
+        type: params.type
+      }
+      if(params.type == 'COMMUNITY') {
+        query.level = policy.level.LOCAL
+      }
       Channel
-        .find({
-          link: params.id,
-          type: params.type,
-          level: params.level
-        })
+        .find(query)
         .populate('owner')
         .sort('updatedAt DESC')
         .then(records => {
@@ -334,13 +337,16 @@ export default {
           if(record) {
 
             let query = {
-              level: params.level,
               countryName: record.countryName,
               adminArea: record.adminArea,
               locality: record.locality,
               thoroughfare: record.thoroughfare,
               type: params.type
             }
+            if(params.type == 'COMMUNITY') {
+              query.level = policy.level.DONG
+            }
+
             Channel
               .find(query)
               .populate('owner')
@@ -361,14 +367,19 @@ export default {
         .then(record => {
           if(record) {
 
+            let query = {
+              countryName: record.countryName,
+              adminArea: record.adminArea,
+              locality: record.locality,
+              type: params.type
+            }
+
+            if(params.type == 'COMMUNITY') {
+              query.level = policy.level.GUGUN
+            }
+
             Channel
-              .find({
-                level: params.level,
-                countryName: record.countryName,
-                adminArea: record.adminArea,
-                locality: record.locality,
-                type: params.type
-              })
+              .find(query)
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
@@ -385,13 +396,19 @@ export default {
         .findOne(params.id)
         .then(record => {
           if(record) {
+
+            let query = {
+              countryName: record.countryName,
+              adminArea: record.adminArea,
+              type: params.type
+            }
+
+            if(params.type == 'COMMUNITY') {
+              query.level = policy.level.DOSI
+            }
+
             Channel
-              .find({
-                level: params.level,
-                countryName: record.countryName,
-                adminArea: record.adminArea,
-                type: params.type
-              })
+              .find(query)
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
