@@ -222,7 +222,10 @@ export default {
         })
         .populate('owner')
         .sort('updatedAt DESC')
-        .then(res.ok)
+        .then(records => {
+          if(records.length > 0) res.ok(records);
+          else res.ok([])
+        })
         .catch(res.negotiate);
     }
     else if(level == policy.level.DONG) {
@@ -240,7 +243,10 @@ export default {
               })
               .populate('owner')
               .sort('updatedAt DESC')
-              .then(res.ok)
+              .then(records => {
+                if(records.length > 0) res.ok(records);
+                else res.ok([])
+              })
               .catch(res.negotiate);
           }
         })
@@ -261,7 +267,10 @@ export default {
               })
               .populate('owner')
               .sort('updatedAt DESC')
-              .then(res.ok)
+              .then(records => {
+                if(records.length > 0) res.ok(records);
+                else res.ok([])
+              })
               .catch(res.negotiate);
           }
         })
