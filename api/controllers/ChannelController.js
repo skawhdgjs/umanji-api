@@ -239,7 +239,8 @@ export default {
                 countryName: record.countryName,
                 adminArea: record.adminArea,
                 locality: record.locality,
-                thoroughfare: record.thoroughfare
+                thoroughfare: record.thoroughfare,
+                type: params.type
               })
               .populate('owner')
               .sort('updatedAt DESC')
@@ -264,6 +265,7 @@ export default {
                 countryName: record.countryName,
                 adminArea: record.adminArea,
                 locality: record.locality,
+                type: params.type
               })
               .populate('owner')
               .sort('updatedAt DESC')
