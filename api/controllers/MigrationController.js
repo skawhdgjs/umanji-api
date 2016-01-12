@@ -70,7 +70,7 @@ export default {
             countryName: '대한민국',
             adminArea: address.delegate,
             locality: addressSet[1],
-            thoroughfare: addressSet[2],
+            thoroughfare: address.name,
             featureName: addressSet[3] + ' ' + addressSet[4]? addressSet[4]: '',
             latitude: address.latitude,
             longitude: address.longitude,

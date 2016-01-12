@@ -234,14 +234,16 @@ export default {
         .then(record => {
           if(record) {
 
+            let query = {
+              countryName: record.countryName,
+              adminArea: record.adminArea,
+              locality: record.locality,
+              thoroughfare: record.thoroughfare,
+              type: params.type
+            }
+            console.log('query', query);
             Channel
-              .find({
-                countryName: record.countryName,
-                adminArea: record.adminArea,
-                locality: record.locality,
-                thoroughfare: record.thoroughfare,
-                type: params.type
-              })
+              .find(query)
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
