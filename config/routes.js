@@ -33,6 +33,7 @@ export default {
     'GET /v1/channels/id/keywords'    : 'ChannelController.getLinks',
 
     'POST /v1/channels/id/link'       : 'ChannelController.createLink',
+    'POST /v1/channels/id/community'  : 'ChannelController.createCommunity',
 
     'POST /v1/channels/id/join'       : 'ChannelController.join',
 

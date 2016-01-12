@@ -13,7 +13,7 @@ export default {
     type     : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
-    level    : { type: 'integer', defaultsTo: policy.level.SPOT },
+    level    : { type: 'integer', defaultsTo: policy.level.LOCAL },
     point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
     link     : { model: 'Channel' },
 

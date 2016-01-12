@@ -39,8 +39,10 @@ export default {
 
   findMarkers(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT', 'SPOT_INNER', 'INFO_CENTER'];
 
+    if(!params.type) {
+      params.type = ['SPOT', 'SPOT_INNER', 'INFO_CENTER'];
+    }
     let query = getMainQuery(params);
 
     Channel
@@ -53,7 +55,10 @@ export default {
 
   findPosts(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['POST']
+
+    if(!params.type) {
+      params.type = ['POST'];
+    }
 
     let query = getMainQuery(params);
 
@@ -83,9 +88,7 @@ export default {
   },
 
   createSpot(req, res) {
-    console.log('createSpot');
     let params = actionUtil.parseValues(req);
-    console.log('params', params);
 
     getAddress(params)
       .then(address => {
@@ -118,9 +121,120 @@ export default {
       .catch(res.negotiate);
   },
 
+  createCommunity(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    Channel
+      .findOne(params.id)
+      .populate('owner')
+      .then(channelRecord => {
+
+        let linkData = {
+          owner: req.user.id,
+          type: params.type,
+          name: params.name,
+          link: params.id,
+          photos: params.photos
+        };
+
+        jsonService.copyAddress(linkData, channelRecord);
+
+        Channel
+          .create(linkData)
+          .then((linkRecord, config) => {
+            linkRecord.owner = jsonService.getUserSimple(req.user);
+            pusherService.channelCreated(req, pusher, channelRecord, linkRecord);
+            res.created(linkRecord, config);
+
+            let query = {}
+            // 동단위 커뮤니티
+            Channel.findOne({
+              name: linkRecord.name,
+              type: 'COMMUNITY',
+              level: policy.level.DONG,
+              thoroughfare: linkRecord.thoroughfare
+            })
+            .then(dongCommunity => {
+              if(!dongCommunity) {
+                // 동단위 정보센터 주소 얻어오기
+                Channel.findOne({
+                  type: 'INFO_CENTER',
+                  level: policy.level.DONG,
+                  thoroughfare: linkRecord.thoroughfare
+                })
+                .then(dongInfoCenter => {
+                  linkData.level = policy.level.DONG
+                  jsonService.copyAddress(linkData, dongInfoCenter);
+
+                  Channel
+                    .create(linkData)
+                    .catch(console.log.bind(console));
+                })
+              }
+            })
+
+            // 구군단위 커뮤니티
+            Channel.findOne({
+              name: linkRecord.name,
+              type: 'COMMUNITY',
+              level: policy.level.GUGUN,
+              locality: linkRecord.locality
+            })
+            .then(gugunCommunity => {
+
+              if(!gugunCommunity) {
+                // 동단위 정보센터 주소 얻어오기
+                Channel.findOne({
+                  type: 'INFO_CENTER',
+                  level: policy.level.GUGUN,
+                  locality: linkRecord.locality
+                })
+                .then(gugunInfoCenter => {
+                  linkData.level = policy.level.GUGUN
+                  jsonService.copyAddress(linkData, gugunInfoCenter);
+
+                  Channel
+                    .create(linkData)
+                    .catch(console.log.bind(console));
+                })
+              }
+            })
+
+            // 시도단위 커뮤니티
+            Channel.findOne({
+              name: linkRecord.name,
+              type: 'COMMUNITY',
+              level: policy.level.DOSI,
+              thoroughfare: linkRecord.adminArea
+            })
+            .then(dosiCommunity => {
+              if(!dosiCommunity) {
+                // 동단위 정보센터 주소 얻어오기
+                Channel.findOne({
+                  type: 'INFO_CENTER',
+                  level: policy.level.DOSI,
+                  adminArea: linkRecord.adminArea
+                })
+                .then(dosiInfoCenter => {
+                  linkData.level = policy.level.DOSI
+                  jsonService.copyAddress(linkData, dosiInfoCenter);
+
+                  Channel
+                    .create(linkData)
+                    .catch(console.log.bind(console));
+                })
+              }
+
+            })
+          })
+          .catch(res.negotiate)
+
+      })
+      .catch(res.negotiate)
+  },
+
   createLink(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('createLink: params', params);
 
     Channel
       .findOne(params.id)
@@ -175,7 +289,6 @@ export default {
 
   join(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('params', params);
     let channelId = params.id
 
 
@@ -199,11 +312,12 @@ export default {
     let level = params.level;
 
 
-    if(level == policy.level.SPOT) {
+    if(level == policy.level.LOCAL) {
       Channel
         .find({
           link: params.id,
-          type: params.type
+          type: params.type,
+          level: params.level
         })
         .populate('owner')
         .sort('updatedAt DESC')
@@ -220,6 +334,7 @@ export default {
           if(record) {
 
             let query = {
+              level: params.level,
               countryName: record.countryName,
               adminArea: record.adminArea,
               locality: record.locality,
@@ -248,6 +363,7 @@ export default {
 
             Channel
               .find({
+                level: params.level,
                 countryName: record.countryName,
                 adminArea: record.adminArea,
                 locality: record.locality,
@@ -271,6 +387,7 @@ export default {
           if(record) {
             Channel
               .find({
+                level: params.level,
                 countryName: record.countryName,
                 adminArea: record.adminArea,
                 type: params.type
@@ -323,8 +440,9 @@ function getAddress(point) {
 
 function getMainQuery(params) {
   let query = {}
-  if(params.id) query.id = params.id
-  if(params.type) query.type = query.type = params.type;
+  if(params.id) query.id = params.id;
+  if(params.type) query.type = params.type;
+  if(params.name) query.name = {'contains': params.name};
   if(params.minLatitude) {
     query.latitude = { '>=': params.minLatitude, '<=': params.maxLatitude };
     query.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };

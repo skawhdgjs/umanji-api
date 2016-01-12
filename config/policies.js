@@ -20,6 +20,7 @@ export default {
       create: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],
+      createCommunity: ['isAuthenticated'],
     },
 
     AuthController: {

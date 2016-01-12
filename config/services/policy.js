@@ -1,6 +1,6 @@
 export default {
   level: {
-    SPOT:     18,
+    LOCAL:    18,
     COMPLEX:  15,
     DONG:     13,
     GUGUN:    11,
