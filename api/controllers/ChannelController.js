@@ -41,7 +41,7 @@ export default {
     let params = actionUtil.parseValues(req);
 
     if(!params.type) {
-      params.type = ['SPOT', 'SPOT_INNER', 'INFO_CENTER'];
+      params.type = ['SPOT', 'INFO_CENTER'];
     }
     let query = getMainQuery(params);
 
@@ -312,19 +312,23 @@ export default {
     let level = params.level;
 
     if(level == policy.level.LOCAL) {
-
       let query = {
         link: params.id,
         type: params.type
       }
+
       if(params.type == 'COMMUNITY') {
         query.level = policy.level.LOCAL
       }
+
+      console.log('params', params);
+
       Channel
         .find(query)
         .populate('owner')
         .sort('updatedAt DESC')
         .then(records => {
+          console.log('records', records);
           if(records.length > 0) res.ok(records);
           else res.ok([])
         })
@@ -345,6 +349,10 @@ export default {
             }
             if(params.type == 'COMMUNITY') {
               query.level = policy.level.DONG
+            }
+
+            if(params.type == 'SPOT') {
+              query.type = ['SPOT', 'SPOT_INNER'];
             }
 
             Channel
@@ -378,6 +386,10 @@ export default {
               query.level = policy.level.GUGUN
             }
 
+            if(params.type == 'SPOT') {
+              query.type = ['SPOT', 'SPOT_INNER'];
+            }
+
             Channel
               .find(query)
               .populate('owner')
@@ -407,6 +419,11 @@ export default {
               query.level = policy.level.DOSI
             }
 
+            if(params.type == 'SPOT') {
+              query.type = ['SPOT', 'SPOT_INNER'];
+            }
+
+            console.log('params', params);
             Channel
               .find(query)
               .populate('owner')
