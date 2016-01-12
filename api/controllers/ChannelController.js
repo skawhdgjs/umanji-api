@@ -60,7 +60,7 @@ export default {
       params.type = ['POST'];
     }
 
-    let query = getMainQuery(params);
+    let query = getMainPostQuery(params);
 
     Channel
       .find(query)
@@ -479,6 +479,19 @@ function getMainQuery(params) {
     query.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };
   }
   if(params.zoom) query.level = { '<=': params.zoom};
+
+  return query;
+}
+
+function getMainPostQuery(params) {
+  let query = {}
+  if(params.id) query.id = params.id;
+  if(params.type) query.type = params.type;
+  if(params.name) query.name = {'contains': params.name};
+  if(params.minLatitude) {
+    query.latitude = { '>=': params.minLatitude, '<=': params.maxLatitude };
+    query.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };
+  }
 
   return query;
 }
