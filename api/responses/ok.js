@@ -13,6 +13,7 @@ export default function (data, config) {
   let response = _.assign({
     code: _.get(config, 'code', 'OK'),
     message: _.get(config, 'message', 'Operation is successfully executed'),
+    id: _.get(config, 'id', ''),
     data: data || {}
   }, _.get(config, 'root', {}));
 

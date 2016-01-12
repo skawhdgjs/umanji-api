@@ -289,11 +289,11 @@ export default {
 
   join(req, res) {
     let params = actionUtil.parseValues(req);
-    let channelId = params.id
-
+    let channelId = params.id;
 
     let query = {
       owner: req.user.id,
+      type: params.type,
       link: channelId
     }
 
@@ -309,7 +309,8 @@ export default {
 
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
-    let level = params.level;
+    const level = params.level;
+    const channelId = params.id;
 
     if(level == policy.level.LOCAL) {
       let query = {
@@ -321,16 +322,13 @@ export default {
         query.level = policy.level.LOCAL
       }
 
-      console.log('params', params);
-
       Channel
         .find(query)
         .populate('owner')
         .sort('updatedAt DESC')
         .then(records => {
-          console.log('records', records);
-          if(records.length > 0) res.ok(records);
-          else res.ok([])
+          if(records.length > 0) res.ok(records, {id: channelId});
+          else res.ok([], {id: channelId})
         })
         .catch(res.negotiate);
     }
@@ -360,8 +358,8 @@ export default {
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
-                if(records.length > 0) res.ok(records);
-                else res.ok([])
+                if(records.length > 0) res.ok(records, {id: channelId});
+                else res.ok([], {id: channelId})
               })
               .catch(res.negotiate);
           }
@@ -395,8 +393,8 @@ export default {
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
-                if(records.length > 0) res.ok(records);
-                else res.ok([])
+                if(records.length > 0) res.ok(records, {id: channelId});
+                else res.ok([], {id: channelId})
               })
               .catch(res.negotiate);
           }
@@ -423,7 +421,6 @@ export default {
               query.type = ['SPOT', 'SPOT_INNER'];
             }
 
-            console.log('params', params);
             Channel
               .find(query)
               .populate('owner')
