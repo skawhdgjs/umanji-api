@@ -14,14 +14,17 @@ export default {
     name     : { type: 'string', defaultsTo: '' },
     desc     : { type: 'string', defaultsTo: '' },
     level    : { type: 'integer', defaultsTo: policy.level.LOCAL },
+
     point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
-    link     : { model: 'Channel' },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
-    actions  : { type: 'array', defaultsTo: [] },
     followers: { type: 'array', defaultsTo: [] },
+
+    subLinks : { type: 'array', defaultsTo: [] },
+    link     : { model: 'Channel' },
+    actions  : { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },
     countryCode  : { type: 'string', defaultsTo: '' },

@@ -36,6 +36,7 @@ export default {
     'POST /v1/channels/id/community'  : 'ChannelController.createCommunity',
 
     'POST /v1/channels/id/join'       : 'ChannelController.join',
+    'POST /v1/channels/id/like'       : 'ChannelController.like',
 
     'GET /v1/users/id'                : 'UserController.get',
     'GET /v1/users/id/links'          : 'UserController.getLinks',
@@ -43,6 +44,10 @@ export default {
     'GET /v1/users/id/spots'          : 'UserController.getLinks',
     'GET /v1/users/id/communities'    : 'UserController.getLinks',
     'GET /v1/users/id/keywords'       : 'UserController.getLinks',
+
+    'PUT /v1/channels/id/action'      : 'ChannelController.action',
+
+
 
     'PUT /v1/users/id'                : 'UserController.update',
     'POST /v1/users/id/gcm'           : 'UserController.gcm',

@@ -235,7 +235,7 @@ export default {
 
   createLink(req, res) {
     let params = actionUtil.parseValues(req);
-
+    
     Channel
       .findOne(params.id)
       .populate('owner')
@@ -245,8 +245,8 @@ export default {
           owner: req.user.id,
           type: params.type,
           name: params.name,
-          link: params.id,
-          photos: params.photos
+          photos: params.photos,
+          link: params.id
         };
 
         jsonService.copyAddress(linkData, channelRecord);
@@ -254,11 +254,26 @@ export default {
         Channel
           .create(linkData)
           .then((linkRecord, config) => {
-            linkRecord.owner = jsonService.getUserSimple(req.user);
 
-            pusherService.channelCreated(req, pusher, channelRecord, linkRecord);
+            channelRecord.subLinks.push({
+              id: linkRecord.id,
+              type: linkRecord.type
+            });
 
-            res.created(linkRecord, config);
+            channelRecord.save((error, updatedChannelRecord) => {
+              if(error) console.log('error', error);
+              else
+                linkRecord.owner = jsonService.getUserSimple(req.user);
+                pusherService.channelCreated(req, pusher, channelRecord, linkRecord);
+
+
+                if(linkRecord.type == 'LIKE') {
+                  res.created(updatedChannelRecord, config);
+                }else {
+                  res.created(linkRecord, config);
+                }
+
+            });
           })
           .catch(res.negotiate)
 
@@ -266,28 +281,15 @@ export default {
       .catch(res.negotiate)
   },
 
-  isJoined(req, res) {
-    let params = actionUtil.parseValues(req);
-    let channelId = params.id
-
-    let query = {
-      owner: req.user.id,
-      link: channelId
-    }
-
-    Channel
-      .findOne(query)
-      .then(record => {
-        if(record != null) {
-          res.ok({});
-        }else {
-          res.notFound();
-        }
-      })
-      .catch(res.negotiate)
+  join(req, res) {
+    this.action(req, res);
   },
 
-  join(req, res) {
+  like(req, res) {
+    this.action(req, res);
+  },
+
+  action(req, res) {
     let params = actionUtil.parseValues(req);
     let channelId = params.id;
 
@@ -306,6 +308,35 @@ export default {
       })
       .catch(res.negotiate)
   },
+
+  // action(req, res) {
+  //   let params = actionUtil.parseValues(req);
+  //   let channelId = params.id;
+  //
+  //   Channel
+  //     .findOne(channelId)
+  //     .then(record => {
+  //       if(record != null) {
+  //         let actionDate = {
+  //           id: req.user.id,
+  //           type: params.type
+  //         }
+  //         if(_.findWhere(record.actions, {id: req.user.id}) == null){
+  //           record.actions.push(actionDate);
+  //           record.save(error => {
+  //             if(error) console.log('error', error);
+  //             else
+  //               console.log('record action update success');
+  //               res.ok(record);
+  //           });
+  //         }
+  //
+  //       }else {
+  //         res.notFound();
+  //       }
+  //     })
+  //     .catch(res.negotiate)
+  // },
 
   getLinks(req, res) {
     let params = actionUtil.parseValues(req);
@@ -345,6 +376,7 @@ export default {
               thoroughfare: record.thoroughfare,
               type: params.type
             }
+
             if(params.type == 'COMMUNITY') {
               query.level = policy.level.DONG
             }
@@ -426,7 +458,7 @@ export default {
               .populate('owner')
               .sort('updatedAt DESC')
               .then(records => {
-                if(records.length > 0) res.ok(records);
+                if(records.length > 0) res.ok(records, {id: channelId});
                 else res.ok([])
               })
               .catch(res.negotiate);

@@ -17,10 +17,12 @@ export default {
 
     ChannelController: {
       join: ['isAuthenticated'],
+      like: ['isAuthenticated'],
       create: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],
       createCommunity: ['isAuthenticated'],
+      action: ['isAuthenticated'],
     },
 
     AuthController: {
