@@ -23,6 +23,7 @@ export default {
       createLink: ['isAuthenticated'],
       createCommunity: ['isAuthenticated'],
       action: ['isAuthenticated'],
+      gcm: ['isAuthenticated'],
     },
 
     AuthController: {
@@ -31,7 +32,6 @@ export default {
     },
 
     UserController: {
-      gcm: ['isAuthenticated'],
       update: ['isAuthenticated']
     }
   }

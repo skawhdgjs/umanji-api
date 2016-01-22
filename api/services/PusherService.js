@@ -3,23 +3,25 @@ import _ from 'lodash';
 import pusher from 'sails-service-pusher';
 import config from '../../config/services/pusher';
 
+
 export default {
   android: pusher('android', config.services.pusher.android),
   ios: pusher('ios', config.services.pusher.ios),
 
-  channelCreated (req, pusher, channelRecord, postRecord) {
+  channelCreated (req, channelRecord, postRecord) {
     Channel
       .find({
         link: channelRecord.id,
-        type: 'USER'
+        type: 'MEMBER'
       })
       .populate('owner')
       .then(memberChannels => {
-
+        console.log('memberChannels count: ', memberChannels.length);
         let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
         tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
+        console.log('tokens: ', tokens);
 
-        pusher
+        this.android
           .send(tokens,{
             payload: {
               id: channelRecord.id,

@@ -27,6 +27,7 @@ export default {
     subLinks : { type: 'array', defaultsTo: [] },
     link     : { model: 'Channel' },
     actions  : { type: 'array', defaultsTo: [] },
+    gcmTokens    : { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },
     countryCode  : { type: 'string', defaultsTo: '' },

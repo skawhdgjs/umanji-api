@@ -21,28 +21,27 @@ export default {
 
     Channel
       .create(params)
-      .then(isSubChannelCreation)
+      .then(channel => {
+        return isSubChannelCreation(req, channel);
+      })
       .then(isCommunityCreation)
       .then(res.created)
       .catch(res.negotiate);
   },
 
-  findMarkers(req, res) {
-    let params = actionUtil.parseValues(req);
-    if(!params.type) params.type = ['SPOT', 'INFO_CENTER'];
-    find(req, res, params);
-  },
-
-  findPosts(req, res) {
-    let params = actionUtil.parseValues(req);
-    if(!params.type) params.type = ['POST'];
-    find(req, res, params);
-  },
-
   find(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('params', params);
-    find(req, res, params);
+    let query = parseQuery(params);
+
+    Channel
+      .find(query)
+      .populateAll()
+      .sort('updatedAt DESC')
+      .then(channels => {
+        console.log('channels count:', channels.length);
+        res.ok(channels, {link: params.link || params.owner || null});
+      })
+      .catch(res.negotiate);
   },
 
   get(req, res) {
@@ -76,44 +75,57 @@ export default {
       })
       .catch(res.negotiate);
   },
+
+  gcm (req, res) {
+    let params = actionUtil.parseValues(req);
+    let user = req.user;
+    let token = params.token;
+
+    console.log('token', token);
+    if(_.findWhere(user.gcmTokens, token) == null){
+      user.gcmTokens.push(token);
+      user.save(error => {
+        if(error) console.log('error', error);
+        else
+          console.log('user update success');
+          res.ok(req.user);
+      });
+    }
+  }
 }
 
-function find(req, res, params) {
-  let query = parseQuery(params);
-  console.log('query:', query);
-
-  Channel
-    .find(query)
-    .populateAll()
-    .sort('updatedAt DESC')
-    .then(channels => {
-      console.log('channels count:', channels.length);
-      res.ok(channels, {link: query.link || query.owner || null});
-    })
-    .catch(res.negotiate);
-}
 function parseQuery(params) {
-  params = _.omit(params, 'access_token')
+  let query = _.clone(params);
+  query = _.omit(query, 'access_token')
 
-  if(params.type == 'SPOTS') params.type = ['SPOT', 'SPOT_INNER'];
-  if(params.name) params.name = {'contains': params.name};
-  if(params.minLatitude) {
-    params.latitude = { '>=': params.minLatitude, '<=': params.maxLatitude };
-    params.longitude = { '>=': params.minLongitude, '<=': params.maxLongitude };
-    params = _.omit(params, ['minLatitude', 'maxLatitude', 'minLongitude', 'maxLongitude']);
+  if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
+  if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
+
+  if(query.name) query.name = {'contains': query.name};
+  if(query.minLatitude) {
+    query.latitude = { '>=': query.minLatitude, '<=': query.maxLatitude };
+    query.longitude = { '>=': query.minLongitude, '<=': query.maxLongitude };
+    query = _.omit(query, ['minLatitude', 'maxLatitude', 'minLongitude', 'maxLongitude']);
   }
 
-  if(params.zoom) {
-    params.level = { '<=': params.zoom};
-    params = _.omit(params, ['zoom']);
+  if(query.level < policy.level.LOCAL) {
+    query = _.omit(query, ['link']);
+
+    if(query.type != 'COMMUNITY') {
+      query = _.omit(query, ['level']);
+    }
   }
 
-  return params;
+  if(query.zoom) {
+    query.level = { '<=': query.zoom};
+    query = _.omit(query, ['zoom']);
+  }
+
+  return query;
 }
 
-function isSubChannelCreation(channel) {
+function isSubChannelCreation(req, channel) {
   if(!channel.link) return channel;
-
   Channel
     .findOne(channel.link)
     .then(linkedChannel => {
@@ -123,6 +135,7 @@ function isSubChannelCreation(channel) {
       });
 
       linkedChannel.save();
+      pusherService.channelCreated(req, linkedChannel, channel);
     });
 
   return channel;
@@ -151,7 +164,6 @@ function createLevelCommunity(CommunityChannel, level, scope) {
   Channel.findOne(query)
   .then(community => {
     if(!community) {
-      // 정보센터 주소 얻어오기
       let infoQuery = {
         type: 'INFO_CENTER',
         level: level

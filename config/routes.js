@@ -16,17 +16,17 @@ export default {
     'POST /v1/channels/id/community'  : 'ChannelController.create',
     'POST /v1/channels/id/join'       : 'ChannelController.create',
 
+
     'GET /v1/channels'                : 'ChannelController.find',
     'GET /v1/channels/id/posts'       : 'ChannelController.find',
     'GET /v1/channels/id/spots'       : 'ChannelController.find',
     'GET /v1/channels/id/members'     : 'ChannelController.find',
     'GET /v1/channels/id/communities' : 'ChannelController.find',
     'GET /v1/channels/id/keywords'    : 'ChannelController.find',
+    'GET /v1/channels/markers'        : 'ChannelController.find',
+    'GET /v1/channels/posts'          : 'ChannelController.find',
 
-    'GET /v1/channels/markers'        : 'ChannelController.findMarkers',
-    'GET /v1/channels/posts'          : 'ChannelController.findPosts',
-
-
+    'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
 
     // *********
 
