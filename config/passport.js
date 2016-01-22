@@ -71,7 +71,7 @@ const SOCIAL_STRATEGY_CONFIG = {
  * @private
  */
 const _onLocalStrategyAuth = (req, email, password, next) => {
-  User
+  Channel
     .findOne({email: email})
     .then(user => {
       if (!user) return next(null, null, sails.config.errors.USER_NOT_FOUND);
@@ -89,7 +89,7 @@ const _onLocalStrategyAuth = (req, email, password, next) => {
  * @private
  */
 const _onJwtStrategyAuth = (req, payload, next) => {
-  User
+  Channel
     .findOne({id: payload.id})
     .then(user => {
       if (!user) return next(null, null, sails.config.errors.USER_NOT_FOUND);
@@ -122,7 +122,7 @@ const _onSocialStrategyAuth = (req, accessToken, refreshToken, profile, next) =>
     };
     model.socialProfiles[profile.provider] = profile._json;
 
-    User
+    Channel
       .findOrCreate(criteria, model)
       .then(user => {
         if (!user) return next(null, null, sails.config.errors.AUTH_FAILED);

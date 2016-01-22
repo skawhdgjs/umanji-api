@@ -6,6 +6,30 @@
 
 export default {
   routes: {
+
+    'GET /v1/channels/point'          : 'ChannelController.getByPoint',
+    'POST /v1/channels'               : 'ChannelController.create',
+    'POST /v1/channels/spot'          : 'ChannelController.create',
+    'POST /v1/channels/id/link'       : 'ChannelController.create',
+    'POST /v1/channels/id/post'       : 'ChannelController.create',
+    'POST /v1/channels/id/spot'       : 'ChannelController.create',
+    'POST /v1/channels/id/community'  : 'ChannelController.create',
+    'POST /v1/channels/id/join'       : 'ChannelController.create',
+
+    'GET /v1/channels'                : 'ChannelController.find',
+    'GET /v1/channels/id/posts'       : 'ChannelController.find',
+    'GET /v1/channels/id/spots'       : 'ChannelController.find',
+    'GET /v1/channels/id/members'     : 'ChannelController.find',
+    'GET /v1/channels/id/communities' : 'ChannelController.find',
+    'GET /v1/channels/id/keywords'    : 'ChannelController.find',
+
+    'GET /v1/channels/markers'        : 'ChannelController.findMarkers',
+    'GET /v1/channels/posts'          : 'ChannelController.findPosts',
+
+
+
+    // *********
+
     'POST /v1/token/check'            : 'AuthController.checkToken',
 
     'POST /v1/signup'                 : 'AuthController.signup',
@@ -14,28 +38,16 @@ export default {
     'POST /v1/photo'                  : 'PhotoController.photo',
     'GET /v1/photo/id'                : 'PhotoController.get',
 
-    'POST /v1/channels/spot'          : 'ChannelController.createSpot',
 
-    'GET /v1/channels'                : 'ChannelController.find',
     'GET /v1/channels/id'             : 'ChannelController.get',
-    'GET /v1/channels/markers'        : 'ChannelController.findMarkers',
-    'GET /v1/channels/posts'          : 'ChannelController.findPosts',
 
-    'GET /v1/channels/point'          : 'ChannelController.getByPoint',
+
 
 
     'GET /v1/channels/links'          : 'ChannelController.getLevelLinks',
     'GET /v1/channels/id/links'       : 'ChannelController.getLinks',
-    'GET /v1/channels/id/posts'       : 'ChannelController.getLinks',
-    'GET /v1/channels/id/spots'       : 'ChannelController.getLinks',
-    'GET /v1/channels/id/members'     : 'ChannelController.getLinks',
-    'GET /v1/channels/id/communities' : 'ChannelController.getLinks',
-    'GET /v1/channels/id/keywords'    : 'ChannelController.getLinks',
 
-    'POST /v1/channels/id/link'       : 'ChannelController.createLink',
-    'POST /v1/channels/id/community'  : 'ChannelController.createCommunity',
 
-    'POST /v1/channels/id/join'       : 'ChannelController.join',
     'POST /v1/channels/id/like'       : 'ChannelController.like',
 
     'GET /v1/users/id'                : 'UserController.get',

@@ -24,8 +24,10 @@ export function signin(req, res) {
  * @param res
  */
 export function signup(req, res) {
-  let params = _.omit(req.allParams(), 'id');
-  User
+  let params = actionUtil.parseValues(req);
+  params.type = 'USER';
+
+  Channel
     .create(params)
     .then(user => {
       return {token: CipherService.jwt.encodeSync({id: user.id}), user: user}
@@ -36,8 +38,7 @@ export function signup(req, res) {
 
 export function checkToken(req, res) {
   let params = _.omit(req.allParams(), 'id');
-  console.log('checkToken: params', params);
-
+  
   let result = {
     token: req.param('access_token'),
     user: req.user
