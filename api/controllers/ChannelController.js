@@ -25,7 +25,9 @@ export default {
         return isSubChannelCreation(req, channel);
       })
       .then(isCommunityCreation)
-      .then(res.created)
+      .then(channel => {
+        res.created(channel, {link: params.link || null});
+      })
       .catch(res.negotiate);
   },
 
@@ -38,7 +40,6 @@ export default {
       .populateAll()
       .sort('updatedAt DESC')
       .then(channels => {
-        console.log('channels count:', channels.length);
         res.ok(channels, {link: params.link || params.owner || null});
       })
       .catch(res.negotiate);
@@ -49,6 +50,7 @@ export default {
 
     Channel
       .findOne(params.id)
+      .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
   },

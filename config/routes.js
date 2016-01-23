@@ -7,7 +7,10 @@
 export default {
   routes: {
 
+
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',
+    'GET /v1/channels/id'             : 'ChannelController.get',
+
     'POST /v1/channels'               : 'ChannelController.create',
     'POST /v1/channels/spot'          : 'ChannelController.create',
     'POST /v1/channels/id/link'       : 'ChannelController.create',
@@ -15,6 +18,7 @@ export default {
     'POST /v1/channels/id/spot'       : 'ChannelController.create',
     'POST /v1/channels/id/community'  : 'ChannelController.create',
     'POST /v1/channels/id/join'       : 'ChannelController.create',
+    'POST /v1/channels/id/like'       : 'ChannelController.create',
 
 
     'GET /v1/channels'                : 'ChannelController.find',
@@ -28,18 +32,17 @@ export default {
 
     'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
 
-    // *********
-
     'POST /v1/token/check'            : 'AuthController.checkToken',
 
     'POST /v1/signup'                 : 'AuthController.signup',
     'POST /v1/signin'                 : 'AuthController.signin',
 
+    // *********
+
+
     'POST /v1/photo'                  : 'PhotoController.photo',
     'GET /v1/photo/id'                : 'PhotoController.get',
 
-
-    'GET /v1/channels/id'             : 'ChannelController.get',
 
 
 
@@ -48,7 +51,7 @@ export default {
     'GET /v1/channels/id/links'       : 'ChannelController.getLinks',
 
 
-    'POST /v1/channels/id/like'       : 'ChannelController.like',
+
 
     'GET /v1/users/id'                : 'UserController.get',
     'GET /v1/users/id/links'          : 'UserController.getLinks',

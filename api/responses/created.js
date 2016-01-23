@@ -13,6 +13,7 @@ export default function (data, config) {
   let response = _.assign({
     code: _.get(config, 'code', 'CREATED'),
     message: _.get(config, 'message', 'The request has been fulfilled and resulted in a new resource being created'),
+    link: _.get(config, 'link', ''),
     data: data || {}
   }, _.get(config, 'root', {}));
 

@@ -19,7 +19,6 @@ export default {
         console.log('memberChannels count: ', memberChannels.length);
         let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
         tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
-        console.log('tokens: ', tokens);
 
         this.android
           .send(tokens,{
