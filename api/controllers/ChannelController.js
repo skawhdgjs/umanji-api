@@ -47,12 +47,16 @@ export default {
 
   find(req, res) {
     let params = actionUtil.parseValues(req);
+    let limit = parseLimit(params);
+    let skip = parseSkip(params);
     let query = parseQuery(params);
 
     Channel
       .find(query)
-      .populateAll()
+      .limit(10)
+      .skip(skip)
       .sort('createdAt DESC')
+      .populateAll()
       .then(channels => {
         res.ok(channels, {link: params.link || params.owner || null});
       })
@@ -97,7 +101,6 @@ export default {
     let user = req.user;
     let token = params.token;
 
-    console.log('token', token);
     if(_.findWhere(user.gcmTokens, token) == null){
       user.gcmTokens.push(token);
       user.save(error => {
@@ -110,9 +113,19 @@ export default {
   }
 }
 
+function parseLimit(params) {
+  return params.limit || 50;
+}
+
+function parseSkip(params) {
+  return params.page * 10 || 0;
+}
+
 function parseQuery(params) {
   let query = _.clone(params);
   query = _.omit(query, 'access_token')
+  query = _.omit(query, 'page');
+  query = _.omit(query, 'limit');
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
   if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
