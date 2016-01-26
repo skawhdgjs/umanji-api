@@ -31,16 +31,16 @@ export default {
     Channel
       .create(params)
       .then(channel => {
+        return Channel
+                .findOne(channel.id)
+                .populateAll()
+      })
+      .then(channel => {
         return isSubChannelCreation(req, channel);
       })
       .then(isCommunityCreation)
       .then(channel => {
-        Channel
-          .findOne(channel.id)
-          .populateAll()
-          .then(channel => {
-            res.created(channel, {link: params.link || null});
-          })
+        res.created(channel, {link: params.link || null});
       })
       .catch(res.negotiate);
   },
@@ -156,7 +156,8 @@ function parseQuery(params) {
 function isSubChannelCreation(req, channel) {
   if(!channel.link) return channel;
   Channel
-    .findOne(channel.link)
+    .findOne(channel.link.id)
+    .populateAll()
     .then(linkedChannel => {
       linkedChannel.subLinks.push({
         owner: req.user.id,
