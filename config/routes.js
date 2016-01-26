@@ -7,6 +7,13 @@
 export default {
   routes: {
 
+    'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
+
+    'POST /v1/token/check'            : 'AuthController.checkToken',
+
+    'POST /v1/signup'                 : 'AuthController.signup',
+    'POST /v1/signin'                 : 'AuthController.signin',
+
 
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',
     'GET /v1/channels/id'             : 'ChannelController.get',
@@ -30,12 +37,8 @@ export default {
     'GET /v1/channels/markers'        : 'ChannelController.find',
     'GET /v1/channels/posts'          : 'ChannelController.find',
 
-    'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
-
-    'POST /v1/token/check'            : 'AuthController.checkToken',
-
-    'POST /v1/signup'                 : 'AuthController.signup',
-    'POST /v1/signin'                 : 'AuthController.signin',
+    'PUT /v1/channels/id'             : 'ChannelController.update',
+    'PUT /v1/channels/id/profile'     : 'ChannelController.update',
 
     // *********
 
@@ -64,7 +67,7 @@ export default {
 
 
 
-    'PUT /v1/users/id'                : 'UserController.update',
+
     'POST /v1/users/id/gcm'           : 'UserController.gcm',
 
 

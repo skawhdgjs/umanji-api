@@ -15,6 +15,15 @@ let pusher = pusherService.android;
  */
 
 export default {
+  update(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    Channel
+      .update(params.id, _.omit(params, 'id'))
+      .then(records => records[0] ? res.ok(records[0]) : res.notFound())
+      .catch(res.negotiate);
+  },
+
   create(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
@@ -26,7 +35,12 @@ export default {
       })
       .then(isCommunityCreation)
       .then(channel => {
-        res.created(channel, {link: params.link || null});
+        Channel
+          .findOne(channel.id)
+          .populateAll()
+          .then(channel => {
+            res.created(channel, {link: params.link || null});
+          })
       })
       .catch(res.negotiate);
   },
@@ -38,7 +52,7 @@ export default {
     Channel
       .find(query)
       .populateAll()
-      .sort('updatedAt DESC')
+      .sort('createdAt DESC')
       .then(channels => {
         res.ok(channels, {link: params.link || params.owner || null});
       })
@@ -132,6 +146,7 @@ function isSubChannelCreation(req, channel) {
     .findOne(channel.link)
     .then(linkedChannel => {
       linkedChannel.subLinks.push({
+        owner: req.user.id,
         id: channel.id,
         type: channel.type
       });
@@ -185,4 +200,9 @@ function createLevelCommunity(CommunityChannel, level, scope) {
       })
     }
   })
+}
+
+function isAction(type) {
+  const actions = ['MEMBER'];
+  return ( _.indexOf(actions, type) > -1 );
 }

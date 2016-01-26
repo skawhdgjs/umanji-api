@@ -16,9 +16,11 @@ export default {
       })
       .populate('owner')
       .then(memberChannels => {
-        console.log('memberChannels count: ', memberChannels.length);
         let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
-        tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
+
+        if(req.user) {
+          tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
+        }
 
         this.android
           .send(tokens,{
