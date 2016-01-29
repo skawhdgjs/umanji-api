@@ -13,6 +13,7 @@ export default {
 
     'POST /v1/signup'                 : 'AuthController.signup',
     'POST /v1/signin'                 : 'AuthController.signin',
+    'DEL  /v1/logout'                 : 'AuthController.logout',
 
 
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',

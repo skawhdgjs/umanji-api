@@ -36,9 +36,13 @@ export function signup(req, res) {
     .catch(res.negotiate);
 }
 
+export function logout(req, res) {
+  console.log('logout');
+  res.ok({});
+}
 export function checkToken(req, res) {
   let params = _.omit(req.allParams(), 'id');
-  
+
   let result = {
     token: req.param('access_token'),
     user: req.user
@@ -46,6 +50,7 @@ export function checkToken(req, res) {
 
   res.ok(result);
 }
+
 
 /**
  * Authorization via social networks

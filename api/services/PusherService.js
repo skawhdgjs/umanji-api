@@ -8,16 +8,15 @@ export default {
   android: pusher('android', config.services.pusher.android),
   ios: pusher('ios', config.services.pusher.ios),
 
-  channelCreated (req, channelRecord, postRecord) {
+  channelCreated (req, channelRecord, subChannel) {
     Channel
       .find({
-        link: channelRecord.id,
+        parent: channelRecord.id,
         type: 'MEMBER'
       })
       .populate('owner')
       .then(memberChannels => {
         let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
-
         if(req.user) {
           tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
         }
@@ -29,9 +28,11 @@ export default {
               type: channelRecord.type,
               level: channelRecord.level,
               title: channelRecord.type + ':'+ (channelRecord.name? channelRecord.name : '이름없음'),
-              text: '@' + postRecord.owner.name + ' ' + postRecord.name,
+              text: '@' + subChannel.owner.name + ' ' + subChannel.name,
             }
           });
+
+        saveNoty(req, channelRecord, subChannel, memberChannels);
       })
   }
 }
@@ -55,4 +56,33 @@ let removeMyTokenFrom = (tokens, myTokens) => {
     _.pull(tokens, userToken);
   });
   return tokens;
+}
+
+let saveNoty = (req, channelRecord, subChannel, memberChannels) => {
+  let recievers = [];
+  if(req.user.id != channelRecord.owner.id) {
+    recievers = [channelRecord.owner.id];
+  }
+
+  let memberIds = _.pluck(memberChannels, 'owner.id');
+
+  console.log('memberIds', memberIds);
+
+  recievers = recievers.concat(memberIds);
+  recievers = _.uniq(recievers);
+
+  console.log('recievers', recievers);
+  console.log('recievers length', recievers.length);
+  _.forEach(recievers, (receiver) => {
+
+    let noty = {
+      from: req.user.id,
+      to: receiver.id,
+      channel: subChannel.id,
+    }
+
+    Noty
+      .create(noty)
+      .catch(console.log.bind(console));
+  })
 }

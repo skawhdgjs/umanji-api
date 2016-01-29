@@ -24,9 +24,9 @@ export default {
     keywords : { type: 'array', defaultsTo: [] },
     followers: { type: 'array', defaultsTo: [] },
 
-    subLinks : { type: 'array', defaultsTo: [] },
-    link     : { model: 'Channel' },
-    actions  : { type: 'array', defaultsTo: [] },
+    subLinks     : { type: 'array', defaultsTo: [] },
+    parent       : { model: 'Channel' },
+    actions      : { type: 'array', defaultsTo: [] },
     gcmTokens    : { type: 'array', defaultsTo: [] },
 
     address      : { type: 'string', defaultsTo: '' },

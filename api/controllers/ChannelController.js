@@ -40,7 +40,7 @@ export default {
       })
       .then(isCommunityCreation)
       .then(channel => {
-        res.created(channel, {link: params.link || null});
+        res.created(channel, {parent: params.parent || null});
       })
       .catch(res.negotiate);
   },
@@ -58,7 +58,7 @@ export default {
       .sort('createdAt DESC')
       .populateAll()
       .then(channels => {
-        res.ok(channels, {link: params.link || params.owner || null});
+        res.ok(channels, {parent: params.parent || params.owner || null});
       })
       .catch(res.negotiate);
   },
@@ -138,7 +138,7 @@ function parseQuery(params) {
   }
 
   if(query.level < policy.level.LOCAL) {
-    query = _.omit(query, ['link']);
+    query = _.omit(query, ['parent']);
 
     if(query.type != 'COMMUNITY') {
       query = _.omit(query, ['level']);
@@ -153,23 +153,23 @@ function parseQuery(params) {
   return query;
 }
 
-function isSubChannelCreation(req, channel) {
-  if(!channel.link) return channel;
+function isSubChannelCreation(req, subChannel) {
+  if(!subChannel.parent) return subChannel;
   Channel
-    .findOne(channel.link.id)
+    .findOne(subChannel.parent.id)
     .populateAll()
-    .then(linkedChannel => {
-      linkedChannel.subLinks.push({
+    .then(parentChannel => {
+      parentChannel.subLinks.push({
         owner: req.user.id,
-        id: channel.id,
-        type: channel.type
+        id: subChannel.id,
+        type: subChannel.type
       });
 
-      linkedChannel.save();
-      pusherService.channelCreated(req, linkedChannel, channel);
+      parentChannel.save();
+      pusherService.channelCreated(req, parentChannel, subChannel);
     });
 
-  return channel;
+  return subChannel;
 }
 
 function isCommunityCreation(channel) {
