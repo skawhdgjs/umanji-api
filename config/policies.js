@@ -33,6 +33,11 @@ export default {
 
     UserController: {
       update: ['isAuthenticated']
+    },
+
+    NotyController: {
+      find: ['isAuthenticated'],
+      count: ['isAuthenticated']
     }
   }
 }

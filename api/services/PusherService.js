@@ -65,19 +65,15 @@ let saveNoty = (req, channelRecord, subChannel, memberChannels) => {
   }
 
   let memberIds = _.pluck(memberChannels, 'owner.id');
-
-  console.log('memberIds', memberIds);
-
   recievers = recievers.concat(memberIds);
   recievers = _.uniq(recievers);
 
-  console.log('recievers', recievers);
-  console.log('recievers length', recievers.length);
-  _.forEach(recievers, (receiver) => {
+  _.pull(recievers, req.user.id);
+  _.forEach(recievers, (receiverId) => {
 
     let noty = {
       from: req.user.id,
-      to: receiver.id,
+      to: receiverId,
       channel: subChannel.id,
     }
 

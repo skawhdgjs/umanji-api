@@ -41,6 +41,8 @@ export default {
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
 
+    'GET /v1/noties'                  : 'NotyController.find',
+    'GET /v1/noties/new/count'        : 'NotyController.count',
     // *********
 
 
