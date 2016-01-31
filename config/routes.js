@@ -43,6 +43,8 @@ export default {
 
     'GET /v1/noties'                  : 'NotyController.find',
     'GET /v1/noties/new/count'        : 'NotyController.count',
+    'PUT /v1/noties/read'             : 'NotyController.read',
+
     // *********
 
 

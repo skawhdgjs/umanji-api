@@ -37,7 +37,8 @@ export default {
 
     NotyController: {
       find: ['isAuthenticated'],
-      count: ['isAuthenticated']
+      count: ['isAuthenticated'],
+      read: ['isAuthenticated'],
     }
   }
 }

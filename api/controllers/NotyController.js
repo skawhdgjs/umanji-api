@@ -32,6 +32,19 @@ export default {
       .then(res.ok)
       .catch(res.negotiate);
   },
+
+  read(req, res) {
+    let params = actionUtil.parseValues(req);
+    let query = parseQuery(params);
+    query.to = req.user.id;
+    query.read = false;
+
+    console.log('api_noites_read query: ', query);
+    Noty
+      .update(query, {read: true})
+      .then(res.ok)
+      .catch(res.negotiate);
+  }
 }
 
 
