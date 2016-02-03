@@ -47,6 +47,8 @@ export default {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
 
+    console.log('params', params);
+    
     Channel
       .create(params)
       .then(channel => {
@@ -70,6 +72,7 @@ export default {
     let skip = parseSkip(params);
     let query = parseQuery(params);
 
+    console.log('find query ', query);
     Channel
       .find(query)
       .limit(10)
@@ -193,7 +196,7 @@ function isSubChannelCreation(req, subChannel) {
 }
 
 function isCommunityCreation(channel) {
-  if(channel.type != 'COMMUNITY') return channel;
+  if(channel.type != 'COMMUNITY' && channel.type != 'KEYWORD') return channel;
   let CommunityChannel = _.clone(channel);
 
   createLevelCommunity(CommunityChannel, policy.level.DONG, {thoroughfare: CommunityChannel.thoroughfare});
@@ -227,6 +230,7 @@ function createLevelCommunity(CommunityChannel, level, scope) {
           CommunityChannel.level = level
           jsonService.copyAddress(CommunityChannel, infoCenter);
 
+          CommunityChannel.type = 'COMMUNITY';
           Channel
             .create(_.omit(CommunityChannel, 'id'))
             .catch(console.log.bind(console));
