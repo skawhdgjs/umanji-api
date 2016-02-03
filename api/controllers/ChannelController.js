@@ -129,6 +129,7 @@ function parseQuery(params) {
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
   if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
+  if(query.type == 'COMMUNITY')  query.type = ['COMMUNITY', 'KEYWORD'];
 
   if(query.name) query.name = {'contains': query.name};
   if(query.minLatitude) {
