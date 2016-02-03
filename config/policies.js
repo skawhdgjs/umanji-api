@@ -18,6 +18,7 @@ export default {
     ChannelController: {
       join: ['isAuthenticated'],
       like: ['isAuthenticated'],
+      delete:  ['isAuthenticated'],
       create: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],

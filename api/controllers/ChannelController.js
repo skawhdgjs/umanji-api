@@ -24,11 +24,29 @@ export default {
       .catch(res.negotiate);
   },
 
+  delete(req, res) {
+    let params = actionUtil.parseValues(req);
+    let parent = params.parent;
+
+    Channel
+      .destroy({id: params.id})
+      .then(channel => {
+        Channel
+          .findOne({id: parent})
+          .then(parent => {
+            _.remove(parent.subLinks, {
+                id: params.id
+            });
+            parent.save();
+            res.ok(channel[0], {parent: params.parent || null});
+          })
+      })
+  },
+
   create(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
-    console.log('params', params);
-    
+
     Channel
       .create(params)
       .then(channel => {
