@@ -27,7 +27,8 @@ export default {
   create(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
-
+    console.log('params', params);
+    
     Channel
       .create(params)
       .then(channel => {

@@ -16,7 +16,9 @@ export default {
     read     : { type: 'boolean', defaultsTo: false },
     type     : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
-    desc     : { type: 'string', defaultsTo: '' },
+
+    desc     : { type: 'json' },
+
     level    : { type: 'integer', defaultsTo: policy.level.LOCAL },
     point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
 
