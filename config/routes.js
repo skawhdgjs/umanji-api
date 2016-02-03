@@ -24,6 +24,7 @@ export default {
     'POST /v1/channels/id/link'       : 'ChannelController.create',
     'POST /v1/channels/id/post'       : 'ChannelController.create',
     'POST /v1/channels/id/spot'       : 'ChannelController.create',
+    'POST /v1/channels/id/member'     : 'ChannelController.create',
     'POST /v1/channels/id/community'  : 'ChannelController.create',
     'POST /v1/channels/id/keyword'    : 'ChannelController.create',
 
@@ -37,6 +38,7 @@ export default {
     'GET /v1/channels'                : 'ChannelController.find',
     'GET /v1/channels/id/posts'       : 'ChannelController.find',
     'GET /v1/channels/id/spots'       : 'ChannelController.find',
+    'GET /v1/channels/id/members'     : 'ChannelController.find',
     'GET /v1/channels/id/communities' : 'ChannelController.find',
     'GET /v1/channels/id/keywords'    : 'ChannelController.find',
     'GET /v1/channels/markers'        : 'ChannelController.find',
