@@ -48,7 +48,7 @@ export default {
     params.owner = req.user.id;
 
     console.log('params', params);
-    
+
     Channel
       .create(params)
       .then(channel => {
@@ -70,14 +70,16 @@ export default {
     let params = actionUtil.parseValues(req);
     let limit = parseLimit(params);
     let skip = parseSkip(params);
+    let sort = parseSort(params);
     let query = parseQuery(params);
 
     console.log('find query ', query);
+    console.log('sort ', sort);
     Channel
       .find(query)
       .limit(10)
       .skip(skip)
-      .sort('createdAt DESC')
+      .sort(sort)
       .populateAll()
       .then(channels => {
         res.ok(channels, {parent: params.parent || params.owner || null});
@@ -143,15 +145,25 @@ function parseSkip(params) {
   return params.page * 10 || 0;
 }
 
+function parseSort(params) {
+  if(params.type == 'SPOT_INNER') {
+    params.sort = 'desc.floor ASC';
+  }
+
+  return params.sort || 'createdAt DESC';
+}
+
 function parseQuery(params) {
   let query = _.clone(params);
   query = _.omit(query, 'access_token')
   query = _.omit(query, 'page');
   query = _.omit(query, 'limit');
+  query = _.omit(query, 'sort');
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
   if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
   if(query.type == 'COMMUNITY')  query.type = ['COMMUNITY', 'KEYWORD'];
+
 
   if(query.name) query.name = {'contains': query.name};
   if(query.minLatitude) {
