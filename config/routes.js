@@ -13,9 +13,9 @@ export default {
 
     'POST /v1/signup'                 : 'AuthController.signup',
     'POST /v1/signin'                 : 'AuthController.signin',
-    'DELETE  /v1/logout'                 : 'AuthController.logout',
+    'DELETE  /v1/logout'              : 'AuthController.logout',
 
-
+    'GET /v1/channels/sign/point'     : 'ChannelController.getByPoint',
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',
     'GET /v1/channels/id'             : 'ChannelController.get',
 
@@ -31,8 +31,9 @@ export default {
     'POST /v1/channels/id/join'       : 'ChannelController.create',
     'POST /v1/channels/id/like'       : 'ChannelController.create',
 
-    'DELETE /v1/channels/id/join'       : 'ChannelController.delete',
-    'DELETE /v1/channels/id/like'       : 'ChannelController.delete',
+    'DELETE /v1/channels/id'          : 'ChannelController.delete',
+    'DELETE /v1/channels/id/join'     : 'ChannelController.delete',
+    'DELETE /v1/channels/id/like'     : 'ChannelController.delete',
 
 
     'GET /v1/channels'                : 'ChannelController.find',

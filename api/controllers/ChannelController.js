@@ -26,20 +26,26 @@ export default {
 
   delete(req, res) {
     let params = actionUtil.parseValues(req);
-    let parent = params.parent;
+    let parentId = params.parent;
+
+    if(!params.id) res.badRequest();
 
     Channel
       .destroy({id: params.id})
       .then(channel => {
-        Channel
-          .findOne({id: parent})
-          .then(parent => {
-            _.remove(parent.subLinks, {
-                id: params.id
-            });
-            parent.save();
-            res.ok(channel[0], {parent: params.parent || null});
-          })
+        if(parentId) {
+          Channel
+            .findOne({id: parentId})
+            .then(parent => {
+              _.remove(parent.subLinks, {
+                  id: params.id
+              });
+              parent.save();
+              res.ok(parent, {parent: params.parent || null});
+            })
+        }else {
+          res.ok(channel[0]);
+        }
       })
   },
 
@@ -162,11 +168,6 @@ function parseQuery(params) {
   query = _.omit(query, 'limit');
   query = _.omit(query, 'sort');
 
-  if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
-  if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
-  if(query.type == 'COMMUNITY')  query.type = ['COMMUNITY', 'KEYWORD'];
-
-
   if(query.name) query.name = {'contains': query.name};
   if(query.minLatitude) {
     query.latitude = { '>=': query.minLatitude, '<=': query.maxLatitude };
@@ -187,12 +188,17 @@ function parseQuery(params) {
     query = _.omit(query, ['zoom']);
   }
 
+  if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
+  if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
+  if(query.type == 'COMMUNITY')  query.type = ['COMMUNITY', 'KEYWORD'];
+
   return query;
 }
 
 function isSubChannelCreation(req, subChannel) {
   if(!subChannel.parent) return subChannel;
-  Channel
+
+  return Channel
     .findOne(subChannel.parent.id)
     .populateAll()
     .then(parentChannel => {
@@ -205,9 +211,10 @@ function isSubChannelCreation(req, subChannel) {
 
       parentChannel.save();
       pusherService.channelCreated(req, parentChannel, subChannel);
-    });
 
-  return subChannel;
+      subChannel.parent = parentChannel;
+      return subChannel;
+    });
 }
 
 function isCommunityCreation(channel) {
