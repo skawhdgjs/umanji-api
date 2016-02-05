@@ -74,10 +74,12 @@ export default {
     let query = parseQuery(params);
 
     console.log('find query ', query);
+    console.log('limit ', limit);
+    console.log('skip ', skip);
     console.log('sort ', sort);
     Channel
       .find(query)
-      .limit(10)
+      .limit(limit)
       .skip(skip)
       .sort(sort)
       .populateAll()
@@ -138,7 +140,7 @@ export default {
 }
 
 function parseLimit(params) {
-  return params.limit || 50;
+  return params.limit || 100;
 }
 
 function parseSkip(params) {
@@ -197,7 +199,8 @@ function isSubChannelCreation(req, subChannel) {
       parentChannel.subLinks.push({
         owner: req.user.id,
         id: subChannel.id,
-        type: subChannel.type
+        type: subChannel.type,
+        name: subChannel.name
       });
 
       parentChannel.save();
