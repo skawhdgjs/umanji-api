@@ -8,6 +8,6 @@ export default {
     CONTRY:   2
   },
   point: {
-    DEFAULT: 100,
+    DEFAULT: 0,
   }
 }

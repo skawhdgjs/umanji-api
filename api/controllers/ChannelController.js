@@ -33,6 +33,12 @@ export default {
     Channel
       .destroy({id: params.id})
       .then(channel => {
+
+        Channel
+          .update({id: req.user.id}, {point: req.user.point - 1})
+          .catch(console.log.bind(console));
+
+
         if(parentId) {
           Channel
             .findOne({id: parentId})
@@ -40,6 +46,8 @@ export default {
               _.remove(parent.subLinks, {
                   id: params.id
               });
+
+              parent.point = parent.point - 1;
               parent.save();
               res.ok(parent, {parent: params.parent || null});
             })
@@ -53,11 +61,14 @@ export default {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
 
-    console.log('params', params);
-
     Channel
       .create(params)
       .then(channel => {
+
+        Channel
+          .update({id: req.user.id}, {point: req.user.point + 1})
+          .catch(console.log.bind(console));
+
         return Channel
                 .findOne(channel.id)
                 .populateAll()
@@ -79,10 +90,6 @@ export default {
     let sort = parseSort(params);
     let query = parseQuery(params);
 
-    console.log('find query ', query);
-    console.log('limit ', limit);
-    console.log('skip ', skip);
-    console.log('sort ', sort);
     Channel
       .find(query)
       .limit(limit)
@@ -176,8 +183,6 @@ function parseQuery(params) {
   }
 
   if(query.level < policy.level.LOCAL) {
-    query = _.omit(query, ['parent']);
-
     if(query.type != 'COMMUNITY') {
       query = _.omit(query, ['level']);
     }
@@ -186,6 +191,11 @@ function parseQuery(params) {
   if(query.zoom) {
     query.level = { '<=': query.zoom};
     query = _.omit(query, ['zoom']);
+  }
+
+  if(query.parentType == 'INFO_CENTER') {
+    query = _.omit(query, ['parentType']);
+    query = _.omit(query, ['parent']);
   }
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
@@ -209,6 +219,7 @@ function isSubChannelCreation(req, subChannel) {
         name: subChannel.name
       });
 
+      parentChannel.point = parentChannel.point + 1;
       parentChannel.save();
       pusherService.channelCreated(req, parentChannel, subChannel);
 

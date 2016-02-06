@@ -20,7 +20,7 @@ export default {
     desc     : { type: 'json' },
 
     level    : { type: 'integer', defaultsTo: policy.level.LOCAL },
-    point    : { type: 'integer', defaultsTo: policy.point.DEFAULT },
+    point    : { type: 'integer', defaultsTo: 0 },
 
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
