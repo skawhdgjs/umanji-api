@@ -13,12 +13,10 @@ export default {
     let query = parseQuery(params);
     query.to = req.user.id
 
-    console.log('NotyController.find query: ', query);
     Noty
       .find(query)
       .sort('createdAt DESC')
       .populateAll()
-      .then(res.ok)
       .catch(res.negotiate);
   },
 
