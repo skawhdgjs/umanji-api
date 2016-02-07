@@ -95,6 +95,7 @@ export default {
       .limit(limit)
       .skip(skip)
       .sort(sort)
+      .sort("createdAt DESC")
       .populateAll()
       .then(channels => {
         res.ok(channels, {parent: params.parent || params.owner || null});
