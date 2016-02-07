@@ -17,7 +17,7 @@ export default {
       .find(query)
       .sort('createdAt DESC')
       .populateAll()
-      .then(noties)
+      .then(res.ok)
       .catch(res.negotiate);
   },
 
