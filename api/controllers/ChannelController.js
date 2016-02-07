@@ -236,6 +236,7 @@ function isCommunityCreation(channel) {
   createLevelCommunity(CommunityChannel, policy.level.DONG, {thoroughfare: CommunityChannel.thoroughfare});
   createLevelCommunity(CommunityChannel, policy.level.GUGUN, {locality: CommunityChannel.locality})
   createLevelCommunity(CommunityChannel, policy.level.DOSI, {adminArea: CommunityChannel.adminArea})
+  createLevelCommunity(CommunityChannel, policy.level.CONTRY, {countryCode: CommunityChannel.countryCode})
 
   return channel;
 }

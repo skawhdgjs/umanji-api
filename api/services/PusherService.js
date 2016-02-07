@@ -75,6 +75,7 @@ let saveNoty = (req, channelRecord, subChannel, memberChannels) => {
       from: req.user.id,
       to: receiverId,
       channel: subChannel.id,
+      parent: channelRecord.id
     }
 
     Noty

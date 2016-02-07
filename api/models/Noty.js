@@ -12,6 +12,7 @@ export default {
     from         : { model: 'Channel' },
     to           : { model: 'Channel' },
     channel      : { model: 'Channel' },
+    parent       : { model: 'Channel' },
     read         : { type: 'boolean', defaultsTo: false },
 
     toJSON() {
