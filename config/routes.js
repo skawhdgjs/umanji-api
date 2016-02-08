@@ -48,11 +48,13 @@ export default {
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
 
+    'PUT /v1/channels/id/spots'       : 'ChannelController.update',
+
     'GET /v1/noties'                  : 'NotyController.find',
     'GET /v1/noties/new/count'        : 'NotyController.count',
     'PUT /v1/noties/read'             : 'NotyController.read',
 
-    // *********
+    // *********  /channels/id/spots
 
 
     'POST /v1/photo'                  : 'PhotoController.photo',
