@@ -12,6 +12,7 @@ let pusher = pusherService.android;
 /**
  * ChannelController
  * @description :: Server-side logic for ...
+ * server coder : Paul Hwang for Git test
  */
 
 export default {
