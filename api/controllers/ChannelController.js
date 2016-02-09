@@ -16,6 +16,16 @@ let pusher = pusherService.android;
  */
 
 export default {
+  home(req, res) {
+    let params = actionUtil.parseValues(req);
+    if(!params.id) {
+      res.badRequest();
+      return;
+    }
+
+
+  },
+
   update(req, res) {
     let params = actionUtil.parseValues(req);
     if(!params.id) {
@@ -23,6 +33,7 @@ export default {
       return;
     }
 
+    console.log('params', params);
     Channel
       .update(params.id, _.omit(params, 'id'))
       .then(records => records[0] ? res.ok(records[0]) : res.notFound())

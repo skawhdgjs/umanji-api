@@ -24,6 +24,7 @@ export default {
       createLink: ['isAuthenticated'],
       createCommunity: ['isAuthenticated'],
       action: ['isAuthenticated'],
+      home: ['isAuthenticated'],
       gcm: ['isAuthenticated'],
     },
 
