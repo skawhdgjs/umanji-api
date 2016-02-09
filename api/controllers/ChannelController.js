@@ -18,7 +18,10 @@ let pusher = pusherService.android;
 export default {
   update(req, res) {
     let params = actionUtil.parseValues(req);
-    if(!params.id) res.badRequest();
+    if(!params.id) {
+      res.badRequest();
+      return;
+    }
 
     Channel
       .update(params.id, _.omit(params, 'id'))
@@ -30,7 +33,10 @@ export default {
     let params = actionUtil.parseValues(req);
     let parentId = params.parent;
 
-    if(!params.id) res.badRequest();
+    if(!params.id) {
+      res.badRequest();
+      return;
+    }
 
     Channel
       .destroy({id: params.id})
