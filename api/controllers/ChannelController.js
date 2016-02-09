@@ -18,6 +18,7 @@ let pusher = pusherService.android;
 export default {
   update(req, res) {
     let params = actionUtil.parseValues(req);
+    if(!params.id) res.badRequest();
 
     Channel
       .update(params.id, _.omit(params, 'id'))
