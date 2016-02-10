@@ -9,7 +9,7 @@ export default {
   schema: true,
 
   attributes: {
-    email     : { type: 'email'},
+    email     : { type: 'email', index: true},
     password  : { type: 'string' },
 
     owner    : { model: 'Channel' },
@@ -39,8 +39,8 @@ export default {
     locality     : { type: 'string', defaultsTo: '' },
     thoroughfare : { type: 'string', defaultsTo: '' },
     featureName  : { type: 'string', defaultsTo: '' },
-    latitude     : { type: 'float', defaultsTo : 0.0 },
-    longitude    : { type: 'float', defaultsTo : 0.0 },
+    latitude     : { type: 'float', defaultsTo : 0.0, index: true },
+    longitude    : { type: 'float', defaultsTo : 0.0, index: true },
 
 
     toJSON() {
