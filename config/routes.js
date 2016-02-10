@@ -40,6 +40,7 @@ export default {
     'GET /v1/channels/id/posts'       : 'ChannelController.find',
     'GET /v1/channels/id/spots'       : 'ChannelController.find',
     'GET /v1/channels/id/members'     : 'ChannelController.find',
+    'GET /v1/channels/id/likes'       : 'ChannelController.find',
     'GET /v1/channels/id/communities' : 'ChannelController.find',
     'GET /v1/channels/id/keywords'    : 'ChannelController.find',
     'GET /v1/channels/markers'        : 'ChannelController.find',
