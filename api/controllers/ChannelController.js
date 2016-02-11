@@ -107,8 +107,10 @@ export default {
     let limit = parseLimit(params);
     let skip = parseSkip(params);
     let sort = parseSort(params);
+    let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
+    console.log('find query: ', query);
     Channel
       .find(query)
       .limit(limit)
@@ -117,6 +119,9 @@ export default {
       .sort("createdAt DESC")
       .populateAll()
       .then(channels => {
+        if(distinct) {
+          channels = _.uniq(channels, distinct);
+        }
         res.ok(channels, {parent: params.parent || params.owner || null});
       })
       .catch(res.negotiate);
@@ -188,12 +193,17 @@ function parseSort(params) {
   return params.sort || 'createdAt DESC';
 }
 
+function parseDistinct(params) {
+  return params.distinct;
+}
+
 function parseQuery(params) {
   let query = _.clone(params);
   query = _.omit(query, 'access_token')
   query = _.omit(query, 'page');
   query = _.omit(query, 'limit');
   query = _.omit(query, 'sort');
+  query = _.omit(query, 'distinct');
 
   if(query.name) query.name = {'contains': query.name};
   if(query.minLatitude) {
@@ -213,7 +223,7 @@ function parseQuery(params) {
     query = _.omit(query, ['zoom']);
   }
 
-  if(query.parentType == 'INFO_CENTER') {
+  if(query.parentType == 'INFO_CENTER' || query.parentType == 'SPOT') {
     query = _.omit(query, ['parentType']);
     query = _.omit(query, ['parent']);
   }
