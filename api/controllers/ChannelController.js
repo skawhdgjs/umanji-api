@@ -80,6 +80,8 @@ export default {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
 
+    console.log('create params: ', params);
+
     Channel
       .create(params)
       .then(channel => {
@@ -102,21 +104,62 @@ export default {
       .catch(res.negotiate);
   },
 
-  find(req, res) {
+  findProfilePosts(req, res) {
     let params = actionUtil.parseValues(req);
+    params.type = 'POST';
+    this.find(req, res, params);
+  },
+
+  findMainMarkers(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT', 'INFO_CENTER'];
+
+    this.find(req, res, params);
+  },
+
+  findMainPosts(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = 'POST';
+    this.find(req, res, params);
+  },
+
+  findPosts(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = 'POST';
+
+    this.find(req, res, params);
+  },
+
+  findSpots(req, res) {
+    let params = actionUtil.parseValues(req);
+    this.find(req, res, params);
+  },
+
+  findMembers(req, res) {
+    let params = actionUtil.parseValues(req);
+    this.find(req, res, params);
+  },
+
+  findChannels(req, res) {
+    let params = actionUtil.parseValues(req);
+    this.find(req, res, params);
+  },
+
+  find(req, res, params) {
     let limit = parseLimit(params);
     let skip = parseSkip(params);
     let sort = parseSort(params);
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
-    console.log('find query: ', query);
+    console.log('find query', query);
+
     Channel
       .find(query)
       .limit(limit)
       .skip(skip)
       .sort(sort)
-      .sort("createdAt DESC")
+      .sort("updatedAt DESC")
       .populateAll()
       .then(channels => {
         if(distinct) {
@@ -178,7 +221,7 @@ export default {
 }
 
 function parseLimit(params) {
-  return params.limit || 100;
+  return params.limit || 10;
 }
 
 function parseSkip(params) {

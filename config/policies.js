@@ -19,13 +19,18 @@ export default {
       join: ['isAuthenticated'],
       like: ['isAuthenticated'],
       delete:  ['isAuthenticated'],
+
       create: ['isAuthenticated'],
+      createPost: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],
       createCommunity: ['isAuthenticated'],
       action: ['isAuthenticated'],
       home: ['isAuthenticated'],
       gcm: ['isAuthenticated'],
+
+      findProfilePosts: ['isAuthenticated'],
+
     },
 
     AuthController: {

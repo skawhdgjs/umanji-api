@@ -21,6 +21,7 @@ export default {
 
     'POST /v1/channels'               : 'ChannelController.create',
     'POST /v1/channels/spot'          : 'ChannelController.create',
+
     'POST /v1/channels/id/link'       : 'ChannelController.create',
     'POST /v1/channels/id/post'       : 'ChannelController.create',
     'POST /v1/channels/id/spot'       : 'ChannelController.create',
@@ -36,15 +37,21 @@ export default {
     'DELETE /v1/channels/id/like'     : 'ChannelController.delete',
 
 
-    'GET /v1/channels'                : 'ChannelController.find',
-    'GET /v1/channels/id/posts'       : 'ChannelController.find',
-    'GET /v1/channels/id/spots'       : 'ChannelController.find',
-    'GET /v1/channels/id/members'     : 'ChannelController.find',
-    'GET /v1/channels/id/likes'       : 'ChannelController.find',
-    'GET /v1/channels/id/communities' : 'ChannelController.find',
-    'GET /v1/channels/id/keywords'    : 'ChannelController.find',
-    'GET /v1/channels/markers'        : 'ChannelController.find',
-    'GET /v1/channels/posts'          : 'ChannelController.find',
+    'GET /v1/channels'                : 'ChannelController.findChannels',
+    'GET /v1/profile/id/posts'        : 'ChannelController.findProfilePosts',
+    'GET /v1/main/markers'            : 'ChannelController.findMainMarkers',
+    'GET /v1/main/posts'              : 'ChannelController.findMainPosts',
+
+    'GET /v1/channels/id/posts'       : 'ChannelController.findPosts',
+    'GET /v1/channels/id/spots'       : 'ChannelController.findSpots',
+
+    'GET /v1/channels/id/members'     : 'ChannelController.findMembers',
+    'GET /v1/channels/id/likes'       : 'ChannelController.findChannels',
+    'GET /v1/channels/id/communities' : 'ChannelController.findChannels',
+    'GET /v1/channels/id/keywords'    : 'ChannelController.findChannels',
+    'GET /v1/channels/markers'        : 'ChannelController.findChannels',
+    'GET /v1/channels/posts'          : 'ChannelController.findChannels',
+
 
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
