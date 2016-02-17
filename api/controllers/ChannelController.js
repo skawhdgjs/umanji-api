@@ -112,7 +112,7 @@ export default {
 
   findMainMarkers(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT', 'INFO_CENTER'];
+    params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
 
     this.find(req, res, params);
   },
