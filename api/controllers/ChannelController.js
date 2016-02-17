@@ -16,14 +16,51 @@ let pusher = pusherService.android;
  */
 
 export default {
+
+  findComplexSpots(req, res) {
+    let params = actionUtil.parseValues(req);
+    params = _.omit(params, 'access_token')
+
+    Channel
+      .findOne(params.id)
+      .then(channel => {
+        let subChannelIds = _.pluck(channel.subLinks, 'id');
+        console.log('subChannelIds', subChannelIds);
+
+        Channel
+          .find({id: subChannelIds})
+          .populateAll()
+          .then(res.ok)
+      })
+
+  },
+
+  link(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    Channel
+      .findOne(params.parent)
+      .populateAll()
+      .then(parentChannel => {
+        parentChannel.subLinks.push({
+          owner: params.owner,
+          id: params.id,
+          type: params.type,
+          name: params.name
+        });
+
+        parentChannel.point = parentChannel.point + 1;
+        return parentChannel.save();
+      })
+      .then(res.ok)
+  },
+
   home(req, res) {
     let params = actionUtil.parseValues(req);
     if(!params.id) {
       res.badRequest();
       return;
     }
-
-
   },
 
   update(req, res) {

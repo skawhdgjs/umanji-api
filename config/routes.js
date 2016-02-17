@@ -33,6 +33,8 @@ export default {
     'POST /v1/channels/id/join'       : 'ChannelController.create',
     'POST /v1/channels/id/like'       : 'ChannelController.create',
 
+    'POST /v1/channels/id/link'       : 'ChannelController.link',
+
     'DELETE /v1/channels/id'          : 'ChannelController.delete',
     'DELETE /v1/channels/id/join'     : 'ChannelController.delete',
     'DELETE /v1/channels/id/like'     : 'ChannelController.delete',
@@ -42,6 +44,10 @@ export default {
     'GET /v1/profile/id/posts'        : 'ChannelController.findProfilePosts',
     'GET /v1/main/markers'            : 'ChannelController.findMainMarkers',
     'GET /v1/main/posts'              : 'ChannelController.findMainPosts',
+
+    'GET /v1/complex/id/spots'        : 'ChannelController.findComplexSpots',
+
+
 
     'GET /v1/channels/id/posts'       : 'ChannelController.findPosts',
     'GET /v1/channels/id/spots'       : 'ChannelController.findSpots',

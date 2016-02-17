@@ -16,6 +16,7 @@ export default {
     // '*': ['isAuthenticated'],
 
     ChannelController: {
+      link: ['isAuthenticated'],
       join: ['isAuthenticated'],
       like: ['isAuthenticated'],
       delete:  ['isAuthenticated'],
