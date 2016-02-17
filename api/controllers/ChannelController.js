@@ -272,7 +272,7 @@ function parseQuery(params) {
   }
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
-  if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER'];
+  if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
   if(query.type == 'COMMUNITY')  query.type = ['COMMUNITY', 'KEYWORD'];
 
   return query;
