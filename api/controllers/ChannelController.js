@@ -202,6 +202,8 @@ export default {
         if(distinct) {
           channels = _.uniq(channels, distinct);
         }
+        console.log('channels skip', skip);
+        console.log('channels length', channels.length);
         res.ok(channels, {parent: params.parent || params.owner || null});
       })
       .catch(res.negotiate);
@@ -258,11 +260,12 @@ export default {
 }
 
 function parseLimit(params) {
-  return params.limit || 10;
+  return params.limit || 5;
 }
 
 function parseSkip(params) {
-  return params.page * 10 || 0;
+  let limit = params.limit || 5;
+  return params.page * limit || 0;
 }
 
 function parseSort(params) {
@@ -329,9 +332,6 @@ function isSubChannelCreation(req, subChannel) {
         name: subChannel.name
       });
 
-      console.log('parentChannel.point ', parentChannel.point);
-      console.log('policy.point.CREATE_CHANNEL ', policy.point.CREATE_CHANNEL);
-      
       parentChannel.point = parentChannel.point + policy.point.CREATE_CHANNEL;
       parentChannel.save();
       pusherService.channelCreated(req, parentChannel, subChannel);
