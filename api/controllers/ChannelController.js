@@ -329,6 +329,9 @@ function isSubChannelCreation(req, subChannel) {
         name: subChannel.name
       });
 
+      console.log('parentChannel.point ', parentChannel.point);
+      console.log('policy.point.CREATE_CHANNEL ', policy.point.CREATE_CHANNEL);
+      
       parentChannel.point = parentChannel.point + policy.point.CREATE_CHANNEL;
       parentChannel.save();
       pusherService.channelCreated(req, parentChannel, subChannel);
