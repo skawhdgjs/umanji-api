@@ -9,5 +9,10 @@ export default {
   },
   point: {
     DEFAULT: 0,
+    LINK: 1,
+    LIKE: 1,
+    JOIN: 2,
+    CREATE_CHANNEL: 10,
+    DELETE_CHANNEL: 10,
   }
 }

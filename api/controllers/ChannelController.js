@@ -49,7 +49,7 @@ export default {
           name: params.name
         });
 
-        parentChannel.point = parentChannel.point + 1;
+        parentChannel.point = parentChannel.point + policy.point.LINK;
         return parentChannel.save();
       })
       .then(res.ok)
@@ -91,7 +91,7 @@ export default {
       .then(channel => {
 
         Channel
-          .update({id: req.user.id}, {point: req.user.point - 1})
+          .update({id: req.user.id}, {point: req.user.point - policy.point.DELETE_CHANNEL})
           .catch(console.log.bind(console));
 
 
@@ -103,7 +103,7 @@ export default {
                   id: params.id
               });
 
-              parent.point = parent.point - 1;
+              parent.point = parent.point - policy.point.DELETE_CHANNEL;
               parent.save();
               res.ok(parent, {parent: params.parent || null});
             })
@@ -124,7 +124,7 @@ export default {
       .then(channel => {
 
         Channel
-          .update({id: req.user.id}, {point: req.user.point + 1})
+          .update({id: req.user.id}, {point: req.user.point + policy.point.CREATE_CHANNEL})
           .catch(console.log.bind(console));
 
         return Channel
@@ -329,7 +329,7 @@ function isSubChannelCreation(req, subChannel) {
         name: subChannel.name
       });
 
-      parentChannel.point = parentChannel.point + 1;
+      parentChannel.point = parentChannel.point + policy.point.CREATE_CHANNEL;
       parentChannel.save();
       pusherService.channelCreated(req, parentChannel, subChannel);
 
