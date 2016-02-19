@@ -200,8 +200,6 @@ export default {
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
-    console.log('find query', query);
-
     Channel
       .find(query)
       .limit(limit)
@@ -271,11 +269,11 @@ export default {
 }
 
 function parseLimit(params) {
-  return params.limit || 5;
+  return params.limit || 10;
 }
 
 function parseSkip(params) {
-  let limit = params.limit || 5;
+  let limit = params.limit || 10;
   return params.page * limit || 0;
 }
 
