@@ -19,19 +19,20 @@ export default {
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',
     'GET /v1/channels/id'             : 'ChannelController.get',
 
-    'POST /v1/channels'               : 'ChannelController.create',
-    'POST /v1/channels/spot'          : 'ChannelController.create',
-    'POST /v1/channels/complex'       : 'ChannelController.create',
+    'POST /v1/channels'               : 'ChannelController.createChannel',
+    'POST /v1/channels/spot'          : 'ChannelController.createChannel',
+    'POST /v1/channels/complex'       : 'ChannelController.createChannel',
 
-    'POST /v1/channels/id/post'       : 'ChannelController.create',
-    'POST /v1/channels/id/spot'       : 'ChannelController.create',
-    'POST /v1/channels/id/member'     : 'ChannelController.create',
-    'POST /v1/channels/id/community'  : 'ChannelController.create',
-    'POST /v1/channels/id/keyword'    : 'ChannelController.create',
+    'POST /v1/channels/id/post'       : 'ChannelController.createChannel',
+    'POST /v1/channels/id/spot'       : 'ChannelController.createChannel',
+    'POST /v1/channels/id/member'     : 'ChannelController.createChannel',
+    'POST /v1/channels/id/community'  : 'ChannelController.createChannel',
+    'POST /v1/channels/id/keyword'    : 'ChannelController.createChannel',
 
-    'POST /v1/channels/id/join'       : 'ChannelController.create',
-    'POST /v1/channels/id/like'       : 'ChannelController.create',
+    'POST /v1/channels/id/join'       : 'ChannelController.createChannel',
+    'POST /v1/channels/id/like'       : 'ChannelController.createChannel',
 
+    'POST /v1/channels/id/vote'       : 'ChannelController.vote',
     'POST /v1/channels/id/link'       : 'ChannelController.link',
 
     'DELETE /v1/channels/id'          : 'ChannelController.delete',

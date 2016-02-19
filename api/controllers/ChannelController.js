@@ -113,6 +113,17 @@ export default {
       })
   },
 
+  vote(req, res) {
+    let params = actionUtil.parseValues(req);
+    console.log('vote params', params);
+    this.create(req, res, params);
+  },
+
+  createChannel(req, res) {
+    let params = actionUtil.parseValues(req);
+    this.create(req, res, params);
+  },
+
   create(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;

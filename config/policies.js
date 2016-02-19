@@ -16,12 +16,13 @@ export default {
     // '*': ['isAuthenticated'],
 
     ChannelController: {
+      vote: ['isAuthenticated'],
       link: ['isAuthenticated'],
       join: ['isAuthenticated'],
       like: ['isAuthenticated'],
       delete:  ['isAuthenticated'],
 
-      create: ['isAuthenticated'],
+      createChannel: ['isAuthenticated'],
       createPost: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],
