@@ -200,18 +200,19 @@ export default {
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
+    console.log('find sort', sort);
+
     Channel
       .find(query)
       .limit(limit)
       .skip(skip)
+      // .sort(sort)
       .sort(sort)
-      .sort("updatedAt DESC")
       .populateAll()
       .then(channels => {
         if(distinct) {
           channels = _.uniq(channels, distinct);
         }
-        console.log('channels skip', skip);
         console.log('channels length', channels.length);
         res.ok(channels, {parent: params.parent || params.owner || null});
       })
@@ -282,7 +283,7 @@ function parseSort(params) {
     params.sort = 'desc.floor ASC';
   }
 
-  return params.sort || 'createdAt DESC';
+  return params.sort || 'updatedAt DESC';
 }
 
 function parseDistinct(params) {
