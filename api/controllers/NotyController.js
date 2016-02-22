@@ -10,12 +10,18 @@ import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
 export default {
   find(req, res) {
     let params = actionUtil.parseValues(req);
+
+    let limit = parseLimit(params);
+    let skip = parseSkip(params);
+    let sort = parseSort(params);
     let query = parseQuery(params);
     query.to = req.user.id
 
     Noty
       .find(query)
-      .sort('createdAt DESC')
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
       .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
@@ -46,12 +52,29 @@ export default {
   }
 }
 
+function parseLimit(params) {
+  return params.limit || 10;
+}
+
+function parseSkip(params) {
+  let limit = params.limit || 10;
+  return params.page * limit || 0;
+}
+
+function parseSort(params) {
+  return params.sort || 'createdAt DESC';
+}
+
+function parseDistinct(params) {
+  return params.distinct;
+}
 
 function parseQuery(params) {
   let query = _.clone(params);
   query = _.omit(query, 'access_token')
   query = _.omit(query, 'page');
   query = _.omit(query, 'limit');
+  query = _.omit(query, 'sort');
 
   return query;
 }

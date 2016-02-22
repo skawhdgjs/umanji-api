@@ -206,7 +206,6 @@ export default {
       .find(query)
       .limit(limit)
       .skip(skip)
-      // .sort(sort)
       .sort(sort)
       .populateAll()
       .then(channels => {
