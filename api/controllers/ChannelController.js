@@ -269,11 +269,11 @@ export default {
 }
 
 function parseLimit(params) {
-  return params.limit || 10;
+  return params.limit || 15;
 }
 
 function parseSkip(params) {
-  let limit = params.limit || 10;
+  let limit = params.limit || 15;
   return params.page * limit || 0;
 }
 
