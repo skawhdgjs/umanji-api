@@ -122,6 +122,8 @@ export default {
     let params = actionUtil.parseValues(req);
     const level = params.level;
 
+    console.log('level', level);
+
     if(level == policy.level.LOCAL) {
       this.create(req, res, params);
     } else {
@@ -315,6 +317,19 @@ export default {
       .catch(res.negotiate);
   },
 
+  findOne(req, res) {
+    let params = actionUtil.parseValues(req);
+    let query = _.omit(params, 'access_token');
+
+    console.log('findOne query', query);
+
+    Channel
+      .findOne(query)
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
+  },
+
   get(req, res) {
     let params = actionUtil.parseValues(req);
 
@@ -451,6 +466,7 @@ function isCommunityCreation(channel) {
   let communityChannel = _.clone(channel);
 
   switch (communityChannel.level) {
+    case policy.level.LOCAL:
     case policy.level.DONG:
       createLevelCommunity(communityChannel, policy.level.DONG, {thoroughfare: communityChannel.thoroughfare});
     case policy.level.GUGUN:
@@ -462,11 +478,10 @@ function isCommunityCreation(channel) {
       break;
   }
 
-  return communityChannel;
+  return channel;
 }
 
 function createLevelCommunity(communityChannel, level, scope) {
-
   let query = {
     type: 'COMMUNITY',
     name: communityChannel.name,
@@ -474,9 +489,9 @@ function createLevelCommunity(communityChannel, level, scope) {
   }
   _.merge(query, scope);
 
+
   return Channel.findOne(query)
     .then(community => {
-
       if(!community) {
         let infoQuery = {
           type: 'INFO_CENTER',

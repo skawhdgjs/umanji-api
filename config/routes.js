@@ -18,6 +18,7 @@ export default {
     'GET /v1/channels/sign/point'     : 'ChannelController.getByPoint',
     'GET /v1/channels/point'          : 'ChannelController.getByPoint',
     'GET /v1/channels/id'             : 'ChannelController.get',
+    'GET /v1/channels/findOne'        : 'ChannelController.findOne',
 
     'POST /v1/channels'               : 'ChannelController.createChannel',
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
