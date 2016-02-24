@@ -179,7 +179,7 @@ export default {
         case policy.level.DOSI:
           createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
             .then(channel => {
-              console.log('DOSI channel', channel);
+
               if(channel) {
                   Channel
                     .findOne(channel.id)
