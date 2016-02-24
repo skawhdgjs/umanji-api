@@ -292,6 +292,12 @@ export default {
     this.find(req, res, params);
   },
 
+  search(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
+    this.find(req, res, params);
+  },
+
   find(req, res, params) {
     let limit = parseLimit(params);
     let skip = parseSkip(params);
@@ -299,7 +305,7 @@ export default {
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
-    console.log('find sort', sort);
+    console.log('find query', query);
 
     Channel
       .find(query)

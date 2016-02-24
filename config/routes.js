@@ -50,6 +50,7 @@ export default {
 
     'GET /v1/complex/id/spots'        : 'ChannelController.findComplexSpots',
 
+    'GET /v1/main/search'             : 'ChannelController.search',
 
 
     'GET /v1/channels/id/posts'       : 'ChannelController.findPosts',
