@@ -23,6 +23,7 @@ export default {
       delete:  ['isAuthenticated'],
 
       createChannel: ['isAuthenticated'],
+      createCommunity: ['isAuthenticated'],
       createPost: ['isAuthenticated'],
       createSpot: ['isAuthenticated'],
       createLink: ['isAuthenticated'],

@@ -23,6 +23,8 @@ export default {
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
     'POST /v1/channels/complex'       : 'ChannelController.createChannel',
 
+    'POST /v1/channels/community'     : 'ChannelController.createCommunity',
+
     'POST /v1/channels/id/post'       : 'ChannelController.createChannel',
     'POST /v1/channels/id/spot'       : 'ChannelController.createChannel',
     'POST /v1/channels/id/member'     : 'ChannelController.createChannel',

@@ -70,7 +70,6 @@ export default {
       return;
     }
 
-    console.log('params', params);
     Channel
       .update(params.id, _.omit(params, 'id'))
       .then(records => records[0] ? res.ok(records[0]) : res.notFound())
@@ -119,6 +118,106 @@ export default {
     this.create(req, res, params);
   },
 
+  createCommunity(req, res) {
+    let params = actionUtil.parseValues(req);
+    const level = params.level;
+
+    if(level == policy.level.LOCAL) {
+      this.create(req, res, params);
+    } else {
+      let communityChannel = {}
+      jsonService.copyAddress(communityChannel, params);
+      communityChannel.owner = req.user.id;
+      communityChannel.level = params.level;
+      communityChannel.name = params.name;
+      communityChannel.type = 'COMMUNITY';
+
+      switch (communityChannel.level) {
+        case policy.level.DONG:
+          createLevelCommunity(communityChannel, policy.level.DONG, {thoroughfare: communityChannel.thoroughfare})
+            .then(channel => {
+
+              if(channel) {
+                  Channel
+                    .findOne(channel.id)
+                    .populateAll()
+                    .then(channel => {
+                        res.created(channel, {parent: params.parent || null});
+                    })
+              }else {
+                res.ok({}, {parent: params.parent || null});
+              }
+
+            });
+
+          createLevelCommunity(communityChannel, policy.level.GUGUN, {locality: communityChannel.locality})
+          createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
+          createLevelCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+          break;
+
+        case policy.level.GUGUN:
+          createLevelCommunity(communityChannel, policy.level.GUGUN, {locality: communityChannel.locality})
+            .then(channel => {
+
+              if(channel) {
+                  Channel
+                    .findOne(channel.id)
+                    .populateAll()
+                    .then(channel => {
+                        res.created(channel, {parent: params.parent || null});
+                    })
+              }else {
+                res.ok({}, {parent: params.parent || null});
+              }
+
+            });
+
+          createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
+          createLevelCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+          break;
+
+        case policy.level.DOSI:
+          createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
+            .then(channel => {
+              console.log('DOSI channel', channel);
+              if(channel) {
+                  Channel
+                    .findOne(channel.id)
+                    .populateAll()
+                    .then(channel => {
+                      res.created(channel, {parent: params.parent || null});
+                    })
+              }else {
+                res.ok({}, {parent: params.parent || null});
+              }
+
+            });
+          createLevelCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+          break;
+
+        case policy.level.CONTRY:
+          createLevelCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+            .then(channel => {
+
+              if(channel) {
+                  Channel
+                    .findOne(channel.id)
+                    .populateAll()
+                    .then(channel => {
+                        res.created(channel, {parent: params.parent || null});
+                    })
+              }else {
+                res.ok({}, {parent: params.parent || null});
+              }
+
+            });
+          break;
+      }
+    }
+  },
+
+
+
   createChannel(req, res) {
     let params = actionUtil.parseValues(req);
     this.create(req, res, params);
@@ -127,8 +226,6 @@ export default {
   create(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
-
-    console.log('create params: ', params);
 
     Channel
       .create(params)
@@ -315,7 +412,7 @@ function parseQuery(params) {
     query = _.omit(query, ['zoom']);
   }
 
-  if(query.parentType == 'INFO_CENTER' || query.parentType == 'SPOT') {
+  if(query.parentType == 'INFO_CENTER' || query .parentType == 'SPOT') {
     query = _.omit(query, ['parentType']);
     query = _.omit(query, ['parent']);
   }
@@ -351,48 +448,58 @@ function isSubChannelCreation(req, subChannel) {
 
 function isCommunityCreation(channel) {
   if(channel.type != 'COMMUNITY' && channel.type != 'KEYWORD') return channel;
-  let CommunityChannel = _.clone(channel);
+  let communityChannel = _.clone(channel);
 
-  createLevelCommunity(CommunityChannel, policy.level.DONG, {thoroughfare: CommunityChannel.thoroughfare});
-  createLevelCommunity(CommunityChannel, policy.level.GUGUN, {locality: CommunityChannel.locality})
-  createLevelCommunity(CommunityChannel, policy.level.DOSI, {adminArea: CommunityChannel.adminArea})
-  createLevelCommunity(CommunityChannel, policy.level.CONTRY, {countryCode: CommunityChannel.countryCode})
+  switch (communityChannel.level) {
+    case policy.level.DONG:
+      createLevelCommunity(communityChannel, policy.level.DONG, {thoroughfare: communityChannel.thoroughfare});
+    case policy.level.GUGUN:
+      createLevelCommunity(communityChannel, policy.level.GUGUN, {locality: communityChannel.locality})
+    case policy.level.DOSI:
+      createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
+    case policy.level.CONTRY:
+      createLevelCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+      break;
+  }
 
-  return channel;
+  return communityChannel;
 }
 
-function createLevelCommunity(CommunityChannel, level, scope) {
+function createLevelCommunity(communityChannel, level, scope) {
 
   let query = {
     type: 'COMMUNITY',
-    name: CommunityChannel.name,
+    name: communityChannel.name,
     level: level
   }
   _.merge(query, scope);
 
-  Channel.findOne(query)
-  .then(community => {
-    if(!community) {
-      let infoQuery = {
-        type: 'INFO_CENTER',
-        level: level
-      }
-      _.merge(infoQuery, scope);
+  return Channel.findOne(query)
+    .then(community => {
 
-      Channel.findOne(infoQuery)
-      .then(infoCenter => {
-        if(infoCenter) {
-          CommunityChannel.level = level
-          jsonService.copyAddress(CommunityChannel, infoCenter);
-
-          CommunityChannel.type = 'COMMUNITY';
-          Channel
-            .create(_.omit(CommunityChannel, 'id'))
-            .catch(console.log.bind(console));
+      if(!community) {
+        let infoQuery = {
+          type: 'INFO_CENTER',
+          level: level
         }
-      })
-    }
-  })
+        _.merge(infoQuery, scope);
+
+        return Channel.findOne(infoQuery)
+        .then(infoCenter => {
+          if(infoCenter) {
+
+            communityChannel.level = level
+            jsonService.copyAddress(communityChannel, infoCenter);
+            communityChannel.type = 'COMMUNITY';
+            return Channel
+              .create(_.omit(communityChannel, 'id'))
+              .catch(console.log.bind(console));
+          }
+        })
+      } else {
+        return null;
+      }
+    })
 }
 
 function isAction(type) {
