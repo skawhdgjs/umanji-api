@@ -9,8 +9,8 @@ export default {
   schema: true,
 
   attributes: {
-    email     : { type: 'email', index: true},
-    password  : { type: 'string' },
+    email     : { type: 'email', unique: true, index: true},
+    password  : { type: 'string'},
 
     owner    : { model: 'Channel' },
     read     : { type: 'boolean', defaultsTo: false },
@@ -42,6 +42,7 @@ export default {
     latitude     : { type: 'float', defaultsTo : 0.0, index: true },
     longitude    : { type: 'float', defaultsTo : 0.0, index: true },
 
+    status       : { type: 'string' },
 
     toJSON() {
       let obj = this.toObject();

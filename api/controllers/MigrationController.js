@@ -175,5 +175,40 @@ export default {
         })
       });
       request.end();
+  },
+
+  deleteData(req, res) {
+    Channel
+      .find()
+      .then(channels => {
+        let deletedPostCountByEmptyUser = 0;
+        let deletedPostCountByEmptyParent = 0;
+
+        _.forEach(channels, (channel) => {
+          if(channel.type == 'POST') {
+            Channel
+              .findOne(channel.owner)
+              .then(user => {
+                if(user == null) {
+                  deletedPostCountByEmptyUser = deletedPostCountByEmptyUser + 1;
+                  Channel
+                    .destroy({id: channel.id})
+                }
+
+                Channel
+                  .findOne(channel.parent)
+                  .then(parent => {
+                    if(parent == null) {
+                      deletedPostCountByEmptyParent = deletedPostCountByEmptyParent + 1;
+                      Channel
+                        .destroy({id: channel.id})
+                    }
+                  })
+              });
+          }
+        })
+        console.log('deletedPostCountByEmptyUser :', deletedPostCountByEmptyUser);
+        console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
+      })
   }
 }

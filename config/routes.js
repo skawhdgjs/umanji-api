@@ -110,5 +110,7 @@ export default {
     'GET /v1/migration/to/01'         : 'MigrationController.toChannel_01',
     'GET /v1/migration/to/02'         : 'MigrationController.toChannel_02',
     'GET /v1/migration/to/03'         : 'MigrationController.toChannel_03',
+
+    'GET /v1/migration/delete'        : 'MigrationController.deleteData',
   }
 }

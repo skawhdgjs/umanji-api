@@ -28,12 +28,22 @@ export function signup(req, res) {
   params.type = 'USER';
 
   Channel
-    .create(params)
+    .findOne({email: params.email})
     .then(user => {
-      return {token: CipherService.jwt.encodeSync({id: user.id}), user: user}
+      if(user) {
+        res.ok({});
+      } else {
+        Channel
+          .create(params)
+          .then(user => {
+            return {token: CipherService.jwt.encodeSync({id: user.id}), user: user}
+          })
+          .then(res.created)
+          .catch(res.negotiate);
+      }
     })
-    .then(res.created)
-    .catch(res.negotiate);
+
+
 }
 
 export function logout(req, res) {
