@@ -185,12 +185,13 @@ export default {
         let deletedPostCountByEmptyParent = 0;
 
         _.forEach(channels, (channel) => {
-          if(channel.type == 'POST') {
+          if(channel.type == 'POST' || channel.type == 'MEMBER') {
             Channel
               .findOne(channel.owner)
               .then(user => {
                 if(user == null) {
                   deletedPostCountByEmptyUser = deletedPostCountByEmptyUser + 1;
+                  console.log('deletedPostCountByEmptyUser :', deletedPostCountByEmptyUser);
                   Channel
                     .destroy({id: channel.id})
                 }
@@ -200,6 +201,7 @@ export default {
                   .then(parent => {
                     if(parent == null) {
                       deletedPostCountByEmptyParent = deletedPostCountByEmptyParent + 1;
+                      console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
                       Channel
                         .destroy({id: channel.id})
                     }
@@ -207,8 +209,6 @@ export default {
               });
           }
         })
-        console.log('deletedPostCountByEmptyUser :', deletedPostCountByEmptyUser);
-        console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
       })
   }
 }
