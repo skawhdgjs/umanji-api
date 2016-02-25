@@ -186,6 +186,9 @@ export default {
 
         _.forEach(channels, (channel) => {
           if(channel.type == 'POST' || channel.type == 'MEMBER') {
+            console.log('channel.type', channel.type);
+            console.log('channel.owner', channel.owner);
+
             Channel
               .findOne(channel.owner)
               .then(user => {
