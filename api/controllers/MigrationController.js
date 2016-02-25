@@ -186,9 +186,6 @@ export default {
 
         _.forEach(channels, (channel) => {
           if(channel.type == 'POST' || channel.type == 'MEMBER') {
-            console.log('channel.type', channel.type);
-            console.log('channel.owner', channel.owner);
-
             Channel
               .findOne(channel.owner)
               .then(user => {
@@ -197,6 +194,7 @@ export default {
                   console.log('deletedPostCountByEmptyUser :', deletedPostCountByEmptyUser);
                   Channel
                     .destroy({id: channel.id})
+                    .catch(console.log.bind(console));
                 }
 
                 Channel
@@ -207,6 +205,7 @@ export default {
                       console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
                       Channel
                         .destroy({id: channel.id})
+                        .catch(console.log.bind(console));
                     }
                   })
               });
