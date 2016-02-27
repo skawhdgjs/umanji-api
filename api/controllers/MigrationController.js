@@ -184,8 +184,13 @@ export default {
         let deletedPostCountByEmptyUser = 0;
         let deletedPostCountByEmptyParent = 0;
 
+        console.log('start delete data ', channels.length)
+
         _.forEach(channels, (channel) => {
-          if(channel.type == 'POST' || channel.type == 'MEMBER') {
+          if(channel.type == 'POST' || channel.type == 'MEMBER' || channel.type == 'LIKE') {
+
+            console.log('channel type ', channel.type);
+
             Channel
               .findOne(channel.owner)
               .then(user => {
@@ -195,22 +200,24 @@ export default {
                   Channel
                     .destroy({id: channel.id})
                     .catch(console.log.bind(console));
+                } else {
+                  Channel
+                    .findOne(channel.parent)
+                    .then(parent => {
+                      if(parent == null) {
+                        deletedPostCountByEmptyParent = deletedPostCountByEmptyParent + 1;
+                        console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
+                        Channel
+                          .destroy({id: channel.id})
+                          .catch(console.log.bind(console));
+                      }
+                    })
                 }
-
-                Channel
-                  .findOne(channel.parent)
-                  .then(parent => {
-                    if(parent == null) {
-                      deletedPostCountByEmptyParent = deletedPostCountByEmptyParent + 1;
-                      console.log('deletedPostCountByEmptyParent :', deletedPostCountByEmptyParent);
-                      Channel
-                        .destroy({id: channel.id})
-                        .catch(console.log.bind(console));
-                    }
-                  })
               });
           }
         })
+
+        res.ok({});
       })
   }
 }

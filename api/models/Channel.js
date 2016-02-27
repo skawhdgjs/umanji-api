@@ -15,6 +15,7 @@ export default {
     owner    : { model: 'Channel' },
     read     : { type: 'boolean', defaultsTo: false },
     type     : { type: 'string' },
+    subType  : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
 
     desc     : { type: 'json' },
