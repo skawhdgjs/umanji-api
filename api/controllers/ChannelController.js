@@ -25,7 +25,6 @@ export default {
       .findOne(params.id)
       .then(channel => {
         let subChannelIds = _.pluck(channel.subLinks, 'id');
-        console.log('subChannelIds', subChannelIds);
 
         Channel
           .find({id: subChannelIds})
@@ -70,9 +69,14 @@ export default {
       return;
     }
 
+    params = _.omit(params, 'access_token');
+
     Channel
       .update(params.id, _.omit(params, 'id'))
-      .then(records => records[0] ? res.ok(records[0]) : res.notFound())
+      .then(records => {
+        console.log('records[0]', records[0])
+        records[0] ? res.ok(records[0]) : res.notFound();
+      })
       .catch(res.negotiate);
   },
 
@@ -114,7 +118,6 @@ export default {
 
   vote(req, res) {
     let params = actionUtil.parseValues(req);
-    console.log('vote params', params);
     this.create(req, res, params);
   },
 
@@ -298,6 +301,8 @@ export default {
   },
 
   find(req, res, params) {
+    console.log('find params', params);
+
     let limit = parseLimit(params);
     let skip = parseSkip(params);
     let sort = parseSort(params);
@@ -305,7 +310,6 @@ export default {
     let query = parseQuery(params);
 
     console.log('find query', query);
-
     Channel
       .find(query)
       .limit(limit)
@@ -316,7 +320,6 @@ export default {
         if(distinct) {
           channels = _.uniq(channels, distinct);
         }
-        console.log('channels length', channels.length);
         res.ok(channels, {parent: params.parent || params.owner || null});
       })
       .catch(res.negotiate);
@@ -325,8 +328,6 @@ export default {
   findOne(req, res) {
     let params = actionUtil.parseValues(req);
     let query = _.omit(params, 'access_token');
-
-    console.log('findOne query', query);
 
     Channel
       .findOne(query)
@@ -378,7 +379,6 @@ export default {
       user.save(error => {
         if(error) console.log('error', error);
         else
-          console.log('user update success');
           res.ok(req.user);
       });
     }
@@ -439,6 +439,18 @@ function parseQuery(params) {
 
   if(query.type == 'SPOTS')        query.type = ['SPOT', 'SPOT_INNER'];
   if(query.type == 'MAIN_MARKER')  query.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
+
+  if(query.type == 'PROFILE_SPOTS') {
+    query.type = ['SPOT', 'SPOT_INNER'];
+    query.or = [{'owner': query.owner}, {'subLinks.owner': query.owner}];
+    query = _.omit(query, ['owner']);
+  }
+
+  if(query.type == 'PROFILE_COMMUNITIES') {
+    query.type = ['COMMUNITY', 'COMPLEX'];
+    query.or = [{'owner': query.owner}, {'subLinks.owner': query.owner}];
+    query = _.omit(query, ['owner', 'level']);
+  }
 
   return query;
 }
@@ -508,10 +520,10 @@ function createLevelCommunity(communityChannel, level, scope) {
         return Channel.findOne(infoQuery)
         .then(infoCenter => {
           if(infoCenter) {
-
             communityChannel.level = level
             jsonService.copyAddress(communityChannel, infoCenter);
             communityChannel.type = 'COMMUNITY';
+            communityChannel.parent = infoCenter.id;
             return Channel
               .create(_.omit(communityChannel, 'id'))
               .catch(console.log.bind(console));

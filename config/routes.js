@@ -45,6 +45,7 @@ export default {
 
     'GET /v1/channels'                : 'ChannelController.findChannels',
     'GET /v1/profile/id/posts'        : 'ChannelController.findProfilePosts',
+
     'GET /v1/main/markers'            : 'ChannelController.findMainMarkers',
     'GET /v1/main/posts'              : 'ChannelController.findMainPosts',
 
