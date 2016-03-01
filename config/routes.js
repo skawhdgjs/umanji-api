@@ -63,6 +63,7 @@ export default {
     'GET /v1/channels/markers'        : 'ChannelController.findChannels',
     'GET /v1/channels/posts'          : 'ChannelController.findChannels',
 
+    'GET /v1/channels/id/authority'   : 'ChannelController.getAuthority',
 
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',

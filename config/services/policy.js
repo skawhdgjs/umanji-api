@@ -14,5 +14,13 @@ export default {
     JOIN: 2,
     CREATE_CHANNEL: 10,
     DELETE_CHANNEL: 10,
+  },
+  admin: {
+    LOCAL:    0,
+    COMPLEX:  100,
+    DONG:     1000,
+    GUGUN:    2000,
+    DOSI:     3000,
+    COUNTRY:   5000
   }
 }
