@@ -122,9 +122,9 @@ export default {
     let params = actionUtil.parseValues(req);
     const level = params.level;
 
-    console.log('level', level);
+    if(level >= policy.level.COMPLEX) {
+      console.log('1')
 
-    if(level == policy.level.LOCAL) {
       this.create(req, res, params);
     } else {
       let communityChannel = {}
@@ -472,6 +472,7 @@ function isCommunityCreation(channel) {
 
   switch (communityChannel.level) {
     case policy.level.LOCAL:
+    case policy.level.COMPLEX:
     case policy.level.DONG:
       createLevelCommunity(communityChannel, policy.level.DONG, {thoroughfare: communityChannel.thoroughfare});
     case policy.level.GUGUN:
