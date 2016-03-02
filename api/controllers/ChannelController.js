@@ -91,11 +91,38 @@ export default {
 
     Channel
       .destroy({id: params.id})
-      .then(channel => {
+      .then(channels => {
+
+        // for backup
+        let channel = _.omit(channels[0], 'id');
+        channel.channelId = channels[0].id;
+        channel.status = 'DELETED';
+        Backup
+          .create(channel)
+          .catch(console.log.bind(console));
+
 
         Channel
           .update({id: req.user.id}, {point: req.user.point - policy.point.DELETE_CHANNEL})
           .catch(console.log.bind(console));
+
+        if(channels[0].id) {
+          Channel
+            .destroy({parent: channels[0].id})
+            .then(deletedChannels => {
+
+              // for backup
+              _.forEach(deletedChannels, (deletedChannel) => {
+                let channel = _.omit(deletedChannel, 'id');
+                channel.channelId = deletedChannel.id;
+                channel.status = 'DELETED';
+                Backup
+                  .create(channel)
+                  .catch(console.log.bind(console));
+              })
+            })
+            .catch(console.log.bind(console));
+        }
 
 
         if(parentId) {
@@ -111,7 +138,7 @@ export default {
               res.ok(parent, {parent: params.parent || null});
             })
         }else {
-          res.ok(channel[0]);
+          res.ok(channels[0]);
         }
       })
   },
