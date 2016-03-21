@@ -45,6 +45,9 @@ export default {
 
     status       : { type: 'string' },
 
+    startDay  : { type: 'string' },
+    endDay    : { type: 'string' },
+
     toJSON() {
       let obj = this.toObject();
       delete obj.password;
