@@ -287,14 +287,14 @@ export default {
     this.find(req, res, params);
   },
 
-  findMainMarkers(req, res) {
+  findDistributions(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = 'INFO_CENTER';
 
     this.find(req, res, params);
   },
 
-  findDistributions(req, res) {
+  findMainMarkers(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
 
