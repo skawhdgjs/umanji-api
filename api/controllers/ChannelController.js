@@ -82,7 +82,7 @@ export default {
 
   updateRole(req, res) {
     let params = actionUtil.parseValues(req);
-    if(!params.id) {
+    if(!params.email) {
       res.badRequest();
       return;
     }
