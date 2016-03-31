@@ -90,7 +90,6 @@ export default {
     params = _.omit(params, 'access_token');
 
     Channel
-      .findOne({email: params.email})
       .update(params.email, _.omit(params, 'email'))
       .then(records => {
         console.log('records[0]', records[0])
