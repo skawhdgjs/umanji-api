@@ -71,6 +71,9 @@ export default {
 
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
+    'PUT /v1/channels/email'          : 'ChannelController.updateRole',
+
+    
 
     'PUT /v1/channels/id/spots'       : 'ChannelController.update',
 

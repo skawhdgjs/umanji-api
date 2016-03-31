@@ -80,6 +80,24 @@ export default {
       .catch(res.negotiate);
   },
 
+  updateRole(req, res) {
+    let params = actionUtil.parseValues(req);
+    if(!params.email) {
+      res.badRequest();
+      return;
+    }
+
+    params = _.omit(params, 'access_token');
+
+    Channel
+      .update(params.email, _.omit(params, 'email'))
+      .then(records => {
+        console.log('records[0]', records[0])
+        records[0] ? res.ok(records[0]) : res.notFound();
+      })
+      .catch(res.negotiate);
+  },
+
   delete(req, res) {
     let params = actionUtil.parseValues(req);
     let parentId = params.parent;
