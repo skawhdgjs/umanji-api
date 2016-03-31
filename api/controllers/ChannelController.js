@@ -90,7 +90,7 @@ export default {
     params = _.omit(params, 'access_token');
 
     Channel
-      .update(params.email, _.omit(params, 'email'))
+      .update({email: params.email}, _.omit(params, 'email'))
       .then(records => {
         console.log('records[0]', records[0])
         records[0] ? res.ok(records[0]) : res.notFound();
