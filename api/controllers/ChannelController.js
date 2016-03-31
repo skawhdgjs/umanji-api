@@ -392,10 +392,21 @@ export default {
     let params = actionUtil.parseValues(req);
 
     Channel
-      .findOne(params.email)
+      .findOne({email :params.email})
       .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
+  },
+
+  findRole (req, res) {
+    let params = actionUtil.parseValues(req);
+    let user = req.user;
+    let token = params.token;
+
+    if(_.findWhere(user.roles, roles) == null){
+      user.roles.push(token);
+      res.ok(req.user);
+    }
   },
 
   get(req, res) {

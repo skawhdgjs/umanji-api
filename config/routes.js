@@ -20,6 +20,9 @@ export default {
     'GET /v1/channels/id'             : 'ChannelController.get',
     'GET /v1/channels/findOne'        : 'ChannelController.findOne',
     'GET /v1/channels/findEmail'      : 'ChannelController.findEmail',
+    'GET /v1/channels/findRole'      : 'ChannelController.findRole',
+
+    
 
     'POST /v1/channels'               : 'ChannelController.createChannel',
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
