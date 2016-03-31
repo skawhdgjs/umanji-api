@@ -370,6 +370,16 @@ export default {
       .catch(res.negotiate);
   },
 
+  findEmail(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    Channel
+      .findOne(params.email)
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
+  },
+
   get(req, res) {
     let params = actionUtil.parseValues(req);
 
