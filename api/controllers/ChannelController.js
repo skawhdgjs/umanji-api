@@ -400,13 +400,12 @@ export default {
 
   findRole (req, res) {
     let params = actionUtil.parseValues(req);
-    let user = req.user;
-    let token = params.token;
 
-    if(_.findWhere(user.roles, roles) == null){
-      user.roles.push(token);
-      res.ok(req.user);
-    }
+    Channel
+      .findOne(params.owner)
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
   },
 
   get(req, res) {
