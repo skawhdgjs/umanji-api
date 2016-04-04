@@ -10,6 +10,7 @@ export default {
 
   attributes: {
     email     : { type: 'email', unique: true, index: true},
+    phone     : { type: 'string'},
     password  : { type: 'string'},
 
     owner    : { model: 'Channel' },
