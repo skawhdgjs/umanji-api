@@ -307,7 +307,7 @@ export default {
 
   findDistributions(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = 'INFO_CENTER';
+    params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX', 'COMMUNITY'];
 
     Channel
       .findOne({keywords :params.keyword})
