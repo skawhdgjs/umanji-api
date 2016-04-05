@@ -309,7 +309,11 @@ export default {
     let params = actionUtil.parseValues(req);
     params.type = 'INFO_CENTER';
 
-    this.find(req, res, params);
+    Channel
+      .findOne({keywords :params.keyword})
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
   },
 
   findMainMarkers(req, res) {
