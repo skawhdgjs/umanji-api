@@ -322,9 +322,42 @@ export default {
   // findMainAds
   findMainAds(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['ADVERTISE'];
+    let query = _.omit(params, 'access_token');
 
-    this.find(req, res, params);
+    query.type = 'ADVERTISE';
+
+    location.getAddress(query)
+      .then(address => {
+        query = _.omit(query, 'latitude');
+        query = _.omit(query, 'longitude');
+
+        if(query.level >= policy.level.DONG) {
+          query.thoroughfare = address.thoroughfare;
+          query.locality = address.locality;
+          query.adminArea = address.adminArea;
+          query.countryCode = address.countryCode;
+
+        } else if(query.level >= policy.level.GUGUN) {
+          query.locality = address.locality;
+          query.adminArea = address.adminArea;
+          query.countryCode = address.countryCode;
+
+        } else if(query.level >= policy.level.DOSI) {
+          query.adminArea = address.adminArea;
+          query.countryCode = address.countryCode;
+
+        } else if(query.level >= policy.level.CONTRY) {
+          query.countryCode = address.countryCode;
+        }
+
+        Channel
+          .find(query)
+          .then(channels => {
+            res.ok(channels);
+          })
+          .catch(res.negotiate);
+      })
+      .catch(res.negotiate);
   },
 
 
