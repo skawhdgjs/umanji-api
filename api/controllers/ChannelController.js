@@ -319,6 +319,15 @@ export default {
     this.find(req, res, params);
   },
 
+  // findMainAds
+  findMainAds(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['ADVERTISE'];
+
+    this.find(req, res, params);
+  },
+
+
   findMainPosts(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = 'POST';
