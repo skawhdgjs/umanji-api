@@ -307,10 +307,13 @@ export default {
 
   findDistributions(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX', 'COMMUNITY'];
+    params = _.omit(params, 'access_token');
 
+    params.type = 'KEYWORD';
+
+    console.log('findDistributions: params', params);
     Channel
-      .findOne({keywords :params.keyword})
+      .find(params)
       .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
