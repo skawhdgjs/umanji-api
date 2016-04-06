@@ -333,39 +333,53 @@ export default {
 
     query.type = 'ADVERTISE';
 
-    location.getAddress(query)
-      .then(address => {
-        query = _.omit(query, 'latitude');
-        query = _.omit(query, 'longitude');
+    if(query.minLatitude) {
+      query.latitude = { '>=': query.minLatitude, '<=': query.maxLatitude };
+      query.longitude = { '>=': query.minLongitude, '<=': query.maxLongitude };
+      query = _.omit(query, ['minLatitude', 'maxLatitude', 'minLongitude', 'maxLongitude']);
+    }
 
-        if(query.level >= policy.level.DONG) {
-          query.thoroughfare = address.thoroughfare;
-          query.locality = address.locality;
-          query.adminArea = address.adminArea;
-          query.countryCode = address.countryCode;
-
-        } else if(query.level >= policy.level.GUGUN) {
-          query.locality = address.locality;
-          query.adminArea = address.adminArea;
-          query.countryCode = address.countryCode;
-
-        } else if(query.level >= policy.level.DOSI) {
-          query.adminArea = address.adminArea;
-          query.countryCode = address.countryCode;
-
-        } else if(query.level >= policy.level.CONTRY) {
-          query.countryCode = address.countryCode;
-        }
-
-        Channel
-          .find(query)
-          .populateAll()
-          .then(channels => {
-            res.ok(channels);
-          })
-          .catch(res.negotiate);
+    Channel
+      .find(query)
+      .populateAll()
+      .then(channels => {
+        res.ok(channels);
       })
       .catch(res.negotiate);
+
+    // location.getAddress(query)
+    //   .then(address => {
+    //     query = _.omit(query, 'latitude');
+    //     query = _.omit(query, 'longitude');
+    //
+    //     if(query.level >= policy.level.DONG) {
+    //       query.thoroughfare = address.thoroughfare;
+    //       query.locality = address.locality;
+    //       query.adminArea = address.adminArea;
+    //       query.countryCode = address.countryCode;
+    //
+    //     } else if(query.level >= policy.level.GUGUN) {
+    //       query.locality = address.locality;
+    //       query.adminArea = address.adminArea;
+    //       query.countryCode = address.countryCode;
+    //
+    //     } else if(query.level >= policy.level.DOSI) {
+    //       query.adminArea = address.adminArea;
+    //       query.countryCode = address.countryCode;
+    //
+    //     } else if(query.level >= policy.level.CONTRY) {
+    //       query.countryCode = address.countryCode;
+    //     }
+    //
+    //     Channel
+    //       .find(query)
+    //       .populateAll()
+    //       .then(channels => {
+    //         res.ok(channels);
+    //       })
+    //       .catch(res.negotiate);
+    //   })
+    //   .catch(res.negotiate);
   },
 
 
