@@ -352,6 +352,7 @@ export default {
 
         Channel
           .find(query)
+          .populateAll()
           .then(channels => {
             res.ok(channels);
           })
