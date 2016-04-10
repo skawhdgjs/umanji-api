@@ -85,6 +85,8 @@ function getAddressByTmap(point) {
 
       response.on('end', () => {
         if(body) {
+          body = parseForErrorData_01(body);
+
           let address = JSON.parse(body).addressInfo;
           let addressDoc = {
             address: address.fullAddress,
@@ -105,4 +107,12 @@ function getAddressByTmap(point) {
 
     }).end();
   })
+}
+
+
+function parseForErrorData_01(body) {
+  body = body.replace(/: "",/g, ': " ",');
+  body = body.replace(/"한국컴퓨터빌딩/g, '한국컴퓨터빌딩');
+  body = body.replace(/""/g, '"');
+  return body;
 }
