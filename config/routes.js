@@ -54,6 +54,7 @@ export default {
     'GET /v1/main/distribution'       : 'ChannelController.findDistributions',
     'GET /v1/main/posts'              : 'ChannelController.findMainPosts',
     'GET /v1/main/ads'                : 'ChannelController.findMainAds',
+    'GET /v1/main/ads2'               : 'ChannelController.findMainAds2',
 
     //main/ads
 

@@ -326,6 +326,15 @@ export default {
     this.find(req, res, params);
   },
 
+  findMainAds2(req, res) {
+    let params = actionUtil.parseValues(req);
+    let query = _.omit(params, 'access_token');
+
+    query.type = 'ADVERTISE';
+    
+    this.find(req, res, params);
+  },
+
   // findMainAds
   findMainAds(req, res) {
     let params = actionUtil.parseValues(req);
