@@ -328,10 +328,8 @@ export default {
 
   findMainAds2(req, res) {
     let params = actionUtil.parseValues(req);
-    let query = _.omit(params, 'access_token');
+    params.type = 'ADVERTISE';
 
-    query.type = 'ADVERTISE';
-    
     this.find(req, res, params);
   },
 
@@ -595,6 +593,11 @@ function parseQuery(params) {
     query.type = ['COMMUNITY', 'COMPLEX'];
     query.or = [{'owner': query.owner}, {'subLinks.owner': query.owner}];
     query = _.omit(query, ['owner', 'level']);
+  }
+
+  if(query.parentType == 'ADVERTISE') {
+    query = _.omit(query, ['parentType']);
+    query = _.omit(query, ['parent']);
   }
 
   return query;
