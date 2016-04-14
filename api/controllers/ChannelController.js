@@ -312,12 +312,23 @@ export default {
     params.type = 'KEYWORD';
 
     console.log('findDistributions: params', params);
+    this.find(req, res, params);
+  },
+/*
+  findDistributions(req, res) {
+    let params = actionUtil.parseValues(req);
+    params = _.omit(params, 'access_token');
+
+    params.type = 'KEYWORD';
+
+    console.log('findDistributions: params', params);
     Channel
       .find(params)
       .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
   },
+*/
 
   findMainMarkers(req, res) {
     let params = actionUtil.parseValues(req);
