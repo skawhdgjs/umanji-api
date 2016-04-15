@@ -170,11 +170,14 @@ export default {
     let params = actionUtil.parseValues(req);
     const level = params.level;
 
-    if(level >= policy.level.COMPLEX) {
-      console.log('1')
+    let parentType = params.parentType;
+    params = _.omit(params, 'parentType');
 
+    if(parentType != 'INFO_CENTER') {
+      console.log('parentType 1', parentType);
       this.create(req, res, params);
     } else {
+      console.log('parentType 2', parentType);
       let communityChannel = {}
       jsonService.copyAddress(communityChannel, params);
       communityChannel.owner = req.user.id;
@@ -424,15 +427,12 @@ export default {
   },
 
   find(req, res, params) {
-    console.log('find params', params);
-
     let limit = parseLimit(params);
     let skip = parseSkip(params);
     let sort = parseSort(params);
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
 
-    console.log('find query', query);
     Channel
       .find(query)
       .limit(limit)
@@ -672,6 +672,7 @@ function createLevelCommunity(communityChannel, level, scope) {
             jsonService.copyAddress(communityChannel, infoCenter);
             communityChannel.type = 'COMMUNITY';
             communityChannel.parent = infoCenter.id;
+
             return Channel
               .create(_.omit(communityChannel, 'id'))
               .catch(console.log.bind(console));
