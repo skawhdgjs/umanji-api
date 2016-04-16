@@ -27,6 +27,7 @@ export default {
     photos   : { type: 'array', defaultsTo: [] },
     roles    : { type: 'array', defaultsTo: [] },
     keywords : { type: 'array', defaultsTo: [] },
+    createdFrom  : { type: 'createdFrom' },
     followers: { type: 'array', defaultsTo: [] },
 
     subLinks     : { type: 'array', defaultsTo: [] },
