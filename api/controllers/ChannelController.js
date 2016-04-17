@@ -634,9 +634,9 @@ function isCommunityCreation(channel) {
     case policy.level.LOCAL:
     case policy.level.COMPLEX:
     case policy.level.DONG:
-      createLevelCommunity(communityChannel, policy.level.DONG, {thoroughfare: communityChannel.thoroughfare});
+      createLevelCommunity(communityChannel, policy.level.DONG, {adminArea: communityChannel.adminArea, locality: communityChannel.locality, thoroughfare: communityChannel.thoroughfare});
     case policy.level.GUGUN:
-      createLevelCommunity(communityChannel, policy.level.GUGUN, {locality: communityChannel.locality})
+      createLevelCommunity(communityChannel, policy.level.GUGUN, {adminArea: communityChannel.adminArea, locality: communityChannel.locality})
     case policy.level.DOSI:
       createLevelCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
     case policy.level.CONTRY:
