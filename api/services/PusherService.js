@@ -8,7 +8,7 @@ export default {
   android: pusher('android', config.services.pusher.android),
   ios: pusher('ios', config.services.pusher.ios),
 
-  channelCreated (req, channelRecord, subChannel) {
+  channelCreated (req, channelRecord, subChannel, push) {
     let query = {};
     if(channelRecord.type == 'INFO_CENTER') {
       switch(channelRecord.level) {
@@ -35,23 +35,25 @@ export default {
       .populate('owner')
       .then(memberChannels => {
         console.log('memberChannels.length : ', memberChannels.length);
-        
+
         let tokens = getGcmTokensFromChannel(channelRecord, memberChannels);
         if(req.user) {
           tokens = removeMyTokenFrom(tokens, req.user.gcmTokens);
         }
 
-        this.android
-          .send(tokens,{
-            payload: {
-              id: channelRecord.id,
-              type: channelRecord.type,
-              level: channelRecord.level,
-              title: channelRecord.type + ':'+ (channelRecord.name? channelRecord.name : '이름없음'),
-              text: '@' + subChannel.owner.name + ' ' + subChannel.name,
-            }
-          });
 
+        if(push != false) {
+          this.android
+            .send(tokens,{
+              payload: {
+                id: channelRecord.id,
+                type: channelRecord.type,
+                level: channelRecord.level,
+                title: channelRecord.type + ':'+ (channelRecord.name? channelRecord.name : '이름없음'),
+                text: '@' + subChannel.owner.name + ' ' + subChannel.name,
+              }
+            });
+        }
         saveNoty(req, channelRecord, subChannel, memberChannels);
       })
   }

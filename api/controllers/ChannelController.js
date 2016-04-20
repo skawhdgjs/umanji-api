@@ -278,8 +278,9 @@ export default {
 
   create(req, res) {
     let params = actionUtil.parseValues(req);
-    params.owner = req.user.id;
+    let push = params.push;
 
+    params.owner = req.user.id;
     Channel
       .create(params)
       .then(channel => {
@@ -293,7 +294,7 @@ export default {
                 .populateAll()
       })
       .then(channel => {
-        return isSubChannelCreation(req, channel);
+        return isSubChannelCreation(req, channel, push);
       })
       .then(isCommunityCreation)
       .then(channel => {
@@ -603,7 +604,7 @@ function parseQuery(params) {
   return query;
 }
 
-function isSubChannelCreation(req, subChannel) {
+function isSubChannelCreation(req, subChannel, push) {
   if(!subChannel.parent) return subChannel;
 
   return Channel
@@ -619,7 +620,7 @@ function isSubChannelCreation(req, subChannel) {
 
       parentChannel.point = parentChannel.point + policy.point.CREATE_CHANNEL;
       parentChannel.save();
-      pusherService.channelCreated(req, parentChannel, subChannel);
+      pusherService.channelCreated(req, parentChannel, subChannel, push);
 
       subChannel.parent = parentChannel;
       return subChannel;
