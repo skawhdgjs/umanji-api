@@ -22,7 +22,7 @@ export default {
     'GET /v1/channels/findEmail'      : 'ChannelController.findEmail',
     'GET /v1/channels/findRole'      : 'ChannelController.findRole',
 
-    
+
 
     'POST /v1/channels'               : 'ChannelController.createChannel',
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
@@ -74,13 +74,15 @@ export default {
     'GET /v1/channels/markers'        : 'ChannelController.findChannels',
     'GET /v1/channels/posts'          : 'ChannelController.findChannels',
 
+    'GET /v1/channels/community'      : 'ChannelController.findCommunity',
+
     'GET /v1/channels/id/authority'   : 'ChannelController.getAuthority',
 
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
     'PUT /v1/channels/email'          : 'ChannelController.updateRole',
 
-    
+
 
     'PUT /v1/channels/id/spots'       : 'ChannelController.update',
 

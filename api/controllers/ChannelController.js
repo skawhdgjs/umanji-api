@@ -422,6 +422,18 @@ export default {
     this.find(req, res, params);
   },
 
+  findCommunity(req, res) {
+    let params = actionUtil.parseValues(req);
+    let query = _.omit(params, 'access_token');
+    query.level = 2;
+
+    Channel
+      .findOne(query)
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
+  },
+
   search(req, res) {
     let params = actionUtil.parseValues(req);
     this.find(req, res, params);
