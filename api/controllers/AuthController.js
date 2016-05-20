@@ -26,6 +26,7 @@ export function signin(req, res) {
 export function signup(req, res) {
   let params = actionUtil.parseValues(req);
   params.type = 'USER';
+  params.action = 'CREATE';
 
   Channel
     .findOne({email: params.email})
@@ -47,7 +48,6 @@ export function signup(req, res) {
 }
 
 export function logout(req, res) {
-  console.log('logout');
   res.ok({});
 }
 export function checkToken(req, res) {

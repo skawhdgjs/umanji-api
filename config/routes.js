@@ -36,15 +36,15 @@ export default {
     'POST /v1/channels/id/community'  : 'ChannelController.createChannel',
     'POST /v1/channels/id/keyword'    : 'ChannelController.createChannel',
 
-    'POST /v1/channels/id/join'       : 'ChannelController.createChannel',
-    'POST /v1/channels/id/like'       : 'ChannelController.createChannel',
+    'POST /v1/channels/id/join'       : 'ChannelController.join',
+    'POST /v1/channels/id/like'       : 'ChannelController.like',
 
     'POST /v1/channels/id/vote'       : 'ChannelController.vote',
     'POST /v1/channels/id/link'       : 'ChannelController.link',
 
-    'DELETE /v1/channels/id'          : 'ChannelController.delete',
-    'DELETE /v1/channels/id/join'     : 'ChannelController.delete',
-    'DELETE /v1/channels/id/like'     : 'ChannelController.delete',
+    'DELETE /v1/channels/id'          : 'ChannelController.deleteChannel',
+    'DELETE /v1/channels/id/join'     : 'ChannelController.unJoin',
+    'DELETE /v1/channels/id/like'     : 'ChannelController.unLike',
 
 
     'GET /v1/channels'                : 'ChannelController.findChannels',

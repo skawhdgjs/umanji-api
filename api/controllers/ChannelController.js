@@ -36,6 +36,7 @@ export default {
 
   link(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'LINK';
 
     Channel
       .findOne(params.parent)
@@ -64,6 +65,7 @@ export default {
 
   update(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'UPDATE';
     if(!params.id) {
       res.badRequest();
       return;
@@ -98,8 +100,27 @@ export default {
       .catch(res.negotiate);
   },
 
-  delete(req, res) {
+  unJoin(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'UN_JOIN';
+    this.delete(req, res, params);
+  },
+
+  unLike(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'UN_LIKE';
+
+    this.delete(req, res, params);
+  },
+
+  deleteChannel(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'DELETE';
+
+    this.delete(req, res, params);
+  },
+
+  delete(req, res, params) {
     let parentId = params.parent;
 
     if(!params.id) {
@@ -163,11 +184,13 @@ export default {
 
   vote(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'VOTE';
     this.create(req, res, params);
   },
 
   createCommunity(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
     const level = params.level;
 
     let parentType = params.parentType;
@@ -269,17 +292,30 @@ export default {
     }
   },
 
-
-
-  createChannel(req, res) {
+  join(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'JOIN';
+
     this.create(req, res, params);
   },
 
-  create(req, res) {
+  like(req, res) {
     let params = actionUtil.parseValues(req);
-    let push = params.push;
+    params.action = 'LIKE';
 
+    this.create(req, res, params);
+  },
+
+  createChannel(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
+
+    this.create(req, res, params);
+  },
+
+  create(req, res, params) {
+    console.log('params.action', params.action)
+    let push = params.push;
     params.owner = req.user.id;
     Channel
       .create(params)

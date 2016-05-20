@@ -16,6 +16,7 @@ export default {
     owner    : { model: 'Channel' },
     read     : { type: 'boolean', defaultsTo: false },
     type     : { type: 'string' },
+    action   : { type: 'string' },
     subType  : { type: 'string' },
     name     : { type: 'string', defaultsTo: '' },
 
@@ -77,5 +78,13 @@ export default {
         next();
       })
       .catch(next);
+  },
+
+  afterCreate(values, next) {
+    console.log('AFTER Collection CREATE ');
+
+    PolicyService.point(values);
+    PolicyService.event(values);
+    return next();
   }
 };
