@@ -4,13 +4,10 @@ export default {
 
   /*************************************************/
   point(channel) {
-    console.log('PolicyService:channel.type:' + channel.type);
-    console.log('PolicyService:channel.action:' + channel.action);
 
     if(!channel.type || !channel.action) return;
     const actionName = channel.action;
 
-    console.log('PolicyService:actionName:' + actionName);
     switch (actionName) {
       case 'CREATE':
         break;

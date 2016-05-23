@@ -188,6 +188,52 @@ export default {
     this.create(req, res, params);
   },
 
+  createKeyword(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
+
+    Channel
+      .findOne(params.id)
+      .then(channel => {
+        let keywordCommunityChannel = {};
+        jsonService.copyAddress(keywordCommunityChannel, channel);
+        keywordCommunityChannel.type = 'KEYWORD_COMMUNITY';
+        keywordCommunityChannel.name = params.name;
+        createKeywordCommunities(keywordCommunityChannel)
+
+        if(channel.keywords.length < 2 && _.findWhere(channel.keywords, params.name) == null) {
+          channel.keywords.push(params.name);
+          Channel
+            .update(params.id, {keywords: channel.keywords})
+            .then(records => {
+              records[0] ? res.ok(records[0]) : res.notFound();
+            })
+        } else {
+          res.ok(channel)
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+        res.negotiate(error)
+      })
+  },
+
+  deleteKeyword(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'DELETE';
+
+    Channel
+      .findOne(params.id)
+      .then(channel => {
+        _.pull(channel.keywords, params.name);
+
+        Channel
+          .update(params.id, {keywords: channel.keywords})
+          .then(res.ok)
+      })
+      .catch(res.negotiate)
+  },
+
   createCommunity(req, res) {
     let params = actionUtil.parseValues(req);
     params.action = 'CREATE';
@@ -336,6 +382,15 @@ export default {
         return isSubChannelCreation(req, channel, push);
       })
       .then(channel => {
+
+        _.forEach(channel.keywords, function(name) {
+          let keywordCommunityChannel = {};
+          jsonService.copyAddress(keywordCommunityChannel, channel);
+          keywordCommunityChannel.type = 'KEYWORD_COMMUNITY';
+          keywordCommunityChannel.name = name;
+          createKeywordCommunities(keywordCommunityChannel)
+        });
+
         res.created(channel, {parent: params.parent || null});
       })
       .catch(res.negotiate);
@@ -463,6 +518,7 @@ export default {
   findCommunity(req, res) {
     let params = actionUtil.parseValues(req);
     let query = _.omit(params, 'access_token');
+    query.type = 'KEYWORD_COMMUNITY';
     query.level = 2;
 
     Channel
@@ -677,6 +733,13 @@ function isSubChannelCreation(req, subChannel, push) {
     });
 }
 
+function createKeywordCommunities(communityChannel) {
+  createKeywordCommunity(communityChannel, policy.level.DONG, {adminArea: communityChannel.adminArea, locality: communityChannel.locality, thoroughfare: communityChannel.thoroughfare});
+  createKeywordCommunity(communityChannel, policy.level.GUGUN, {adminArea: communityChannel.adminArea, locality: communityChannel.locality})
+  createKeywordCommunity(communityChannel, policy.level.DOSI, {adminArea: communityChannel.adminArea})
+  createKeywordCommunity(communityChannel, policy.level.CONTRY, {countryCode: communityChannel.countryCode})
+}
+
 function isCommunityCreation(channel) {
   if(channel.type != 'COMMUNITY' && channel.type != 'KEYWORD') return channel;
   let communityChannel = _.clone(channel);
@@ -696,6 +759,41 @@ function isCommunityCreation(channel) {
   }
 
   return channel;
+}
+
+function createKeywordCommunity(communityChannel, level, scope) {
+  let query = {
+    type: 'KEYWORD_COMMUNITY',
+    name: communityChannel.name,
+    level: level
+  }
+  _.merge(query, scope);
+
+  return Channel.findOne(query)
+    .then(community => {
+      if(!community) {
+        let infoQuery = {
+          type: 'INFO_CENTER',
+          level: level
+        }
+        _.merge(infoQuery, scope);
+
+        return Channel.findOne(infoQuery)
+        .then(infoCenter => {
+          if(infoCenter) {
+            communityChannel.level = level
+            jsonService.copyAddress(communityChannel, infoCenter);
+            communityChannel.parent = infoCenter.id;
+
+            return Channel
+              .create(_.omit(communityChannel, 'id'))
+              .catch(console.log.bind(console));
+          }
+        })
+      } else {
+        return null;
+      }
+    })
 }
 
 function createLevelCommunity(communityChannel, level, scope) {

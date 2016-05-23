@@ -27,14 +27,15 @@ export default {
     'POST /v1/channels'               : 'ChannelController.createChannel',
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
     'POST /v1/channels/complex'       : 'ChannelController.createChannel',
-
     'POST /v1/channels/community'     : 'ChannelController.createCommunity',
+
+    'POST /v1/channels/keyword'       : 'ChannelController.createKeyword',
+    'DELETE /v1/channels/id/keyword'  : 'ChannelController.deleteKeyword',
 
     'POST /v1/channels/id/post'       : 'ChannelController.createChannel',
     'POST /v1/channels/id/spot'       : 'ChannelController.createChannel',
     'POST /v1/channels/id/member'     : 'ChannelController.createChannel',
     'POST /v1/channels/id/community'  : 'ChannelController.createChannel',
-    'POST /v1/channels/id/keyword'    : 'ChannelController.createChannel',
 
     'POST /v1/channels/id/join'       : 'ChannelController.join',
     'POST /v1/channels/id/like'       : 'ChannelController.like',

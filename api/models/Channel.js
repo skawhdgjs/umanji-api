@@ -81,7 +81,6 @@ export default {
   },
 
   afterCreate(values, next) {
-    console.log('AFTER Collection CREATE ');
 
     PolicyService.point(values);
     PolicyService.event(values);
