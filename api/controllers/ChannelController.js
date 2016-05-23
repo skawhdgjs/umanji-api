@@ -191,16 +191,20 @@ export default {
   createCommunity(req, res) {
     let params = actionUtil.parseValues(req);
     params.action = 'CREATE';
+    this.create(req, res, params);
+  },
+
+  DEPRECIATED_createCommunity(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
     const level = params.level;
 
     let parentType = params.parentType;
     params = _.omit(params, 'parentType');
 
     if(parentType != 'INFO_CENTER') {
-      console.log('parentType 1', parentType);
       this.create(req, res, params);
     } else {
-      console.log('parentType 2', parentType);
       let communityChannel = {}
       jsonService.copyAddress(communityChannel, params);
       communityChannel.owner = req.user.id;
@@ -314,7 +318,6 @@ export default {
   },
 
   create(req, res, params) {
-    console.log('params.action', params.action)
     let push = params.push;
     params.owner = req.user.id;
     Channel
@@ -332,7 +335,6 @@ export default {
       .then(channel => {
         return isSubChannelCreation(req, channel, push);
       })
-      .then(isCommunityCreation)
       .then(channel => {
         res.created(channel, {parent: params.parent || null});
       })
