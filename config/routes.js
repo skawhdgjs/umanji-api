@@ -57,6 +57,9 @@ export default {
     'GET /v1/main/ads'                : 'ChannelController.findMainAds',
     'GET /v1/main/ads2'               : 'ChannelController.findMainAds2',
 
+    'GET /v1/keyword/posts'           : 'ChannelController.findKeywordPosts',
+    'GET /v1/keyword/channels'        : 'ChannelController.findKeywordChannels',
+
     //main/ads
 
 
@@ -70,7 +73,9 @@ export default {
 
     'GET /v1/channels/id/members'     : 'ChannelController.findMembers',
     'GET /v1/channels/id/likes'       : 'ChannelController.findChannels',
-    'GET /v1/channels/id/communities' : 'ChannelController.findChannels',
+
+    'GET /v1/channels/id/communities' : 'ChannelController.findCommunities',
+
     'GET /v1/channels/id/keywords'    : 'ChannelController.findChannels',
     'GET /v1/channels/markers'        : 'ChannelController.findChannels',
     'GET /v1/channels/posts'          : 'ChannelController.findChannels',

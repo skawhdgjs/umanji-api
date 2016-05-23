@@ -76,8 +76,16 @@ export default {
     Channel
       .update(params.id, _.omit(params, 'id'))
       .then(records => {
-        console.log('records[0]', records[0])
-        records[0] ? res.ok(records[0]) : res.notFound();
+        var channel = records[0];
+        _.forEach(channel.keywords, function(name) {
+          let keywordCommunityChannel = {};
+          jsonService.copyAddress(keywordCommunityChannel, channel);
+          keywordCommunityChannel.type = 'KEYWORD_COMMUNITY';
+          keywordCommunityChannel.name = name;
+          createKeywordCommunities(keywordCommunityChannel)
+        });
+
+        res.ok(channel);
       })
       .catch(res.negotiate);
   },
@@ -366,6 +374,13 @@ export default {
   create(req, res, params) {
     let push = params.push;
     params.owner = req.user.id;
+
+
+    if(params.type == 'POST') {
+      console.log('create type', params.type);
+
+    }
+
     Channel
       .create(params)
       .then(channel => {
@@ -404,13 +419,14 @@ export default {
 
   findDistributions(req, res) {
     let params = actionUtil.parseValues(req);
-    params = _.omit(params, 'access_token');
+    let query = parseQuery(params);
 
-    params.type = 'KEYWORD';
+    console.log('findDistributions: params', query);
 
-    console.log('findDistributions: params', params);
     Channel
-      .find(params)
+      .find(query)
+      .limit(50)
+      .sort('point DESC')
       .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
@@ -450,42 +466,20 @@ export default {
         res.ok(channels);
       })
       .catch(res.negotiate);
-
-    // location.getAddress(query)
-    //   .then(address => {
-    //     query = _.omit(query, 'latitude');
-    //     query = _.omit(query, 'longitude');
-    //
-    //     if(query.level >= policy.level.DONG) {
-    //       query.thoroughfare = address.thoroughfare;
-    //       query.locality = address.locality;
-    //       query.adminArea = address.adminArea;
-    //       query.countryCode = address.countryCode;
-    //
-    //     } else if(query.level >= policy.level.GUGUN) {
-    //       query.locality = address.locality;
-    //       query.adminArea = address.adminArea;
-    //       query.countryCode = address.countryCode;
-    //
-    //     } else if(query.level >= policy.level.DOSI) {
-    //       query.adminArea = address.adminArea;
-    //       query.countryCode = address.countryCode;
-    //
-    //     } else if(query.level >= policy.level.CONTRY) {
-    //       query.countryCode = address.countryCode;
-    //     }
-    //
-    //     Channel
-    //       .find(query)
-    //       .populateAll()
-    //       .then(channels => {
-    //         res.ok(channels);
-    //       })
-    //       .catch(res.negotiate);
-    //   })
-    //   .catch(res.negotiate);
   },
 
+
+  findKeywordPosts(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = 'POST';
+    this.find(req, res, params);
+  },
+
+  findKeywordChannels(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT', 'COMMUNITY', 'SPOT_INNER', 'COMPLEX'];
+    this.find(req, res, params);
+  },
 
   findMainPosts(req, res) {
     let params = actionUtil.parseValues(req);
@@ -496,7 +490,6 @@ export default {
   findPosts(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = 'POST';
-
     this.find(req, res, params);
   },
 
@@ -508,6 +501,30 @@ export default {
   findMembers(req, res) {
     let params = actionUtil.parseValues(req);
     this.find(req, res, params);
+  },
+
+  findCommunities(req, res) {
+    let params = actionUtil.parseValues(req);
+
+    let limit = parseLimit(params);
+    let skip = parseSkip(params);
+    let sort = parseSort(params);
+    let distinct = parseDistinct(params);
+    let query = parseQuery(params);
+
+    Channel
+      .find(query)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
+      .populateAll()
+      .then(channels => {
+        if(distinct) {
+          channels = _.uniq(channels, distinct);
+        }
+        res.ok(channels, {parent: params.parent || params.owner || null});
+      })
+      .catch(res.negotiate);
   },
 
   findChannels(req, res) {
@@ -538,7 +555,9 @@ export default {
     let skip = parseSkip(params);
     let sort = parseSort(params);
     let distinct = parseDistinct(params);
-    let query = parseQuery(params);
+    let query = parseQueryFull(params);
+
+    console.log('findPosts', query);
 
     Channel
       .find(query)
@@ -657,6 +676,23 @@ function parseDistinct(params) {
 }
 
 function parseQuery(params) {
+  let query = _.clone(params);
+  query = _.omit(query, 'access_token')
+  query = _.omit(query, 'page');
+  query = _.omit(query, 'limit');
+  query = _.omit(query, 'sort');
+  query = _.omit(query, 'distinct');
+
+  if(query.minLatitude) {
+    query.latitude = { '>=': query.minLatitude, '<=': query.maxLatitude };
+    query.longitude = { '>=': query.minLongitude, '<=': query.maxLongitude };
+    query = _.omit(query, ['minLatitude', 'maxLatitude', 'minLongitude', 'maxLongitude']);
+  }
+
+  return query;
+}
+
+function parseQueryFull(params) {
   let query = _.clone(params);
   query = _.omit(query, 'access_token')
   query = _.omit(query, 'page');
