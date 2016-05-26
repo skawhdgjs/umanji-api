@@ -7,6 +7,8 @@
 export default {
   routes: {
 
+    'GET /v1/system/version'          : 'SystemController.version',
+
     'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
 
     'POST /v1/token/check'            : 'AuthController.checkToken',
