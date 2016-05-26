@@ -536,7 +536,9 @@ export default {
     let params = actionUtil.parseValues(req);
     let query = _.omit(params, 'access_token');
     query.type = 'KEYWORD_COMMUNITY';
-    query.level = 2;
+    if(!query.level) {
+      query.level = 2;
+    }
 
     Channel
       .findOne(query)
