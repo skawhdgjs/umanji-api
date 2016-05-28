@@ -657,12 +657,8 @@ export default {
 }
 
 function parseLimit(params) {
-  if(params.type == 'KEYWORD_COMMUNITY'){
-    return 2;
-  } else {
-    return params.limit || 15;
-  }
-} 
+  return params.limit || 15;
+}
 
 function parseSkip(params) {
   let limit = params.limit || 15;
