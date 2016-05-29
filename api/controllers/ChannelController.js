@@ -511,7 +511,7 @@ export default {
     let sort = parseSort(params);
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
-    query.level = 2;
+    //query.level = 2;
 
     Channel
       .find(query)
