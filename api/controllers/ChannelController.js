@@ -804,7 +804,8 @@ function createKeywordCommunity(communityChannel, level, scope) {
   let query = {
     type: 'KEYWORD_COMMUNITY',
     name: communityChannel.name,
-    level: level
+    level: level,
+    keywords: communityChannel.name
   }
   _.merge(query, scope);
 
