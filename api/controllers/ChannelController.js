@@ -804,8 +804,7 @@ function createKeywordCommunity(communityChannel, level, scope) {
   let query = {
     type: 'KEYWORD_COMMUNITY',
     name: communityChannel.name,
-    level: level,
-    keywords: communityChannel.name
+    level: level
   }
   _.merge(query, scope);
 
@@ -824,6 +823,7 @@ function createKeywordCommunity(communityChannel, level, scope) {
             communityChannel.level = level
             jsonService.copyAddress(communityChannel, infoCenter);
             communityChannel.parent = infoCenter.id;
+            communityChannel.keywords = communityChannel.name
 
             return Channel
               .create(_.omit(communityChannel, 'id'))
