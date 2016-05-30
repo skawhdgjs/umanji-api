@@ -823,7 +823,7 @@ function createKeywordCommunity(communityChannel, level, scope) {
             communityChannel.level = level
             jsonService.copyAddress(communityChannel, infoCenter);
             communityChannel.parent = infoCenter.id;
-            communityChannel.keywords = communityChannel.name
+            //communityChannel.keywords = communityChannel.name
 
             return Channel
               .create(_.omit(communityChannel, 'id'))
