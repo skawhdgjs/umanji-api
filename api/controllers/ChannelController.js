@@ -809,7 +809,9 @@ function createKeywordCommunity(communityChannel, level, scope) {
 
   return Channel.findOne(query)
     .then(community => {
+      console.log('createKeywordCommunity');
       if(!community) {
+        console.log('KEYWORD_COMMUNITY NOT found');
         let infoQuery = {
           type: 'INFO_CENTER',
           level: level

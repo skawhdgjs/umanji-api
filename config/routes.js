@@ -8,6 +8,7 @@ export default {
   routes: {
 
     'GET /v1/system/version'          : 'SystemController.version',
+    'GET /v1/system/channels'         : 'SystemController.channelCounts',
 
     'PUT /v1/channels/id/gcm'         : 'ChannelController.gcm',
 
