@@ -511,6 +511,7 @@ export default {
     let sort = parseSort(params);
     let distinct = parseDistinct(params);
     let query = parseQuery(params);
+    //query.level = 2;
 
     Channel
       .find(query)
@@ -824,6 +825,7 @@ function createKeywordCommunity(communityChannel, level, scope) {
             communityChannel.level = level
             jsonService.copyAddress(communityChannel, infoCenter);
             communityChannel.parent = infoCenter.id;
+            //communityChannel.keywords = communityChannel.name
 
             return Channel
               .create(_.omit(communityChannel, 'id'))
