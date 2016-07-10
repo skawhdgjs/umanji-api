@@ -425,7 +425,7 @@ export default {
 
     Channel
       .find(query)
-      .limit(50)
+      .limit(10)
       .sort('point DESC')
       .populateAll()
       .then(res.ok)
@@ -500,6 +500,12 @@ export default {
 
   findMembers(req, res) {
     let params = actionUtil.parseValues(req);
+    this.find(req, res, params);
+  },
+
+  findBottomCommunities(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = ['SPOT', 'COMMUNITY', 'SPOT_INNER', 'COMPLEX'];
     this.find(req, res, params);
   },
 

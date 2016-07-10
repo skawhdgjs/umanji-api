@@ -63,9 +63,11 @@ export default {
     'GET /v1/keyword/posts'           : 'ChannelController.findKeywordPosts',
     'GET /v1/keyword/channels'        : 'ChannelController.findKeywordChannels',
 
+    'GET /v1/keyword/bottom/communities'  : 'ChannelController.findBottomCommunities',
+
     //main/ads
 
-
+// findBottomCommunities
     'GET /v1/complex/id/spots'        : 'ChannelController.findComplexSpots',
 
     'GET /v1/main/search'             : 'ChannelController.search',
