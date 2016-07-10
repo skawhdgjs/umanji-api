@@ -513,7 +513,6 @@ export default {
       .find(query)
       .limit(10)
       .sort('point DESC')
-      .populateAll()
       .then(res.ok)
       .catch(res.negotiate);
   },
