@@ -505,8 +505,17 @@ export default {
 
   findBottomCommunities(req, res) {
     let params = actionUtil.parseValues(req);
-    params.type = ['SPOT', 'COMMUNITY', 'SPOT_INNER', 'COMPLEX'];
-    this.find(req, res, params);
+    let query = parseQuery(params);
+
+    console.log('findDistributions: params', query);
+
+    Channel
+      .find(query)
+      .limit(10)
+      .sort('point DESC')
+      .populateAll()
+      .then(res.ok)
+      .catch(res.negotiate);
   },
 
   findCommunities(req, res) {
