@@ -42,6 +42,19 @@ function getAddressByGmap(point) {
 
           let addressDoc = {
             address: address.formatted_address,
+            countryCode: address.getCountryCode(),
+            countryName: address.getCountryName(),
+            adminArea: address.getAdminArea(),
+            locality: address.getLocality(),
+            thoroughfare: address.getThoroughfare(),
+            featureName: address.getFeatureName(),
+            latitude: point.latitude,
+            longitude: point.longitude
+          }
+
+/*
+          let addressDoc = {
+            address: address.formatted_address,
             countryCode: address.address_components[4].short_name,
             countryName: address.address_components[4].long_name,
             adminArea: address.address_components[3].long_name,
@@ -51,6 +64,9 @@ function getAddressByGmap(point) {
             latitude: point.latitude,
             longitude: point.longitude
           }
+
+          */
+
           resolve(addressDoc);
 
         } else {
