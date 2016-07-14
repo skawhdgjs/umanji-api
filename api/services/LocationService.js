@@ -39,7 +39,7 @@ function getAddressByGmap(point) {
       response.on('end', () => {
         if(body) {
           let address = JSON.parse(body).results[0];
-
+/*
           let addressDoc = {
             address: address.formatted_address,
             countryCode: address.getCountryCode(),
@@ -51,8 +51,8 @@ function getAddressByGmap(point) {
             latitude: point.latitude,
             longitude: point.longitude
           }
+*/
 
-/*
           let addressDoc = {
             address: address.formatted_address,
             countryCode: address.address_components[4].short_name,
@@ -65,7 +65,7 @@ function getAddressByGmap(point) {
             longitude: point.longitude
           }
 
-          */
+          
 
           resolve(addressDoc);
 
