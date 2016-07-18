@@ -423,12 +423,12 @@ updateToExpert(req, res) {
     Channel
           .findOne(params.owner)
           .populateAll()
-          .then(parentChannel => {
-            parentChannel.subLinks.push({
+          .then(channel => {
+            channel.subLinks.push({
               owner: params.owner,
               id: params.id,
-              type: params.type,
-              name: params.name
+              type: params.subLinks.type,
+              name: params.subLinks.name
             });
           })
           .catch(res.negotiate);
