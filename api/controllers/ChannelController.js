@@ -416,20 +416,22 @@ export default {
   
 updateToExpert(req, res) {
     let params = actionUtil.parseValues(req);
-    if(!params.email) {
-      res.badRequest();
-      return;
-    }
+    params.owner = req.user.id;
 
     params = _.omit(params, 'access_token');
 
     Channel
-      .update({email: params.email}, _.omit(params, 'email'))
-      .then(records => {
-        console.log('records[0]', records[0])
-        records[0] ? res.ok(records[0]) : res.notFound();
-      })
-      .catch(res.negotiate);
+          .findOne(params.owner)
+          .populateAll()
+          .then(parentChannel => {
+            parentChannel.subLinks.push({
+              owner: params.owner,
+              id: params.id,
+              type: params.type,
+              name: params.name
+            });
+          })
+          .catch(res.negotiate);
   },
   
 
