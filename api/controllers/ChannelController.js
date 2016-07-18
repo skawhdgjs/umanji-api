@@ -422,30 +422,21 @@ updateToExpert(req, res) {
       .findOne(params.owner)
       .populateAll()
       .then(channel => {
-
-        Channel
-          .update({id: req.user.id}, {subLinks:params.subLinks})
-          .catch(console.log.bind(console));
-      });
-
-/*
-
-      .then(parentChannel => {
-      parentChannel.subLinks.push({
+      channel.subLinks.push({
         owner: req.user.id,
         id: subChannel.id,
         type: subChannel.type,
         name: subChannel.name
       });
 
-      parentChannel.point = parentChannel.point + policy.point.CREATE_CHANNEL;
-      parentChannel.save();
-      pusherService.channelCreated(req, parentChannel, subChannel, push);
+      channel.save();
 
-      subChannel.parent = parentChannel;
-      return subChannel;
     });
-*/
+
+
+
+      
+
 
 
   },
