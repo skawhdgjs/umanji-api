@@ -421,19 +421,6 @@ updateToExpert(req, res) {
     params = _.omit(params, 'access_token');
 
     Channel
-          .findOne(params.owner)
-          .populateAll()
-          .then(channel => {
-            channel.subLinks.push({
-              owner: params.owner,
-              id: params.id,
-              type: params.sub_type,
-              name: params.sub_name
-            });
-          })
-          // .catch(res.negotiate);
-
-    Channel
       .create(params)
       .then(channel => {
 
