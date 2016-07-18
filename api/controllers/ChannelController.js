@@ -424,9 +424,9 @@ updateToExpert(req, res) {
       .then(channel => {
       channel.subLinks.push({
         owner: req.user.id,
-        id: subChannel.id,
-        type: subChannel.type,
-        name: subChannel.name
+        id: channel.id,
+        type: params.sub_type,
+        name: params.sub_name
       });
 
       channel.save();
