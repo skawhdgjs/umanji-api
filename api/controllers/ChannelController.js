@@ -418,10 +418,9 @@ updateToExpert(req, res) {
     let params = actionUtil.parseValues(req);
     params.owner = req.user.id;
 
-    params = _.omit(params, 'access_token');
-
     Channel
-      .create(params)
+      .findOne(params.owner)
+      .populateAll()
       .then(channel => {
 
         Channel
