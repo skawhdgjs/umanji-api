@@ -432,6 +432,15 @@ updateToExpert(req, res) {
             });
           })
           // .catch(res.negotiate);
+
+    Channel
+      .create(params)
+      .then(channel => {
+
+        Channel
+          .update({id: req.user.id}, {subLinks:params.subLinks})
+          .catch(console.log.bind(console));
+      })
   },
   
 
