@@ -411,6 +411,44 @@ export default {
       .catch(res.negotiate);
   },
 
+
+// Paul test for create keyword into user subLinks data :: start
+  createProfessionalChannel(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
+
+    this.createProfessional(req, res, params);
+  },
+
+  createProfessional(req, res, params) {
+    let push = params.push;
+    params.owner = req.user.id;
+
+    Channel
+      .create(params)
+      .then(channel => {
+
+        Channel
+          .update({id: req.user.id}, {point: req.user.point + policy.point.CREATE_CHANNEL})
+          .catch(console.log.bind(console));
+
+        return Channel
+                .findOne(channel.id)
+                .populateAll()
+      })
+      .then(channel => {
+        return isSubChannelCreation(req, channel, push);
+      })
+      
+      .catch(res.negotiate);
+  },
+
+  // Paul test for create keyword into user subLinks data :: end
+
+
+
+
+
   findProfilePosts(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = 'POST';
