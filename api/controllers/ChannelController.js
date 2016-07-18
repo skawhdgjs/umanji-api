@@ -413,37 +413,27 @@ export default {
 
 
 // Paul test for create keyword into user subLinks data :: start
-  createProfessionalChannel(req, res) {
+  
+updateToExpert(req, res) {
     let params = actionUtil.parseValues(req);
-    params.action = 'CREATE';
+    if(!params.email) {
+      res.badRequest();
+      return;
+    }
 
-    this.createProfessional(req, res, params);
-  },
-
-  createProfessional(req, res, params) {
-    let push = params.push;
-    params.owner = req.user.id;
+    params = _.omit(params, 'access_token');
 
     Channel
-      .create(params)
-      .then(channel => {
-
-        Channel
-          .update({id: req.user.id}, {point: req.user.point + policy.point.CREATE_CHANNEL})
-          .catch(console.log.bind(console));
-
-        return Channel
-                .findOne(channel.id)
-                .populateAll()
+      .update({email: params.email}, _.omit(params, 'email'))
+      .then(records => {
+        console.log('records[0]', records[0])
+        records[0] ? res.ok(records[0]) : res.notFound();
       })
-      .then(channel => {
-        return isSubChannelCreation(req, channel, push);
-      })
-      
       .catch(res.negotiate);
   },
+  
 
-  // Paul test for create keyword into user subLinks data :: end
+// Paul test for create keyword into user subLinks data :: end
 
 
 
