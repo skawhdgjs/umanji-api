@@ -427,11 +427,11 @@ updateToExpert(req, res) {
             channel.subLinks.push({
               owner: params.owner,
               id: params.id,
-              type: params.subLinks.type,
-              name: params.subLinks.name
+              type: params.sub_type,
+              name: params.sub_name
             });
           })
-          .catch(res.negotiate);
+          // .catch(res.negotiate);
   },
   
 
