@@ -398,11 +398,11 @@ export default {
       })
       .then(channel => {
         console.log("Paul catch type*************************************** :: ", channel.parent.type);
-        if(channel.parent.type == 'INFO_CENTER'){
-          return isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
-        } else {
+        
+          isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
+        
           return isSubChannelCreation(req, channel, push);
-        }
+        
         
       })
       .then(channel => {
