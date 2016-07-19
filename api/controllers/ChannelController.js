@@ -373,6 +373,9 @@ export default {
 
   create(req, res, params) {
     let push = params.push;
+    let sub_type = params.sub_type;
+    let sub_name = params.sub_name;
+    let sub_point = params.sub_point;
     params.owner = req.user.id;
 
 
@@ -394,7 +397,13 @@ export default {
                 .populateAll()
       })
       .then(channel => {
-        return isSubChannelCreation(req, channel, push);
+        console.log("Paul catch type*************************************** :: ", channel.parent.type);
+        if(channel.parent.type == 'INFO_CENTER'){
+          return isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
+        } else {
+          return isSubChannelCreation(req, channel, push);
+        }
+        
       })
       .then(channel => {
 
@@ -416,8 +425,55 @@ export default {
   
 updateToExpert(req, res) {
     let params = actionUtil.parseValues(req);
-    params.owner = req.user.id;
 
+    // params.owner = req.user.id;
+    // let query = "{_id:ObjectId('"+params.owner+"')}";
+    // let query = _.omit(params, 'access_token');
+    // let userParams = params.owner;
+
+    // console.log('create type', params.type);
+    // console.log("Paul ::", params);
+    // console.log("Paul inner channel ::", channel);
+    // console.log("Paul userParams ::", channel);
+    // console.log("Paul userParams ****************************************************  ::", query);
+    
+    
+    Channel
+    .findOne(params)
+    .populateAll()
+    .then(channel => {
+      console.log("Paul userParams ****************************************************  ::", channel);
+//       Channel
+//       .find(params.owner)
+//       .populateAll
+//       .then(channel => {
+//       })
+ 
+    });
+ 
+/*
+    Channel
+    
+      .find(params)
+      .populateAll()
+      .then(channel => {
+        console.log("Paul channel ::", channel);
+      channel.subLinks.push({
+        owner: req.user.id,
+        id: channel.id,
+        type: params.sub_type,
+        name: params.sub_name
+      });
+ 
+      channel.save();
+ 
+    });
+ 
+    */
+ 
+ 
+
+/*
     Channel
       .findOne(params.owner)
       .populateAll()
@@ -432,7 +488,7 @@ updateToExpert(req, res) {
       channel.save();
 
     });
-
+*/
 
 
       
@@ -813,6 +869,30 @@ function isSubChannelCreation(req, subChannel, push) {
 
       subChannel.parent = parentChannel;
       return subChannel;
+    });
+}
+//  Paul did it :: 2016 07 19
+function isExpertCreation(req, channel, sub_type, sub_name, sub_point) {
+  // console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", "I'm Here!!!");
+  // if(!subChannel.parent) return subChannel;
+
+  return Channel
+    // .findOne(subChannel.parent.id)
+    .findOne(channel.owner.id)
+    .populateAll()
+    .then(parentChannel => {
+      console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", channel);
+      parentChannel.subLinks.push({
+        owner: req.user.id,
+        id: sub_point,
+        type: sub_type,
+        name: sub_name
+      });
+
+      parentChannel.save();
+
+      channel.owner = parentChannel;
+      return channel;
     });
 }
 
