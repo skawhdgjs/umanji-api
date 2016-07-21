@@ -373,40 +373,47 @@ export default {
 
   create(req, res, params) {
     let push = params.push;
-    let sub_type = params.sub_type;
-    let sub_name = params.sub_name;
-    let sub_point = params.sub_point;
+    let sub_type = params.subLinks.type;
+    let sub_name = params.subLinks.name;
+    let sub_point = params.subLinks.point;
     params.owner = req.user.id;
+    // console.log("Paul channel *************************************** first params :: ", params);
 
 
     if(params.type == 'POST') {
       console.log('create type', params.type);
-
     }
+
+    params = _.omit(params, 'subLinks');
 
     Channel
       .create(params)
-      .then(channel => {
-
+      .then(channel => {     // post
+        console.log("Paul channel *************************************** channel first :: ", channel.keywords);
         Channel
           .update({id: req.user.id}, {point: req.user.point + policy.point.CREATE_CHANNEL})
           .catch(console.log.bind(console));
 
         return Channel
-                .findOne(channel.id)
+                .findOne(req.user.id)   //channel.id => post  / channel.owner => user
                 .populateAll()
       })
+      
       .then(channel => {
-        console.log("Paul catch type*************************************** :: ", channel.parent.type);
-        if(channel.parent.type == 'INFO_CENTER'){
-          return isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
-        } else {
-          return isSubChannelCreation(req, channel, push);
-        }
+console.log("Paul channel *************************************** channel second:: ", channel.subLinks);
+Channel
+        .update(channel.id, _.omit(channel, 'id'))
         
-      })
-      .then(channel => {
-
+          channel.subLinks.push({
+            id: '900',
+            owner: req.user.id,
+            point: '1000',
+            type: sub_type,
+            name: sub_name
+          });
+          res.ok(channel);
+          channel.save();
+console.log("Paul channel *************************************** after work:: ", channel.subLinks);
         _.forEach(channel.keywords, function(name) {
           let keywordCommunityChannel = {};
           jsonService.copyAddress(keywordCommunityChannel, channel);
@@ -421,83 +428,46 @@ export default {
   },
 
 
+
 // Paul test for create keyword into user subLinks data :: start
   
 updateToExpert(req, res) {
     let params = actionUtil.parseValues(req);
+    params.action = 'UPDATE';
+    if(!params.id) {
+      res.badRequest();
+      return;
+    }
 
-    // params.owner = req.user.id;
-    // let query = "{_id:ObjectId('"+params.owner+"')}";
-    // let query = _.omit(params, 'access_token');
-    // let userParams = params.owner;
+    params = _.omit(params, 'access_token');
 
-    // console.log('create type', params.type);
-    // console.log("Paul ::", params);
-    // console.log("Paul inner channel ::", channel);
-    // console.log("Paul userParams ::", channel);
-    // console.log("Paul userParams ****************************************************  ::", query);
-    
-    
+    console.log("Paul log +++++++++++++++++++++++++++++++++++++ I am Here and Param is ", params);
+
+console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", channel);
+
+
     Channel
-    .findOne(params)
-    .populateAll()
-    .then(channel => {
-      console.log("Paul userParams ****************************************************  ::", channel);
-//       Channel
-//       .find(params.owner)
-//       .populateAll
-//       .then(channel => {
-//       })
- 
-    });
- 
-/*
-    Channel
-    
-      .find(params)
-      .populateAll()
-      .then(channel => {
-        console.log("Paul channel ::", channel);
-      channel.subLinks.push({
-        owner: req.user.id,
-        id: channel.id,
-        type: params.sub_type,
-        name: params.sub_name
-      });
- 
-      channel.save();
- 
-    });
- 
-    */
- 
- 
+      .update(params.id, _.omit(params, 'id'))
+      .then(records => {
+        
 
-/*
-    Channel
-      .findOne(params.owner)
-      .populateAll()
-      .then(channel => {
-      channel.subLinks.push({
-        owner: req.user.id,
-        id: channel.id,
-        type: params.sub_type,
-        name: params.sub_name
-      });
 
-      channel.save();
+        var channel = records[0];
+        _.forEach(channel.subLinks, function(subLinks) {
+          channel.subLinks.push({
+          owner: req.user.id,
+          id: '500',
+          type: subLinks.sub_type,
+          name: subLinks.sub_name
+        });
+        });
 
-    });
-*/
-
+        res.ok(channel);
+      })
+      .catch(res.negotiate);
 
       
-
-
-
   },
-  
-
 // Paul test for create keyword into user subLinks data :: end
 
 
@@ -881,7 +851,7 @@ function isExpertCreation(req, channel, sub_type, sub_name, sub_point) {
     .findOne(channel.owner.id)
     .populateAll()
     .then(parentChannel => {
-      console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", channel);
+      // console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", channel);
       parentChannel.subLinks.push({
         owner: req.user.id,
         id: sub_point,
