@@ -373,56 +373,49 @@ export default {
 
   create(req, res, params) {
     let push = params.push;
-    let sub_type = params.subLinks.type;
-    let sub_name = params.subLinks.name;
-    let sub_point = params.subLinks.point;
+    let sub_type = params.sub_type;
+    let sub_name = params.sub_name;
+    let sub_point = params.sub_point;
+    let order = params.order;
     params.owner = req.user.id;
-    // console.log("Paul channel *************************************** first params :: ", params);
-
 
     if(params.type == 'POST') {
       console.log('create type', params.type);
-    }
 
-    params = _.omit(params, 'subLinks');
+    }
 
     Channel
       .create(params)
-      .then(channel => {     // post
-        console.log("Paul channel *************************************** channel first :: ", channel.keywords);
+      .then(channel => {
+
         Channel
           .update({id: req.user.id}, {point: req.user.point + policy.point.CREATE_CHANNEL})
           .catch(console.log.bind(console));
 
         return Channel
-                .findOne(req.user.id)   //channel.id => post  / channel.owner => user
+                .findOne(channel.id)
                 .populateAll()
       })
-      
       .then(channel => {
-<<<<<<< HEAD
-console.log("Paul channel *************************************** channel second:: ", channel.subLinks);
-Channel
-        .update(channel.id, _.omit(channel, 'id'))
-=======
-        console.log("Paul catch type*************************************** :: ", channel.parent.type);
-        
-          isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
-        
+        console.log("Paul arrive *************************************** order :: ", order);
+        if(order === "do_update"){
+          console.log("Paul update *************************************** good :: ", "good");
+
+
+          // parentChannel.save();
+          // channel.owner = parentChannel;
+          return channel;
+
+        } else {
+          isExpertCreation(req, channel, sub_type, sub_name, sub_point);
           return isSubChannelCreation(req, channel, push);
+        }
+          
         
->>>>>>> parent of 8a3adac... Revert "expert and keyword"
         
-          channel.subLinks.push({
-            id: '900',
-            owner: req.user.id,
-            point: '1000',
-            type: sub_type,
-            name: sub_name
-          });
-          res.ok(channel);
-          channel.save();
-console.log("Paul channel *************************************** after work:: ", channel.subLinks);
+      })
+      .then(channel => {
+
         _.forEach(channel.keywords, function(name) {
           let keywordCommunityChannel = {};
           jsonService.copyAddress(keywordCommunityChannel, channel);
