@@ -400,9 +400,18 @@ export default {
       })
       
       .then(channel => {
+<<<<<<< HEAD
 console.log("Paul channel *************************************** channel second:: ", channel.subLinks);
 Channel
         .update(channel.id, _.omit(channel, 'id'))
+=======
+        console.log("Paul catch type*************************************** :: ", channel.parent.type);
+        
+          isExpertCreation(req, channel, sub_type, sub_name, sub_point);  
+        
+          return isSubChannelCreation(req, channel, push);
+        
+>>>>>>> parent of 8a3adac... Revert "expert and keyword"
         
           channel.subLinks.push({
             id: '900',
