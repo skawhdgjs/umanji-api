@@ -376,7 +376,6 @@ export default {
     let sub_type = params.sub_type;
     let sub_name = params.sub_name;
     let sub_point = params.sub_point;
-    let order = params.order;
     params.owner = req.user.id;
 
     if(params.type == 'POST') {
@@ -396,20 +395,14 @@ export default {
                 .findOne(channel.id)
                 .populateAll()
       })
-      .then(channel => {
-        console.log("Paul arrive *************************************** order :: ", order);
-        if(order === "do_update"){
-          console.log("Paul update *************************************** good :: ", "good");
-
-
+      .then(channel => {       
           // parentChannel.save();
           // channel.owner = parentChannel;
-          return channel;
+          // return channel;
 
-        } else {
           isExpertCreation(req, channel, sub_type, sub_name, sub_point);
           return isSubChannelCreation(req, channel, push);
-        }
+        
           
         
         
@@ -856,9 +849,10 @@ function isExpertCreation(req, channel, sub_type, sub_name, sub_point) {
       // console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", channel);
       parentChannel.subLinks.push({
         owner: req.user.id,
-        id: sub_point,
+        id: req.user.id,
         type: sub_type,
-        name: sub_name
+        name: sub_name,
+        point: sub_point
       });
 
       parentChannel.save();
