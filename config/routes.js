@@ -61,6 +61,9 @@ export default {
     'GET /v1/main/posts'              : 'ChannelController.findMainPosts',
     'GET /v1/main/ads'                : 'ChannelController.findMainAds',
     'GET /v1/main/ads2'               : 'ChannelController.findMainAds2',
+    'GET /v1/staff'                   : 'ChannelController.findStaff',
+
+    // staff
 
     'GET /v1/keyword/posts'           : 'ChannelController.findKeywordPosts',
     'GET /v1/keyword/channels'        : 'ChannelController.findKeywordChannels',

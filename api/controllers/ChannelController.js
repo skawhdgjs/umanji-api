@@ -66,6 +66,7 @@ export default {
   update(req, res) {
     let params = actionUtil.parseValues(req);
     params.action = 'UPDATE';
+    console.log("Paul  ****************************", params);
     if(!params.id) {
       res.badRequest();
       return;
@@ -500,6 +501,14 @@ console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", c
   findMainAds2(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = 'ADVERTISE';
+
+    this.find(req, res, params);
+  },
+
+// Paul did it on 160724
+  findStaff(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.type = 'INFO_CENTER';
 
     this.find(req, res, params);
   },
