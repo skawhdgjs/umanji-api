@@ -423,7 +423,48 @@ export default {
       .catch(res.negotiate);
   },
 
+// Paul did it :: new community find on bottom
+findBottomChannels(req, res) {
+    let params = actionUtil.parseValues(req);
 
+    let limit = parseLimit(params);
+    let skip = parseSkip(params);
+    let sort = parseSort(params);
+    let distinct = parseDistinct(params);
+    let query = parseQuery(params);
+    //query.level = 2;
+
+    Channel
+      .find(query)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
+      .populateAll()
+      .then(channels => {
+        if(distinct) {
+          channels = _.uniq(channels, distinct);
+        }
+        res.ok(channels, {parent: params.parent || params.owner || null});
+      })
+      .catch(res.negotiate);
+  }, 
+
+// findBottomChannels
+/* original
+if(distinct) {
+          channels = _.uniq(channels, distinct);
+        }
+        res.ok(channels, {parent: params.parent || params.owner || null});
+
+
+*/
+/*
+params.type = ['SPOT', 'INFO_CENTER', 'COMPLEX'];
+
+        this.find(req, res, params);
+console.log("Paul did +++++++++++++++++++++++++++++++", "done");
+
+*/
 
 // Paul test for create keyword into user subLinks data :: start
   
