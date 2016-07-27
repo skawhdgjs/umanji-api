@@ -32,6 +32,8 @@ export default {
 
     subLinks     : { type: 'array', defaultsTo: [] },
     parent       : { model: 'Channel' },
+    parentType   : { type: 'string' },   
+    typeFilter   : { type: 'string' },  // Paul did it :: typeFilter 170727
     actions      : { type: 'array', defaultsTo: [] },
     gcmTokens    : { type: 'array', defaultsTo: [] },
 
