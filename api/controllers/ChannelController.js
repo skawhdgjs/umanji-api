@@ -525,7 +525,7 @@ console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", c
 
     Channel
       .find(query)
-      .limit(10)
+      .limit(100)
       .sort('point DESC')
       .populateAll()
       .then(res.ok)
