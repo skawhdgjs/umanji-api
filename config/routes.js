@@ -90,6 +90,9 @@ export default {
     'GET /v1/channels/bottom/keywords': 'ChannelController.findBottomChannels',
     'GET /v1/channels/markers'        : 'ChannelController.findChannels',
     'GET /v1/channels/posts'          : 'ChannelController.findChannels',
+    'GET /v1/channels/newCommunities' : 'ChannelController.findNewCommunities',
+
+    // 
 
     'GET /v1/channels/community'      : 'ChannelController.findCommunity',
 

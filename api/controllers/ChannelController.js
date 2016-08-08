@@ -611,6 +611,12 @@ console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", c
     this.find(req, res, params);
   },
 
+  findNewCommunities(req, res) {
+    let params = actionUtil.parseValues(req);
+    let query = _.omit(params, 'level');
+    this.find(req, res, params);
+  },
+
   findBottomCommunities(req, res) {
     let params = actionUtil.parseValues(req);
     params.type = ['SPOT', 'SPOT_INNER', 'COMPLEX'];
