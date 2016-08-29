@@ -91,6 +91,27 @@ export default {
       .catch(res.negotiate);
   },
 
+  updatePassword(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'UPDATE';
+    console.log("Paul  ****************************11", params);
+    if(!params.id) {
+      res.badRequest();
+      return;
+    }
+
+    params = _.omit(params, 'access_token');
+
+    Channel
+      .update(params.id, _.omit(params, 'id'))
+      .then(records => {
+        var channel = records[0];
+
+        res.ok(channel);
+      })
+      .catch(res.negotiate);
+  },
+
   updateRole(req, res) {
     let params = actionUtil.parseValues(req);
     if(!params.email) {

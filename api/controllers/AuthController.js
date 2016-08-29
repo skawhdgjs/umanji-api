@@ -16,6 +16,7 @@ import passport from 'passport';
 export function signin(req, res) {
   let params = actionUtil.parseValues(req);
   passport.authenticate('local', _.partial(sails.config.passport.onPassportAuth, req, res))(req, res);
+  console.log("Paul", res);
 }
 
 /**
@@ -43,8 +44,29 @@ export function signup(req, res) {
           .catch(res.negotiate);
       }
     })
+}
 
+export function updatePassword(req, res) {
+  let params = actionUtil.parseValues(req);
+  params.type = 'USER';
+  params.action = 'CREATE';
+  console.log("Paul  ****************************update", params);
 
+  Channel
+    .findOne({email: params.email})
+    .then(user => {
+      if(user) {
+        res.ok({});
+      } else {
+        Channel
+          .update(params)
+          .then(user => {
+            return {token: CipherService.jwt.encodeSync({id: user.id}), user: user}
+          })
+          .then(res.created)
+          .catch(res.negotiate);
+      }
+    })
 }
 
 export function logout(req, res) {
@@ -57,6 +79,7 @@ export function checkToken(req, res) {
     token: req.param('access_token'),
     user: req.user
   }
+  console.log('Paul', result);
 
   res.ok(result);
 }

@@ -92,7 +92,7 @@ export default {
     'GET /v1/channels/posts'          : 'ChannelController.findChannels',
     'GET /v1/channels/newCommunities' : 'ChannelController.findNewCommunities',
 
-    // 
+    // updatePassword
 
     'GET /v1/channels/community'      : 'ChannelController.findCommunity',
 
@@ -101,6 +101,7 @@ export default {
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
     'PUT /v1/channels/email'          : 'ChannelController.updateRole',
+    'PUT /v1/channels/password'          : 'ChannelController.updatePassword',
 
 
 
