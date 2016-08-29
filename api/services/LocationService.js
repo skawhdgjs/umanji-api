@@ -58,8 +58,11 @@ function getAddressByGmap(point) {
           
 
           if(typeof address === "undefined"){
-            addressDoc = "sea";
-
+            addressDoc = {
+                address: "sea",
+                latitude: point.latitude,
+                longitude: point.longitude
+              }
 
           } else {
             // let arrayCount = Object.keys(address).length;
@@ -67,8 +70,6 @@ function getAddressByGmap(point) {
 
           console.log("Paul addresDoc Gmap Array Count :: ", arrayCount);
             
-
-
             switch(arrayCount){
               case 2:
               addressDoc = {
@@ -130,10 +131,7 @@ function getAddressByGmap(point) {
               }
 
             }
-
-            
-            
-
+        
             /*let addressDoc = {
               address: address.formatted_address,
               countryCode: address.address_components[4].short_name,
@@ -152,8 +150,6 @@ function getAddressByGmap(point) {
 
             resolve(addressDoc);
           }
-
-          
 
         } else {
           resolve('');
