@@ -23,12 +23,12 @@ export default {
     'GET /v1/channels/id'             : 'ChannelController.get',
     'GET /v1/channels/findOne'        : 'ChannelController.findOne',
     'GET /v1/channels/findEmail'      : 'ChannelController.findEmail',
-    'GET /v1/channels/findRole'      : 'ChannelController.findRole',
+    'GET /v1/channels/findRole'       : 'ChannelController.findRole',
 
 
 
     'POST /v1/channels'               : 'ChannelController.createChannel',
-    'POST /v1/channels/expert' : 'ChannelController.updateToExpert',
+    'POST /v1/channels/expert'        : 'ChannelController.updateToExpert',
 
     'POST /v1/channels/spot'          : 'ChannelController.createChannel',
     'POST /v1/channels/complex'       : 'ChannelController.createChannel',
@@ -101,7 +101,10 @@ export default {
     'PUT /v1/channels/id'             : 'ChannelController.update',
     'PUT /v1/channels/id/profile'     : 'ChannelController.update',
     'PUT /v1/channels/email'          : 'ChannelController.updateRole',
-    'PUT /v1/channels/password'          : 'ChannelController.updatePassword',
+    'PUT /v1/channels/password'       : 'ChannelController.updatePassword',
+
+    // 2016.08.31 manager  createManager
+    'PUT /v1/channels/manager'        : 'ChannelController.createManager',
 
 
 

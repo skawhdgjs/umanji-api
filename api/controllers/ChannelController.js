@@ -66,7 +66,7 @@ export default {
   update(req, res) {
     let params = actionUtil.parseValues(req);
     params.action = 'UPDATE';
-    console.log("Paul  ****************************", params);
+    console.log("Paul  ****************************", "update");
     if(!params.id) {
       res.badRequest();
       return;
@@ -94,7 +94,7 @@ export default {
   updatePassword(req, res) {
     let params = actionUtil.parseValues(req);
     params.action = 'UPDATE';
-    console.log("Paul  ****************************11", params);
+    // console.log("Paul  ****************************11", params);
     if(!params.id) {
       res.badRequest();
       return;
@@ -124,7 +124,7 @@ export default {
     Channel
       .update({email: params.email}, _.omit(params, 'email'))
       .then(records => {
-        console.log('records[0]', records[0])
+        // console.log('records[0]', records[0])
         records[0] ? res.ok(records[0]) : res.notFound();
       })
       .catch(res.negotiate);
@@ -401,7 +401,7 @@ export default {
     params.owner = req.user.id;
 
     if(params.type == 'POST') {
-      console.log('create type', params.type);
+      console.log('Paul ::', 'create type');
 
     }
 
@@ -425,9 +425,6 @@ export default {
           isExpertCreation(req, channel, sub_type, sub_name, sub_point);
           return isSubChannelCreation(req, channel, push);
         
-          
-        
-        
       })
       .then(channel => {
 
@@ -442,6 +439,37 @@ export default {
         res.created(channel, {parent: params.parent || null});
       })
       .catch(res.negotiate);
+  },
+
+
+  createManager(req, res) {
+    let params = actionUtil.parseValues(req);
+    params.action = 'CREATE';
+
+    let sub_type = params.sub_type;
+    let sub_name = params.sub_name;
+
+console.log("Paul - sub-name :: ", sub_name);
+
+    Channel
+      .findOne(params.owner)
+      .populateAll()
+      .then(channel => {       
+
+        channel.subLinks.push({
+        owner: params.owner,
+        id: params.owner,
+        type: sub_type,
+        name: sub_name,
+      });
+
+      channel.save();
+
+      // channel.owner = parentChannel;
+      return channel;
+        
+      })
+   
   },
 
 // Paul did it :: new community find on bottom
@@ -499,9 +527,8 @@ updateToExpert(req, res) {
 
     params = _.omit(params, 'access_token');
 
-    console.log("Paul log +++++++++++++++++++++++++++++++++++++ I am Here and Param is ", params);
-
-console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", channel);
+    // console.log("Paul log +++++++++++++++++++++++++++++++++++++ I am Here and Param is ", params);
+    // console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", channel);
 
 
     Channel
@@ -542,7 +569,7 @@ console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", c
     let params = actionUtil.parseValues(req);
     let query = parseQuery(params);
 
-    console.log('findDistributions: params', query);
+    // console.log('findDistributions: params', query);
 
     Channel
       .find(query)
@@ -702,7 +729,7 @@ console.log("Paul log +++++++++++++++++++++++++++++++++++++ channel.subLinks", c
     let distinct = parseDistinct(params);
     let query = parseQueryFull(params);
 
-    console.log('findPosts', query);
+    // console.log('findPosts', query);
 
     Channel
       .find(query)
@@ -939,6 +966,27 @@ function isExpertCreation(req, channel, sub_type, sub_name, sub_point) {
     });
 }
 
+function isManagerCreation(req, channel, sub_type, sub_name) {
+
+  return Channel
+    .findOne(channel.owner.id)
+    .populateAll()
+    .then(channel => {
+      // console.log("Paul parentChannel +++++++++++++++++++++++++++ ::", channel);
+        channel.subLinks.push({
+        owner: req.user.id,
+        id: req.user.id,
+        type: sub_type,
+        name: sub_name,
+      });
+
+      channel.save();
+
+      // channel.owner = parentChannel;
+      return channel;
+    });
+}
+
 function createKeywordCommunities(communityChannel) {
   createKeywordCommunity(communityChannel, policy.level.DONG, {adminArea: communityChannel.adminArea, locality: communityChannel.locality, thoroughfare: communityChannel.thoroughfare});
   createKeywordCommunity(communityChannel, policy.level.GUGUN, {adminArea: communityChannel.adminArea, locality: communityChannel.locality})
@@ -977,9 +1025,9 @@ function createKeywordCommunity(communityChannel, level, scope) {
 
   return Channel.findOne(query)
     .then(community => {
-      console.log('createKeywordCommunity');
+      // console.log('createKeywordCommunity');
       if(!community) {
-        console.log('KEYWORD_COMMUNITY NOT found');
+        // console.log('KEYWORD_COMMUNITY NOT found');
         let infoQuery = {
           type: 'INFO_CENTER',
           level: level

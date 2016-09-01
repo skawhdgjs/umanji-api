@@ -52,7 +52,7 @@ function getAddressByGmap(point) {
             longitude: point.longitude
           }
           */
-          console.log("Paul addresDoc Gmap :: ", address);
+          console.log("Paul addresDoc Gmap :: ", "LocationService ::Gmap address");
 
           let addressDoc;
           
@@ -146,7 +146,7 @@ function getAddressByGmap(point) {
           }
           
           if(typeof addressDoc != 'undefined'){
-            console.log("Paul addresDoc :: ", addressDoc);
+            // console.log("Paul addresDoc :: ", addressDoc);
 
             resolve(addressDoc);
           }
@@ -162,7 +162,7 @@ function getAddressByGmap(point) {
 
 
 function getAddressByTmap(point) {
-  console.log("Paul", "I am in ADDRESS!!!!!!!!!!!");
+  // console.log("Paul", "I am in ADDRESS!!!!!!!!!!!");
   return new Promise( (resolve, reject) => {
     let options = {
       host : 'apis.skplanetx.com',
@@ -187,7 +187,7 @@ function getAddressByTmap(point) {
           body = parseForErrorData_01(body);
 
           let address = JSON.parse(body).addressInfo;
-          console.log("Paul : address ??", address);
+          console.log("Paul :: ", "LocationService : getAddressByTmap");
           let addressDoc ;
           if(typeof address != 'undefined'){
             addressDoc = {
