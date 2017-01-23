@@ -7,6 +7,8 @@ import actionUtil from 'sails/lib/hooks/blueprints/actionUtil';
  * @description :: Server-side logic for Noty
  */
 
+
+// my git test
 export default {
   find(req, res) {
     let params = actionUtil.parseValues(req);
@@ -31,6 +33,8 @@ export default {
     let params = actionUtil.parseValues(req);
     let query = parseQuery(params);
     query.to = req.user.id
+
+    console.log("Paul -> noty :: ", "noty" );
 
     Noty
       .count(query)
