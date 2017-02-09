@@ -55,7 +55,7 @@ function getAddressByGmap(point) {
           console.log("Paul addresDoc Gmap :: ", "LocationService ::Gmap address");
 
           let addressDoc;
-          
+
 
           if(typeof address === "undefined"){
             addressDoc = {
@@ -69,7 +69,7 @@ function getAddressByGmap(point) {
           let arrayCount = address.address_components.length;
 
           console.log("Paul addresDoc Gmap Array Count :: ", arrayCount);
-            
+
             switch(arrayCount){
               case 2:
               addressDoc = {
@@ -131,7 +131,7 @@ function getAddressByGmap(point) {
               }
 
             }
-        
+
             /*let addressDoc = {
               address: address.formatted_address,
               countryCode: address.address_components[4].short_name,
@@ -144,7 +144,7 @@ function getAddressByGmap(point) {
               longitude: point.longitude
             }*/
           }
-          
+
           if(typeof addressDoc != 'undefined'){
             // console.log("Paul addresDoc :: ", addressDoc);
 
@@ -164,6 +164,7 @@ function getAddressByGmap(point) {
 function getAddressByTmap(point) {
   // console.log("Paul", "I am in ADDRESS!!!!!!!!!!!");
   return new Promise( (resolve, reject) => {
+    //console.log("long"+point.longitude+" lati"+point.latitude);
     let options = {
       host : 'apis.skplanetx.com',
       port: 443,
@@ -176,15 +177,18 @@ function getAddressByTmap(point) {
     };
 
     https.request(options, function(response) {
+      //console.log("statusCode: " + response.statusCode);
+
       let body = '';
       response.on('error', e => { reject(e); });
       response.on('data', (chunk) => {
         body += chunk;
+        //console.log(body);
       });
 
       response.on('end', () => {
         if(body) {
-          body = parseForErrorData_01(body);
+        //  body = parseForErrorData_01(body);
 
           let address = JSON.parse(body).addressInfo;
           console.log("Paul :: ", "LocationService : getAddressByTmap");
@@ -203,9 +207,8 @@ function getAddressByTmap(point) {
             }
           } else {
             addressDoc = "sea";
-
           }
-          
+
           resolve(addressDoc);
         } else {
           resolve('');
@@ -213,6 +216,7 @@ function getAddressByTmap(point) {
       });
 
     }).end();
+
   })
 }
 
